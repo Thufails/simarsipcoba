@@ -109,28 +109,79 @@ class DashboardController extends Controller
     }
     public function getAllArsip()
     {
-        $arsips = Arsip::with('jenisDokumen')->get();
+        // Ambil semua arsip dengan informasi jenis dokumen terkait
+        $arsips = Arsip::with('jenisDokumen')
+                       ->with([
+                           'infoArsipPengangkatan',
+                           'infoArsipSuratPindah',
+                           'infoArsipPerceraian',
+                           'infoArsipPengesahan',
+                           'infoArsipKematian',
+                           'infoArsipKelahiran',
+                           'infoArsipPengakuan',
+                           'infoArsipPerkawinan',
+                           'infoArsipKk',
+                           'infoArsipSkot',
+                           'infoArsipSktt',
+                           'infoArsipKtp'
+                       ])->get();
 
+        // Mengembalikan data dalam format JSON
         if ($arsips->isNotEmpty()) {
+            // Format data sesuai kebutuhan
             $formattedArsips = $arsips->map(function ($arsip) {
+                $nama = [];
+                $models = [
+                    'infoArsipPengangkatan' => 'NAMA_ANAK',
+                    'infoArsipSuratPindah' => 'NAMA_KEPALA',
+                    'infoArsipPerceraian' => ['NAMA_PRIA', 'NAMA_WANITA'],
+                    'infoArsipPengesahan' => 'NAMA_ANAK',
+                    'infoArsipKematian' => 'NAMA',
+                    'infoArsipKelahiran' => 'NAMA',
+                    'infoArsipPengakuan' => 'NAMA_ANAK',
+                    'infoArsipPerkawinan' => ['NAMA_PRIA', 'NAMA_WANITA'],
+                    'infoArsipKk' => 'NAMA_KEPALA',
+                    'infoArsipSkot' => ['NAMA', 'NAMA_PANGGIL'],
+                    'infoArsipSktt' => 'NAMA',
+                    'infoArsipKtp' => 'NAMA',
+                ];
+
+                // Mendapatkan nama dari setiap tabel terkait
+                foreach ($models as $relation => $columnName) {
+                    if (is_array($columnName)) {
+                        foreach ($columnName as $column) {
+                            if (!empty($arsip->$relation->$column)) {
+                                $nama[] = $arsip->$relation->$column;
+                            }
+                        }
+                    } else {
+                        if (!empty($arsip->$relation->$columnName)) {
+                            $nama[] = $arsip->$relation->$columnName;
+                        }
+                    }
+                }
+
+                // Gabungkan nama menjadi satu string
+                $nama = implode(', ', $nama);
+
                 return [
-                    'ID_ARSIP' => $arsip->ID_ARSIP,
                     'ID_DOKUMEN' => $arsip->ID_DOKUMEN,
                     'NAMA_DOKUMEN' => $arsip->jenisDokumen->NAMA_DOKUMEN ?? null,
-                    'NO_DOK_PENGANGKATAN' => $arsip->NO_DOK_PENGANGKATAN,
-                    'NO_DOK_SURAT_PINDAH' => $arsip->NO_DOK_SURAT_PINDAH,
-                    'NO_DOK_PERCERAIAN' => $arsip->NO_DOK_PERCERAIAN,
-                    'NO_DOK_PENGESAHAN' => $arsip->NO_DOK_PENGESAHAN,
-                    'ID_OPERATOR' => $arsip->ID_OPERATOR,
-                    'ID_HISTORY' => $arsip->ID_HISTORY,
-                    'NO_DOK_KEMATIAN' => $arsip->NO_DOK_KEMATIAN,
-                    'NO_DOK_KELAHIRAN' => $arsip->NO_DOK_KELAHIRAN,
-                    'NO_DOK_PENGAKUAN' => $arsip->NO_DOK_PENGAKUAN,
-                    'NO_DOK_PERKAWINAN' => $arsip->NO_DOK_PERKAWINAN,
-                    'NO_DOK_KK' => $arsip->NO_DOK_KK,
-                    'NO_DOK_SKOT' => $arsip->NO_DOK_SKOT,
-                    'NO_DOK_SKTT' => $arsip->NO_DOK_SKTT,
-                    'NO_DOK_KTP' => $arsip->NO_DOK_KTP,
+                    'no_dokumen' => implode(', ', array_filter([
+                        $arsip->NO_DOK_PENGANGKATAN,
+                        $arsip->NO_DOK_SURAT_PINDAH,
+                        $arsip->NO_DOK_PERCERAIAN,
+                        $arsip->NO_DOK_PENGESAHAN,
+                        $arsip->NO_DOK_KEMATIAN,
+                        $arsip->NO_DOK_KELAHIRAN,
+                        $arsip->NO_DOK_PENGAKUAN,
+                        $arsip->NO_DOK_PERKAWINAN,
+                        $arsip->NO_DOK_KK,
+                        $arsip->NO_DOK_SKOT,
+                        $arsip->NO_DOK_SKTT,
+                        $arsip->NO_DOK_KTP,
+                    ])),
+                    'nama' => $nama,
                     'JUMLAH_BERKAS' => $arsip->JUMLAH_BERKAS,
                     'NO_BUKU' => $arsip->NO_BUKU,
                     'NO_RAK' => $arsip->NO_RAK,
@@ -139,11 +190,11 @@ class DashboardController extends Controller
                     'LOK_SIMPAN' => $arsip->LOK_SIMPAN,
                     'TANGGAL_PINDAI' => $arsip->TANGGAL_PINDAI,
                     'KETERANGAN' => $arsip->KETERANGAN,
-
+                    // Tambahkan kolom lain sesuai kebutuhan
                 ];
             });
 
-        return response()->json([
+            return response()->json([
                 'success' => true,
                 'message' => 'Sukses Menampilkan Data Arsip',
                 'arsips' => $formattedArsips
