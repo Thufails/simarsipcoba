@@ -107,6 +107,26 @@ class DashboardController extends Controller
             'arsip' => $arsip,
         ]);
     }
+    public function getAllArsip()
+    {
+        // Ambil semua arsip tanpa filter
+        $arsips = Arsip::all();
+
+        // Mengembalikan data dalam format JSON
+        if ($arsips) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Sukses Menampilkan Data Arsip',
+                'access_token' => $arsips
+            ], 201);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menampilkan data Arsip',
+                'data' => ''
+            ], 400);
+        }
+    }
     public function manajemen ()
     {
 
