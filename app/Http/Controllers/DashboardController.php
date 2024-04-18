@@ -33,8 +33,8 @@ class DashboardController extends Controller
     {
         $validator = app('validator')->make($request->all(), [
             'jenis_dokumen' => 'nullable|exists:jenis_dokumen,ID_DOKUMEN',
-            'no_dokumen' => 'nullable|string',
-            'nama' => 'nullable|string'
+            'NO_DOKUMEN' => 'nullable|string',
+            'NAMA' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -51,24 +51,24 @@ class DashboardController extends Controller
             $arsipquery->where('ID_DOKUMEN', $request->jenis_dokumen);
         }
 
-        if ($request->has('no_dokumen')) {
+        if ($request->has('NO_DOKUMEN')) {
             $arsipquery->where(function ($q) use ($request) {
-                $q->where('NO_DOK_PENGANGKATAN', 'LIKE', '%' . $request->no_dokumen . '%')
-                    ->orWhere('NO_DOK_SURAT_PINDAH', 'LIKE', '%' . $request->no_dokumen . '%')
-                    ->orWhere('NO_DOK_PERCERAIAN', 'LIKE', '%' . $request->no_dokumen . '%')
-                    ->orWhere('NO_DOK_PENGESAHAN', 'LIKE', '%' . $request->no_dokumen . '%')
-                    ->orWhere('NO_DOK_KEMATIAN', 'LIKE', '%' . $request->no_dokumen . '%')
-                    ->orWhere('NO_DOK_KELAHIRAN', 'LIKE', '%' . $request->no_dokumen . '%')
-                    ->orWhere('NO_DOK_PENGAKUAN', 'LIKE', '%' . $request->no_dokumen . '%')
-                    ->orWhere('NO_DOK_PERKAWINAN', 'LIKE', '%' . $request->no_dokumen . '%')
-                    ->orWhere('NO_DOK_KK', 'LIKE', '%' . $request->no_dokumen . '%')
-                    ->orWhere('NO_DOK_SKOT', 'LIKE', '%' . $request->no_dokumen . '%')
-                    ->orWhere('NO_DOK_SKTT', 'LIKE', '%' . $request->no_dokumen . '%')
-                    ->orWhere('NO_DOK_KTP', 'LIKE', '%' . $request->no_dokumen . '%');
+                $q->where('NO_DOK_PENGANGKATAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_SURAT_PINDAH', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_PERCERAIAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_PENGESAHAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_KEMATIAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_KELAHIRAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_PENGAKUAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_PERKAWINAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_KK', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_SKOT', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_SKTT', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_KTP', 'LIKE', '%' . $request->NO_DOKUMEN . '%');
             });
         }
 
-        if ($request->has('nama')) {
+        if ($request->has('NAMA')) {
             $arsipquery->where(function ($arsipquery) use ($request) {
                 $models = [
                     'infoArsipPengangkatan' => 'NAMA_ANAK',
@@ -88,10 +88,10 @@ class DashboardController extends Controller
                 foreach ($models as $relation => $columnName) {
                     $arsipquery->orWhereHas($relation, function ($query) use ($request, $columnName) {
                         if (is_array($columnName)) {
-                            $query->where($columnName[0], 'LIKE', '%' . $request->nama . '%')
-                                ->orWhere($columnName[1], 'LIKE', '%' . $request->nama . '%');
+                            $query->where($columnName[0], 'LIKE', '%' . $request->NAMA . '%')
+                                ->orWhere($columnName[1], 'LIKE', '%' . $request->NAMA . '%');
                         } else {
-                            $query->where($columnName, 'LIKE', '%' . $request->nama . '%');
+                            $query->where($columnName, 'LIKE', '%' . $request->NAMA . '%');
                         }
                     });
                 }
@@ -102,8 +102,8 @@ class DashboardController extends Controller
 
         return response()->json([
             'jenis_dokumen'=>$jenisDokumen,
-            'no_dokumen' => $request->no_dokumen,
-            'nama' => $request->nama,
+            'NO_DOKUMEN' => $request->NO_DOKUMEN,
+            'NAMA' => $request->NAMA,
             'arsip' => $arsip,
         ]);
     }
@@ -130,7 +130,7 @@ class DashboardController extends Controller
         if ($arsips->isNotEmpty()) {
             // Format data sesuai kebutuhan
             $formattedArsips = $arsips->map(function ($arsip) {
-                $nama = [];
+                $NAMA = [];
                 $models = [
                     'infoArsipPengangkatan' => 'NAMA_ANAK',
                     'infoArsipSuratPindah' => 'NAMA_KEPALA',
@@ -146,28 +146,28 @@ class DashboardController extends Controller
                     'infoArsipKtp' => 'NAMA',
                 ];
 
-                // Mendapatkan nama dari setiap tabel terkait
+                // Mendapatkan NAMA dari setiap tabel terkait
                 foreach ($models as $relation => $columnName) {
                     if (is_array($columnName)) {
                         foreach ($columnName as $column) {
                             if (!empty($arsip->$relation->$column)) {
-                                $nama[] = $arsip->$relation->$column;
+                                $NAMA[] = $arsip->$relation->$column;
                             }
                         }
                     } else {
                         if (!empty($arsip->$relation->$columnName)) {
-                            $nama[] = $arsip->$relation->$columnName;
+                            $NAMA[] = $arsip->$relation->$columnName;
                         }
                     }
                 }
 
-                // Gabungkan nama menjadi satu string
-                $nama = implode(', ', $nama);
+                // Gabungkan NAMA menjadi satu string
+                $NAMA = implode(', ', $NAMA);
 
                 return [
                     'ID_DOKUMEN' => $arsip->ID_DOKUMEN,
                     'NAMA_DOKUMEN' => $arsip->jenisDokumen->NAMA_DOKUMEN ?? null,
-                    'no_dokumen' => implode(', ', array_filter([
+                    'NO_DOKUMEN' => implode(', ', array_filter([
                         $arsip->NO_DOK_PENGANGKATAN,
                         $arsip->NO_DOK_SURAT_PINDAH,
                         $arsip->NO_DOK_PERCERAIAN,
@@ -181,7 +181,7 @@ class DashboardController extends Controller
                         $arsip->NO_DOK_SKTT,
                         $arsip->NO_DOK_KTP,
                     ])),
-                    'nama' => $nama,
+                    'NAMA' => $NAMA,
                     'JUMLAH_BERKAS' => $arsip->JUMLAH_BERKAS,
                     'NO_BUKU' => $arsip->NO_BUKU,
                     'NO_RAK' => $arsip->NO_RAK,
