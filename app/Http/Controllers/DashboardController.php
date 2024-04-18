@@ -109,22 +109,50 @@ class DashboardController extends Controller
     }
     public function getAllArsip()
     {
-        // Ambil semua arsip tanpa filter
-        $arsips = Arsip::all();
+        $arsips = Arsip::with('jenisDokumen')->get();
 
-        // Mengembalikan data dalam format JSON
-        if ($arsips) {
-            return response()->json([
+        if ($arsips->isNotEmpty()) {
+            $formattedArsips = $arsips->map(function ($arsip) {
+                return [
+                    'ID_DOKUMEN' => $arsip->ID_DOKUMEN,
+                    'NAMA_DOKUMEN' => $arsip->jenisDokumen->NAMA_DOKUMEN ?? null,
+                    'NO_DOK_PENGANGKATAN' => $arsip->NO_DOK_PENGANGKATAN,
+                    'NO_DOK_SURAT_PINDAH' => $arsip->NO_DOK_SURAT_PINDAH,
+                    'NO_DOK_PERCERAIAN' => $arsip->NO_DOK_PERCERAIAN,
+                    'NO_DOK_PENGESAHAN' => $arsip->NO_DOK_PENGESAHAN,
+                    'ID_OPERATOR' => $arsip->ID_OPERATOR,
+                    'ID_HISTORY' => $arsip->ID_HISTORY,
+                    'NO_DOK_KEMATIAN' => $arsip->NO_DOK_KEMATIAN,
+                    'NO_DOK_KELAHIRAN' => $arsip->NO_DOK_KELAHIRAN,
+                    'NO_DOK_PENGAKUAN' => $arsip->NO_DOK_PENGAKUAN,
+                    'NO_DOK_PERKAWINAN' => $arsip->NO_DOK_PERKAWINAN,
+                    'NO_DOK_KK' => $arsip->NO_DOK_KK,
+                    'NO_DOK_SKOT' => $arsip->NO_DOK_SKOT,
+                    'NO_DOK_SKTT' => $arsip->NO_DOK_SKTT,
+                    'NO_DOK_KTP' => $arsip->NO_DOK_KTP,
+                    'JUMLAH_BERKAS' => $arsip->JUMLAH_BERKAS,
+                    'NO_BUKU' => $arsip->NO_BUKU,
+                    'NO_RAK' => $arsip->NO_RAK,
+                    'NO_BARIS' => $arsip->NO_BARIS,
+                    'NO_BOKS' => $arsip->NO_BOKS,
+                    'LOK_SIMPAN' => $arsip->LOK_SIMPAN,
+                    'TANGGAL_PINDAI' => $arsip->TANGGAL_PINDAI,
+                    'KETERANGAN' => $arsip->KETERANGAN,
+
+                ];
+            });
+
+        return response()->json([
                 'success' => true,
                 'message' => 'Sukses Menampilkan Data Arsip',
-                'access_token' => $arsips
-            ], 201);
+                'arsips' => $formattedArsips
+            ], 200);
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menampilkan data Arsip',
-                'data' => ''
-            ], 400);
+                'message' => 'Tidak ada data Arsip',
+                'arsips' => []
+            ], 404);
         }
     }
     public function manajemen ()
