@@ -114,6 +114,7 @@ class DashboardController extends Controller
         if ($arsips->isNotEmpty()) {
             $formattedArsips = $arsips->map(function ($arsip) {
                 return [
+                    'ID_ARSIP' => $arsip->ID_ARSIP,
                     'ID_DOKUMEN' => $arsip->ID_DOKUMEN,
                     'NAMA_DOKUMEN' => $arsip->jenisDokumen->NAMA_DOKUMEN ?? null,
                     'NO_DOK_PENGANGKATAN' => $arsip->NO_DOK_PENGANGKATAN,
