@@ -24,7 +24,7 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
 
 $router->group(['prefix' => 'dashboard'], function () use ($router) {
     $router->get('/pencarian', 'DashboardController@pencarian');
-    //$router->get('/updateUser', 'AuthController@showUser');
+    $router->get('/getAllArsip', 'DashboardController@getAllArsip');
 });
 
 
