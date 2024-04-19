@@ -109,7 +109,6 @@ class DashboardController extends Controller
     }
     public function getAllArsip()
     {
-        // Ambil semua arsip dengan informasi jenis dokumen terkait
         $arsips = Arsip::with('jenisDokumen')
                        ->with([
                            'infoArsipPengangkatan',
@@ -126,9 +125,7 @@ class DashboardController extends Controller
                            'infoArsipKtp'
                        ])->get();
 
-        // Mengembalikan data dalam format JSON
         if ($arsips->isNotEmpty()) {
-            // Format data sesuai kebutuhan
             $formattedArsips = $arsips->map(function ($arsip) {
                 $NAMA = [];
                 $models = [
@@ -146,7 +143,6 @@ class DashboardController extends Controller
                     'infoArsipKtp' => 'NAMA',
                 ];
 
-                // Mendapatkan NAMA dari setiap tabel terkait
                 foreach ($models as $relation => $columnName) {
                     if (is_array($columnName)) {
                         foreach ($columnName as $column) {
@@ -161,7 +157,6 @@ class DashboardController extends Controller
                     }
                 }
 
-                // Gabungkan NAMA menjadi satu string
                 $NAMA = implode(', ', $NAMA);
 
                 return [
@@ -190,7 +185,6 @@ class DashboardController extends Controller
                     'LOK_SIMPAN' => $arsip->LOK_SIMPAN,
                     'TANGGAL_PINDAI' => $arsip->TANGGAL_PINDAI,
                     'KETERANGAN' => $arsip->KETERANGAN,
-                    // Tambahkan kolom lain sesuai kebutuhan
                 ];
             });
 
