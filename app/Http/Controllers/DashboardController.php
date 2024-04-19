@@ -237,7 +237,78 @@ class DashboardController extends Controller
             ], 404);
         }
     }
-    
+
+    public function getArsipDokumenById($ID_ARSIP)
+    {
+        $arsip = Arsip::with('jenisDokumen')
+                      ->with([
+                          'infoArsipPengangkatan',
+                          'infoArsipSuratPindah',
+                          'infoArsipPerceraian',
+                          'infoArsipPengesahan',
+                          'infoArsipKematian',
+                          'infoArsipKelahiran',
+                          'infoArsipPengakuan',
+                          'infoArsipPerkawinan',
+                          'infoArsipKk',
+                          'infoArsipSkot',
+                          'infoArsipSktt',
+                          'infoArsipKtp'
+                      ])->find($ID_ARSIP);
+
+        if (!$arsip) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Arsip tidak ditemukan',
+            ], 404);
+        }
+
+        $dokumen = [];
+        $models = [
+            'infoArsipPengangkatan' => ['FILE_LAMA','FILE_LAINNYA','FILE_PENGANGKATAN'],
+            'infoArsipSuratPindah' => ['FILE_LAMA','FILE_SKP_WNI','FILE_KTP_ASAL','FILE_NIKAH_CERAI',
+                                        'FILE_AKTA_KELAHIRAN','FILE_KK','FILE_F101','FILE_102','FILE_DOK_PENDUKUNG',
+                                        'FILE_LAINNYA','FILE_SURAT_PINDAH'],
+            'infoArsipPerceraian' => ['FILE_LAMA','FILE_F201','FILE_FC_PP',
+                                        'FILE_KUTIPAN_PERKAWINAN','FILE_KTP','FILE_KK','FILE_SPTJM','FILE_LAINNYA',
+                                        'FILE_AKTA_PERCERAIAN','FILE_AKTA_PERKAWINAN'],
+            'infoArsipPengesahan' => ['FILE_LAMA','FILE_LAINNYA','FILE_PENGESAHAN'],
+            'infoArsipKematian' => ['FILE_LAMA','FILE_F201','FILE_SK_KEMATIAN','FILE_KK','FILE_KTP',
+                                    'FILE_KTP_SUAMI_ISTRI','FILE_KUTIPAN_KEMATIAN','FILE_FC_PP','FILE_FC_DOK_PERJALANAN',
+                                    'FILE_DOK_PENDUKUNG','FILE_SPTJM','FILE_LAINNYA','FILE_AKTA_KEMATIAN'],
+            'infoArsipKelahiran' => ['FILE_LAMA','FILE_KK','FILE_KTP_AYAH','FILE_KTP_IBU','FILE_F102','FILE_F201',
+                                    'FILE_BUKU_NIKAH','FILE_KUTIPAN_KELAHIRAN','FILE_SURAT_KELAHIRAN','FILE_SPTJM_PENERBITAN',
+                                    'FILE_PELAPORAN_KELAHIRAN','FILE_LAINNYA','FILE_AKTA_KELAHIRAN'],
+            'infoArsipPengakuan' => ['FILE_LAMA','FILE_LAINNYA','FILE_PENGAKUAN'],
+            'infoArsipPerkawinan' => ['FILE_LAMA','FILE_LAINNYA','FILE_F201','FILE_FC_SK_KAWIN',
+                                        'FILE_FC_PASFOTO','FILE_KTP','FILE_KK','FILE_AKTA_KEMATIAN','FILE_AKTA_PERCERAIAN',
+                                        'FILE_SPTJM','FILE_LAINNYA','FILE_AKTA_PERKAWINAN'],
+            'infoArsipKk' => ['FILE_LAMA','FILE_F101','FILE_NIKAH_CERAI','FILE_SK_PINDAH','FILE_SK_PINDAH_LUAR',
+                                'FILE_SK_PENGGANTI','FILE_PUTUSAN_PRESIDEN','FILE_KK_LAMA','FILE_SK_PERISTIWA','FILE_SK_HILANG',
+                                'FILE_KTP','FILE_LAINNYA','FILE_KK'],
+            'infoArsipSkot' => ['FILE_LAMA','FILE_LAINNYA','FILE_SKOT'],
+            'infoArsipSktt' => ['FILE_LAMA','FILE_LAINNYA','FILE_SKTT'],
+            'infoArsipKtp' => ['FILE_LAMA','FILE_KK','FILE_KUTIPAN_KTP','FILE_SK_HILANG','FILE_AKTA_KELAHIRAN',
+                                'FILE_IJAZAH','FILE_SURAT_NIKAH_CERAI','FILE_SURAT_PINDAH','FILE_LAINNYA','FILE_KTP'],
+        ];
+
+        foreach ($models as $relation => $columns) {
+            if ($arsip->$relation) {
+                foreach ($columns as $column) {
+                    if (!empty($arsip->$relation->$column)) {
+                        $dokumen[] = $arsip->$relation->$column;
+                    }
+                }
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Sukses Menampilkan Arsip by '. $arsip->ID_ARSIP,
+            'dokumen' => $dokumen,
+        ], 200);
+    }
+
     public function rekapitulasi ()
     {
 
