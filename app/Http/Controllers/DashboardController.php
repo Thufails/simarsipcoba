@@ -304,7 +304,7 @@ class DashboardController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Sukses Menampilkan Arsip by '. $arsip->ID_ARSIP,
+            'message' => 'Sukses Menampilkan Arsip by id'. $arsip->ID_ARSIP,
             'dokumen' => $dokumen,
         ], 200);
     }
