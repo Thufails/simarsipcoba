@@ -262,7 +262,6 @@ class DashboardController extends Controller
                 'message' => 'Arsip tidak ditemukan',
             ], 404);
         }
-
         $dokumen = [];
         $models = [
             'infoArsipPengangkatan' => ['FILE_LAMA','FILE_LAINNYA','FILE_PENGANGKATAN'],
@@ -301,10 +300,9 @@ class DashboardController extends Controller
                 }
             }
         }
-
         return response()->json([
             'success' => true,
-            'message' => 'Sukses Menampilkan Arsip by id'. $arsip->ID_ARSIP,
+            'message' => 'Sukses Menampilkan Arsip by id '. $arsip->ID_ARSIP,
             'dokumen' => $dokumen,
         ], 200);
     }
