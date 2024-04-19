@@ -237,16 +237,8 @@ class DashboardController extends Controller
             ], 404);
         }
     }
-    public function manajemen ()
-    {
-
-    }
+    
     public function rekapitulasi ()
-    {
-
-    }
-
-    public function operator ()
     {
 
     }
