@@ -19,10 +19,11 @@ class PencarianController extends Controller
      *
      * @return void
      */
-    public function pencarian(Request $request)
+
+     public function pencarianFilter(Request $request)
     {
         $validator = app('validator')->make($request->all(), [
-            'jenis_dokumen' => 'nullable|exists:jenis_dokumen,ID_DOKUMEN',
+            'JENIS_DOKUMEN' => 'nullable|exists:JENIS_DOKUMEN,ID_DOKUMEN',
             'NO_DOKUMEN' => 'nullable|string',
             'NAMA' => 'nullable|string'
         ]);
@@ -31,71 +32,123 @@ class PencarianController extends Controller
             throw new ValidationException($validator);
         }
 
-        $jenisDokumen = JenisDokumen::when($request->has('jenis_dokumen'), function ($query) use ($request) {
-            $query->where('ID_DOKUMEN', $request->jenis_dokumen);
-        }) ->pluck('NAMA_DOKUMEN');
+        $jenisDokumen = JenisDokumen::when($request->has('JENIS_DOKUMEN'), function ($query) use ($request) {
+            $query->where('ID_DOKUMEN', $request->JENIS_DOKUMEN);
+        })->pluck('NAMA_DOKUMEN');
 
-        $arsipquery = Arsip::query();
+        $arsipQuery = Arsip::query();
 
-        if ($request->has('jenis_dokumen')) {
-            $arsipquery->where('ID_DOKUMEN', $request->jenis_dokumen);
+        if ($request->has('JENIS_DOKUMEN')) {
+            $arsipQuery->where('ID_DOKUMEN', $request->JENIS_DOKUMEN);
         }
 
         if ($request->has('NO_DOKUMEN')) {
-            $arsipquery->where(function ($q) use ($request) {
-                $q->where('NO_DOK_PENGANGKATAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                    ->orWhere('NO_DOK_SURAT_PINDAH', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                    ->orWhere('NO_DOK_PERCERAIAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                    ->orWhere('NO_DOK_PENGESAHAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                    ->orWhere('NO_DOK_KEMATIAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                    ->orWhere('NO_DOK_KELAHIRAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                    ->orWhere('NO_DOK_PENGAKUAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                    ->orWhere('NO_DOK_PERKAWINAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                    ->orWhere('NO_DOK_KK', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                    ->orWhere('NO_DOK_SKOT', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                    ->orWhere('NO_DOK_SKTT', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                    ->orWhere('NO_DOK_KTP', 'LIKE', '%' . $request->NO_DOKUMEN . '%');
-            });
+            if ($request->has('NAMA')) {
+                // Filter berdasarkan NO_DOKUMEN dan NAMA
+                $arsipQuery->where(function ($q) use ($request) {
+                    $q->where('NO_DOK_PENGANGKATAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_SURAT_PINDAH', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_PERCERAIAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_PENGESAHAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_KEMATIAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_KELAHIRAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_PENGAKUAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_PERKAWINAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_KK', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_SKOT', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_SKTT', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_KTP', 'LIKE', '%' . $request->NO_DOKUMEN . '%');
+                });
+            } else {
+                // Filter hanya berdasarkan NO_DOKUMEN
+                $arsipQuery->where(function ($q) use ($request) {
+                    $q->where('NO_DOK_PENGANGKATAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_SURAT_PINDAH', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_PERCERAIAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_PENGESAHAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_KEMATIAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_KELAHIRAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_PENGAKUAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_PERKAWINAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_KK', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_SKOT', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_SKTT', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                        ->orWhere('NO_DOK_KTP', 'LIKE', '%' . $request->NO_DOKUMEN . '%');
+                });
+            }
         }
 
         if ($request->has('NAMA')) {
-            $arsipquery->where(function ($arsipquery) use ($request) {
-                $models = [
-                    'infoArsipPengangkatan' => 'NAMA_ANAK',
-                    'infoArsipSuratPindah' => 'NAMA_KEPALA',
-                    'infoArsipPerceraian' => ['NAMA_PRIA', 'NAMA_WANITA'],
-                    'infoArsipPengesahan' => 'NAMA_ANAK',
-                    'infoArsipKematian' => 'NAMA',
-                    'infoArsipKelahiran' => 'NAMA',
-                    'infoArsipPengakuan' => 'NAMA_ANAK',
-                    'infoArsipPerkawinan' => ['NAMA_PRIA', 'NAMA_WANITA'],
-                    'infoArsipKk' => 'NAMA_KEPALA',
-                    'infoArsipSkot' => ['NAMA', 'NAMA_PANGGIL'],
-                    'infoArsipSktt' => 'NAMA',
-                    'infoArsipKtp' => 'NAMA',
-                ];
+            if ($request->has('NO_DOKUMEN')) {
+                // Filter berdasarkan NO_DOKUMEN dan NAMA
+                $arsipQuery->where(function ($arsipQuery) use ($request) {
+                    $models = [
+                        'infoArsipPengangkatan' => 'NAMA_ANAK',
+                        'infoArsipSuratPindah' => 'NAMA_KEPALA',
+                        'infoArsipPerceraian' => ['NAMA_PRIA', 'NAMA_WANITA'],
+                        'infoArsipPengesahan' => 'NAMA_ANAK',
+                        'infoArsipKematian' => 'NAMA',
+                        'infoArsipKelahiran' => 'NAMA',
+                        'infoArsipPengakuan' => 'NAMA_ANAK',
+                        'infoArsipPerkawinan' => ['NAMA_PRIA', 'NAMA_WANITA'],
+                        'infoArsipKk' => 'NAMA_KEPALA',
+                        'infoArsipSkot' => ['NAMA', 'NAMA_PANGGIL'],
+                        'infoArsipSktt' => 'NAMA',
+                        'infoArsipKtp' => 'NAMA',
+                    ];
 
-                foreach ($models as $relation => $columnName) {
-                    $arsipquery->orWhereHas($relation, function ($query) use ($request, $columnName) {
-                        if (is_array($columnName)) {
-                            $query->where($columnName[0], 'LIKE', '%' . $request->NAMA . '%')
-                                ->orWhere($columnName[1], 'LIKE', '%' . $request->NAMA . '%');
-                        } else {
-                            $query->where($columnName, 'LIKE', '%' . $request->NAMA . '%');
-                        }
-                    });
-                }
-            });
+                    foreach ($models as $relation => $columnName) {
+                        $arsipQuery->orWhereHas($relation, function ($query) use ($request, $columnName) {
+                            if (is_array($columnName)) {
+                                $query->where($columnName[0], 'LIKE', '%' . $request->NAMA . '%')
+                                    ->orWhere($columnName[1], 'LIKE', '%' . $request->NAMA . '%');
+                            } else {
+                                $query->where($columnName, 'LIKE', '%' . $request->NAMA . '%');
+                            }
+                        });
+                    }
+                });
+            } else {
+                // Filter hanya berdasarkan NAMA
+                $arsipQuery->where(function ($arsipQuery) use ($request) {
+                    $models = [
+                        'infoArsipPengangkatan' => 'NAMA_ANAK',
+                        'infoArsipSuratPindah' => 'NAMA_KEPALA',
+                        'infoArsipPerceraian' => ['NAMA_PRIA', 'NAMA_WANITA'],
+                        'infoArsipPengesahan' => 'NAMA_ANAK',
+                        'infoArsipKematian' => 'NAMA',
+                        'infoArsipKelahiran' => 'NAMA',
+                        'infoArsipPengakuan' => 'NAMA_ANAK',
+                        'infoArsipPerkawinan' => ['NAMA_PRIA', 'NAMA_WANITA'],
+                        'infoArsipKk' => 'NAMA_KEPALA',
+                        'infoArsipSkot' => ['NAMA', 'NAMA_PANGGIL'],
+                        'infoArsipSktt' => 'NAMA',
+                        'infoArsipKtp' => 'NAMA',
+                    ];
+
+                    foreach ($models as $relation => $columnName) {
+                        $arsipQuery->orWhereHas($relation, function ($query) use ($request, $columnName) {
+                            if (is_array($columnName)) {
+                                $query->where($columnName[0], 'LIKE', '%' . $request->NAMA . '%')
+                                    ->orWhere($columnName[1], 'LIKE', '%' . $request->NAMA . '%');
+                            } else {
+                                $query->where($columnName, 'LIKE', '%' . $request->NAMA . '%');
+                            }
+                        });
+                    }
+                });
+            }
         }
 
-        $arsip = $arsipquery->select('JUMLAH_BERKAS', 'NO_BUKU', 'NO_RAK', 'NO_BARIS', 'NO_BOKS', 'LOK_SIMPAN', 'TANGGAL_PINDAI', 'KETERANGAN')->get();
+        $arsip = $arsipQuery->select('JUMLAH_BERKAS', 'NO_BUKU', 'NO_RAK', 'NO_BARIS', 'NO_BOKS', 'LOK_SIMPAN', 'TANGGAL_PINDAI', 'KETERANGAN')->get();
 
         return response()->json([
-            'jenis_dokumen'=>$jenisDokumen,
+            'JENIS_DOKUMEN' => $jenisDokumen,
             'NO_DOKUMEN' => $request->NO_DOKUMEN,
             'NAMA' => $request->NAMA,
-            'arsip' => $arsip,
-        ]);
+            'arsip' => $arsip->isEmpty() ? null : $arsip,
+            'message' => $arsip->isEmpty() ? 'Tidak ada arsip yang ditemukan' : 'Sukses mendapatkan data arsip',
+        ], $arsip->isEmpty() ? 404 : 200);
     }
     public function getAllArsip()
     {
