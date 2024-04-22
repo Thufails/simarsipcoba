@@ -23,7 +23,7 @@ class PencarianController extends Controller
      public function pencarianFilter(Request $request)
     {
         $validator = app('validator')->make($request->all(), [
-            'JENIS_DOKUMEN' => 'nullable|exists:JENIS_DOKUMEN,ID_DOKUMEN',
+            'JENIS_DOKUMEN' => 'nullable|exists:jenis_dokumen,ID_DOKUMEN',
             'NO_DOKUMEN' => 'nullable|string',
             'NAMA' => 'nullable|string'
         ]);
