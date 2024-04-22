@@ -38,72 +38,76 @@ class PencarianController extends Controller
 
          $query = Arsip::with('jenisDokumen');
 
-         if ($request->has('NO_DOKUMEN')) {
-             $query->where(function ($q) use ($request) {
-                 $q->where('NO_DOK_PENGANGKATAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                     ->orWhere('NO_DOK_SURAT_PINDAH', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                     ->orWhere('NO_DOK_PERCERAIAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                     ->orWhere('NO_DOK_PENGESAHAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                     ->orWhere('NO_DOK_KEMATIAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                     ->orWhere('NO_DOK_KELAHIRAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                     ->orWhere('NO_DOK_PENGAKUAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                     ->orWhere('NO_DOK_PERKAWINAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                     ->orWhere('NO_DOK_KK', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                     ->orWhere('NO_DOK_SKOT', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                     ->orWhere('NO_DOK_SKTT', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
-                     ->orWhere('NO_DOK_KTP', 'LIKE', '%' . $request->NO_DOKUMEN . '%');
-             });
-         }
+         if ($request->has('JENIS_DOKUMEN')) {
+            $query->where('ID_DOKUMEN', $request->JENIS_DOKUMEN);
+        }
 
-         if ($request->has('NAMA')) {
-             $query->where(function ($q) use ($request) {
-                 $q->whereHas('infoArsipPengangkatan', function ($arsipquery) use ($request) {
-                     $arsipquery->where('NAMA_ANAK', 'LIKE', '%' . $request->NAMA . '%');
-                 })
-                 ->orWhereHas('infoArsipSuratPindah', function ($arsipquery) use ($request) {
-                     $arsipquery->where('NAMA_KEPALA', 'LIKE', '%' . $request->NAMA . '%');
-                 })
-                 ->orWhereHas('infoArsipPerceraian', function ($arsipquery) use ($request) {
-                     $arsipquery->where(function ($q) use ($request) {
-                         $q->where('NAMA_PRIA', 'LIKE', '%' . $request->NAMA . '%')
-                           ->orWhere('NAMA_WANITA', 'LIKE', '%' . $request->NAMA . '%');
-                     });
-                 })
-                 ->orWhereHas('infoArsipPengesahan', function ($arsipquery) use ($request) {
-                     $arsipquery->where('NAMA_ANAK', 'LIKE', '%' . $request->NAMA . '%');
-                 })
-                 ->orWhereHas('infoArsipKematian', function ($arsipquery) use ($request) {
-                     $arsipquery->where('NAMA', 'LIKE', '%' . $request->NAMA . '%');
-                 })
-                 ->orWhereHas('infoArsipKelahiran', function ($arsipquery) use ($request) {
-                     $arsipquery->where('NAMA', 'LIKE', '%' . $request->NAMA . '%');
-                 })
-                 ->orWhereHas('infoArsipPengakuan', function ($arsipquery) use ($request) {
-                     $arsipquery->where('NAMA_ANAK', 'LIKE', '%' . $request->NAMA . '%');
-                 })
-                 ->orWhereHas('infoArsipPerkawinan', function ($arsipquery) use ($request) {
-                     $arsipquery->where(function ($q) use ($request) {
-                         $q->where('NAMA_PRIA', 'LIKE', '%' . $request->NAMA . '%')
-                           ->orWhere('NAMA_WANITA', 'LIKE', '%' . $request->NAMA . '%');
-                     });
-                 })
-                 ->orWhereHas('infoArsipKk', function ($arsipquery) use ($request) {
-                     $arsipquery->where('NAMA_KEPALA', 'LIKE', '%' . $request->NAMA . '%');
-                 })
-                 ->orWhereHas('infoArsipSkot', function ($arsipquery) use ($request) {
-                     $arsipquery->where(function ($q) use ($request) {
-                         $q->where('NAMA', 'LIKE', '%' . $request->NAMA . '%')
-                           ->orWhere('NAMA_PANGGIL', 'LIKE', '%' . $request->NAMA . '%');
-                     });
-                 })
-                 ->orWhereHas('infoArsipSktt', function ($arsipquery) use ($request) {
-                     $arsipquery->where('NAMA', 'LIKE', '%' . $request->NAMA . '%');
-                 })
-                 ->orWhereHas('infoArsipKtp', function ($arsipquery) use ($request) {
-                     $arsipquery->where('NAMA', 'LIKE', '%' . $request->NAMA . '%');
-                 });
-             });
-         }
+        else if ($request->has('NO_DOKUMEN')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('NO_DOK_PENGANGKATAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_SURAT_PINDAH', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_PERCERAIAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_PENGESAHAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_KEMATIAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_KELAHIRAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_PENGAKUAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_PERKAWINAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_KK', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_SKOT', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_SKTT', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
+                    ->orWhere('NO_DOK_KTP', 'LIKE', '%' . $request->NO_DOKUMEN . '%');
+            });
+        }
+
+        else if ($request->has('NAMA')) {
+            $query->where(function ($q) use ($request) {
+                $q->whereHas('infoArsipPengangkatan', function ($arsipquery) use ($request) {
+                    $arsipquery->where('NAMA_ANAK', 'LIKE', '%' . $request->NAMA . '%');
+                })
+                ->orWhereHas('infoArsipSuratPindah', function ($arsipquery) use ($request) {
+                    $arsipquery->where('NAMA_KEPALA', 'LIKE', '%' . $request->NAMA . '%');
+                })
+                ->orWhereHas('infoArsipPerceraian', function ($arsipquery) use ($request) {
+                    $arsipquery->where(function ($q) use ($request) {
+                        $q->where('NAMA_PRIA', 'LIKE', '%' . $request->NAMA . '%')
+                          ->orWhere('NAMA_WANITA', 'LIKE', '%' . $request->NAMA . '%');
+                    });
+                })
+                ->orWhereHas('infoArsipPengesahan', function ($arsipquery) use ($request) {
+                    $arsipquery->where('NAMA_ANAK', 'LIKE', '%' . $request->NAMA . '%');
+                })
+                ->orWhereHas('infoArsipKematian', function ($arsipquery) use ($request) {
+                    $arsipquery->where('NAMA', 'LIKE', '%' . $request->NAMA . '%');
+                })
+                ->orWhereHas('infoArsipKelahiran', function ($arsipquery) use ($request) {
+                    $arsipquery->where('NAMA', 'LIKE', '%' . $request->NAMA . '%');
+                })
+                ->orWhereHas('infoArsipPengakuan', function ($arsipquery) use ($request) {
+                    $arsipquery->where('NAMA_ANAK', 'LIKE', '%' . $request->NAMA . '%');
+                })
+                ->orWhereHas('infoArsipPerkawinan', function ($arsipquery) use ($request) {
+                    $arsipquery->where(function ($q) use ($request) {
+                        $q->where('NAMA_PRIA', 'LIKE', '%' . $request->NAMA . '%')
+                          ->orWhere('NAMA_WANITA', 'LIKE', '%' . $request->NAMA . '%');
+                    });
+                })
+                ->orWhereHas('infoArsipKk', function ($arsipquery) use ($request) {
+                    $arsipquery->where('NAMA_KEPALA', 'LIKE', '%' . $request->NAMA . '%');
+                })
+                ->orWhereHas('infoArsipSkot', function ($arsipquery) use ($request) {
+                    $arsipquery->where(function ($q) use ($request) {
+                        $q->where('NAMA', 'LIKE', '%' . $request->NAMA . '%')
+                          ->orWhere('NAMA_PANGGIL', 'LIKE', '%' . $request->NAMA . '%');
+                    });
+                })
+                ->orWhereHas('infoArsipSktt', function ($arsipquery) use ($request) {
+                    $arsipquery->where('NAMA', 'LIKE', '%' . $request->NAMA . '%');
+                })
+                ->orWhereHas('infoArsipKtp', function ($arsipquery) use ($request) {
+                    $arsipquery->where('NAMA', 'LIKE', '%' . $request->NAMA . '%');
+                });
+            });
+        }
 
          $arsips = $query->get();
          $formattedArsips = $arsips->map(function ($arsip) {
