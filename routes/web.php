@@ -27,7 +27,7 @@ $router->group(['prefix' => 'dashboard'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'pencarian'], function () use ($router) {
-    $router->get('/filter', 'PencarianController@pencarian');
+    $router->get('/filter', 'PencarianController@pencarianFilter');
     $router->get('/getAllArsip', 'PencarianController@getAllArsip');
     $router->get('/getArsipDokumen/{ID_ARSIP}', 'PencarianController@getArsipDokumenById');
 });
