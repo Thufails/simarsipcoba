@@ -37,6 +37,12 @@ class PencarianController extends Controller
          }
 
          $query = Arsip::with('jenisDokumen');
+         
+         if ($request->has('JENIS_DOKUMEN') && $request->JENIS_DOKUMEN != null) {
+            $query->whereHas('jenisDokumen', function ($q) use ($request) {
+                $q->where('ID_DOKUMEN', $request->JENIS_DOKUMEN);
+            });
+        }
 
          if ($request->has('NO_DOKUMEN')) {
              $query->where(function ($q) use ($request) {
