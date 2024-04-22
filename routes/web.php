@@ -29,7 +29,7 @@ $router->group(['prefix' => 'dashboard'], function () use ($router) {
 $router->group(['prefix' => 'pencarian'], function () use ($router) {
     $router->get('/filter', 'DashboardController@pencarian');
     $router->get('/getAllArsip', 'DashboardController@getAllArsip');
-    $router->get('/getArsip/{ID_ARSIP}', 'DashboardController@getArsipDokumenById');
+    $router->get('/getArsipDokumen/{ID_ARSIP}', 'DashboardController@getArsipDokumenById');
 });
 
 $router->group(['prefix' => 'profile', 'middleware' => 'auth'], function () use ($router) {
