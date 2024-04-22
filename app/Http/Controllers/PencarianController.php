@@ -22,14 +22,12 @@ class PencarianController extends Controller
 
      public function pencarianFilter(Request $request)
      {
-         // Validasi input
          $validator = app('validator')->make($request->all(), [
              'JENIS_DOKUMEN' => 'nullable|exists:jenis_dokumen,ID_DOKUMEN',
              'NO_DOKUMEN' => 'nullable|string',
              'NAMA' => 'nullable|string',
          ]);
 
-         // Jika validasi gagal, kembalikan response error
          if ($validator->fails()) {
              return response()->json([
                  'success' => false,
@@ -38,15 +36,12 @@ class PencarianController extends Controller
              ], 400);
          }
 
-         // Query untuk mengambil data arsip dengan relasi jenis dokumen
          $query = Arsip::with('jenisDokumen');
 
-         // Filter berdasarkan jenis dokumen jika diberikan
          if ($request->has('JENIS_DOKUMEN')) {
              $query->where('ID_DOKUMEN', $request->JENIS_DOKUMEN);
          }
 
-         // Filter berdasarkan nomor dokumen jika diberikan
          if ($request->has('NO_DOKUMEN')) {
              $query->where(function ($q) use ($request) {
                  $q->where('NO_DOK_PENGANGKATAN', 'LIKE', '%' . $request->NO_DOKUMEN . '%')
@@ -64,7 +59,6 @@ class PencarianController extends Controller
              });
          }
 
-         // Filter berdasarkan NAMA jika diberikan
          if ($request->has('NAMA')) {
              $query->where(function ($q) use ($request) {
                  $q->whereHas('infoArsipPengangkatan', function ($arsipquery) use ($request) {
@@ -115,10 +109,7 @@ class PencarianController extends Controller
              });
          }
 
-         // Ambil data arsip sesuai dengan filter
          $arsips = $query->get();
-
-         // Format data sesuai kebutuhan
          $formattedArsips = $arsips->map(function ($arsip) {
              $NAMA = [];
              $DOKUMEN = [];
@@ -137,7 +128,6 @@ class PencarianController extends Controller
                  'infoArsipKtp' => ['NAMA', 'FILE_LAMA', 'FILE_KK', 'FILE_KUTIPAN_KTP', 'FILE_SK_HILANG', 'FILE_AKTA_KELAHIRAN', 'FILE_IJAZAH', 'FILE_SURAT_NIKAH_CERAI', 'FILE_SURAT_PINDAH', 'FILE_LAINNYA', 'FILE_KTP'],
              ];
 
-             // Mendapatkan NAMA dan dokumen dari setiap tabel terkait
              foreach ($models as $relation => $columns) {
                  if (is_array($columns)) {
                      foreach ($columns as $column) {
@@ -160,7 +150,6 @@ class PencarianController extends Controller
                  }
              }
 
-             // Gabungkan NAMA dan dokumen menjadi satu string
              $NAMA = implode(', ', $NAMA);
              $DOKUMEN = implode(', ', array_filter($DOKUMEN));
 
@@ -192,11 +181,9 @@ class PencarianController extends Controller
                  'LOK_SIMPAN' => $arsip->LOK_SIMPAN,
                  'TANGGAL_PINDAI' => $arsip->TANGGAL_PINDAI,
                  'KETERANGAN' => $arsip->KETERANGAN,
-                 // Tambahkan kolom lain sesuai kebutuhan
              ];
          });
 
-         // Mengembalikan data dalam format JSON
          if ($formattedArsips->isNotEmpty()) {
              return response()->json([
                  'success' => true,
