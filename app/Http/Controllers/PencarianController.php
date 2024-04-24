@@ -435,7 +435,16 @@ class PencarianController extends Controller
             }
 
             $formattedArsip['NAMA'] = implode(', ', $NAMA);
-            $formattedArsip['DOKUMEN'] = implode(', ', array_filter($DOKUMEN));
+
+            $formattedDokumen = [];
+            foreach ($models as $relation => $columns) {
+                foreach ($columns as $column) {
+                    if (!empty($arsip->$relation->$column) && strpos($column, 'FILE_') !== false) {
+                        $formattedDokumen[$column] = $arsip->$relation->$column;
+                    }
+                }
+            }
+            $formattedArsip['DOKUMEN'] = $formattedDokumen;
 
             return response()->json([
                 'success' => true,
