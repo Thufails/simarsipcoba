@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('arsip', function (Blueprint $table) {
-            $table->bigInteger('ID_ARSIP')->primary();
+            $table->id('ID_ARSIP');
             $table->bigInteger('JUMLAH_BERKAS')->nullable();
             $table->bigInteger('NO_BUKU')->nullable();
             $table->bigInteger('NO_RAK')->nullable();
