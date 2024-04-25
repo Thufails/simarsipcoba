@@ -186,15 +186,6 @@ class InfoArsipKelahiranController extends Controller
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN'=>'nullable|string|max:15',
             'NAMA' => 'required|string|max:50',
-            'TEMPAT_LAHIR' => 'required|string|max:25',
-            'TANGGAL_LAHIR' => 'required|date',
-            'ANAK_KE' => 'required|integer',
-            'NAMA_AYAH' => 'required|string|max:50',
-            'NAMA_IBU' => 'required|string|max:50',
-            'NO_KK' => 'required|integer',
-            'TAHUN_PEMBUATAN_DOK_KELAHIRAN' => 'required|date',
-            'STATUS_KELAHIRAN' => 'required|string|max:25',
-            'STATUS_PENDUDUK' => 'required|string|max:25',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_KK' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_KTP_AYAH' => 'nullable|file|mimes:pdf|max:25000',
@@ -271,15 +262,7 @@ class InfoArsipKelahiranController extends Controller
 
         // Update data info arsip kelahiran
         $infoArsipKelahiran->NAMA = $request->input('NAMA');
-        $infoArsipKelahiran->TEMPAT_LAHIR = $request->input('TEMPAT_LAHIR');
-        $infoArsipKelahiran->TANGGAL_LAHIR = $request->input('TANGGAL_LAHIR');
-        $infoArsipKelahiran->ANAK_KE = $request->input('ANAK_KE');
-        $infoArsipKelahiran->NAMA_AYAH = $request->input('NAMA_AYAH');
-        $infoArsipKelahiran->NAMA_IBU = $request->input('NAMA_IBU');
-        $infoArsipKelahiran->NO_KK = $request->input('NO_KK');
-        $infoArsipKelahiran->TAHUN_PEMBUATAN_DOK_KELAHIRAN = $request->input('TAHUN_PEMBUATAN_DOK_KELAHIRAN');
-        $infoArsipKelahiran->STATUS_KELAHIRAN = $request->input('STATUS_KELAHIRAN');
-        $infoArsipKelahiran->STATUS_PENDUDUK = $request->input('STATUS_PENDUDUK');
+
 
         $fileFields = [
             'FILE_LAMA',
