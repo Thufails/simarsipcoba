@@ -291,7 +291,7 @@ class InfoArsipKelahiranController extends Controller
                 if (in_array($extension, $allowedExtensions)) {
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
-                        $fileName = time() . '_' . $file->getClientOriginalName();
+                        $fileName = $file;
                         $file->storeAs('Arsip Kelahiran', $fileName, 'public');
                         // Simpan nama file ke dalam database sesuai dengan field yang sesuai
                         $infoArsipKelahiran->$field = $fileName;
