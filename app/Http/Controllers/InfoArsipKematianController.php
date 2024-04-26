@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\infoArsipKematian;
+use App\Models\InfoArsipKematian;
 use App\Models\User;
 use App\Models\Arsip;
 use App\Models\JenisDokumen;
@@ -92,7 +92,7 @@ class InfoArsipKematianController extends Controller
 
         $idArsip = $arsip->ID_ARSIP;
 
-        $infoArsipKematian = new infoArsipKematian();
+        $infoArsipKematian = new InfoArsipKematian();
         $infoArsipKematian->ID_ARSIP = $idArsip;
         $infoArsipKematian->NO_DOK_KEMATIAN = $arsip->NO_DOK_KEMATIAN;
         $infoArsipKematian->NAMA = $request->input('NAMA');
@@ -236,7 +236,7 @@ class InfoArsipKematianController extends Controller
         }
         $arsip->save();
 
-        $infoArsipKematian = infoArsipKematian::where('ID_ARSIP', $ID_ARSIP)->first();
+        $infoArsipKematian = InfoArsipKematian::where('ID_ARSIP', $ID_ARSIP)->first();
 
         if (!$infoArsipKematian) {
             return response()->json([
