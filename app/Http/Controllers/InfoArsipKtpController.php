@@ -196,8 +196,150 @@ class InfoArsipKtpController extends Controller
     }
 
 
-    public function updateKtp (Request $request)
+    public function updateKtp (Request $request, $ID_ARSIP)
     {
+        $validator = app('validator')->make($request->all(), [
+            'JUMLAH_BERKAS' => 'nullable|integer',
+            'NO_BUKU' => 'nullable|integer',
+            'NO_RAK' => 'nullable|integer',
+            'NO_BARIS' => 'nullable|integer',
+            'NO_BOKS' => 'nullable|integer',
+            'LOK_SIMPAN' => 'nullable|string|max:25',
+            'KETERANGAN' => 'nullable|string|max:15',
+            'NAMA' => 'required|string|max:50',
+            'FILE_KK' => 'nullable|file|max:25000|mimes:pdf',
+            'FILE_KUTIPAN_KTP' => 'nullable|file|max:25000|mimes:pdf',
+            'FILE_SK_HILANG' => 'nullable|file|max:25000|mimes:pdf',
+            'FILE_AKTA_LAHIR' => 'nullable|file|max:25000|mimes:pdf',
+            'FILE_IJAZAH' => 'nullable|file|max:25000|mimes:pdf',
+            'FILE_SURAT_NIKAH_CERAI' => 'nullable|file|max:25000|mimes:pdf',
+            'FILE_SURAT_PINDAH' => 'nullable|file|max:25000|mimes:pdf',
+            'FILE_LAINNYA' => 'nullable|file|max:25000|mimes:pdf',
+            'FILE_KTP' => 'nullable|file|max:25000|mimes:pdf',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validasi gagal',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+        $idDokumen = JenisDokumen::where('NAMA_DOKUMEN', 'Kartu Tanda Penduduk')->value('ID_DOKUMEN');
+        // Temukan arsip berdasarkan ID_ARSIP
+        $arsip = Arsip::find($ID_ARSIP);
+
+        if (!$arsip) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Arsip tidak ditemukan',
+            ], 404);
+        }
+
+        // Simpan data arsip sebelum diupdate untuk memeriksa apakah ada perubahan
+        $arsipBeforeUpdate = clone $arsip;
+
+        // Update data arsip
+        $arsip->JUMLAH_BERKAS = $request->input('JUMLAH_BERKAS');
+        $arsip->NO_BUKU = $request->input('NO_BUKU');
+        $arsip->NO_RAK = $request->input('NO_RAK');
+        $arsip->NO_BARIS = $request->input('NO_BARIS');
+        $arsip->NO_BOKS = $request->input('NO_BOKS');
+        $arsip->LOK_SIMPAN = $request->input('LOK_SIMPAN');
+        $arsip->KETERANGAN = $request->input('KETERANGAN');
+        $arsip->ID_DOKUMEN = $idDokumen;
+        $arsip->TANGGAL_PINDAI = Carbon::now();
+
+        // Periksa apakah ada perubahan pada data arsip
+        if (!$arsip->isDirty()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Tidak ada perubahan pada Arsip',
+                'data' => $arsipBeforeUpdate,
+            ], 200);
+        }
+        $arsip->save();
+
+        // Temukan info arsip KTP yang terkait
+        $infoArsipKtp = InfoArsipKtp::where('ID_ARSIP', $ID_ARSIP)->first();
+
+        if (!$infoArsipKtp) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Info arsip KTP tidak ditemukan',
+            ], 404);
+        }
+
+        // Simpan data info arsip KTP sebelum diupdate untuk memeriksa apakah ada perubahan
+        $infoArsipKtpBeforeUpdate = clone $infoArsipKtp;
+
+        $infoArsipKtp->NAMA = $request->input('NAMA');
+
+        $fileFields = [
+            'FILE_KK',
+            'FILE_KUTIPAN_KTP',
+            'FILE_SK_HILANG',
+            'FILE_AKTA_LAHIR',
+            'FILE_IJAZAH',
+            'FILE_SURAT_NIKAH_CERAI',
+            'FILE_SURAT_PINDAH',
+            'FILE_LAINNYA',
+            'FILE_KTP',
+        ];
+
+        foreach ($fileFields as $field) {
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+                $fileName = $file->getClientOriginalName();
+                $fileExtension = $file->getClientOriginalExtension();
+                $allowedExtensions = ['pdf'];
+
+                if (in_array($fileExtension, $allowedExtensions)) {
+                    if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
+                        $fileName = $file->getClientOriginalName();
+                        $file = $file->storeAs('Arsip Ktp', $fileName, 'public');
+                        $infoArsipKtp ->$field = $fileName;
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Ukuran file terlalu besar. Maksimal ukuran file adalah 25 MB.',
+                            'field' => $field
+                        ], 400);
+                    }
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Ekstensi file tidak didukung. Hanya file PDF yang diizinkan.',
+                        'field' => $field
+                    ], 400);
+                }
+            }
+        }
+
+            // Periksa apakah ada perubahan pada data info arsip pengesahan
+        if (!$infoArsipKtp->isDirty()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Ktp tidak ada perubahan',
+                'data' => $infoArsipKtpBeforeUpdate,
+            ], 200);
+        }
+        $infoArsipKtp->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data berhasil diperbarui',
+            'arsip' => [
+                'JUMLAH_BERKAS' => $arsip->JUMLAH_BERKAS,
+                'NO_BUKU' => $arsip->NO_BUKU,
+                'NO_RAK' => $arsip->NO_RAK,
+                'NO_BARIS' => $arsip->NO_BARIS,
+                'NO_BOKS' => $arsip->NO_BOKS,
+                'LOK_SIMPAN' => $arsip->LOK_SIMPAN,
+                'KETERANGAN' => $arsip->KETERANGAN,
+                'ID_DOKUMEN' => $arsip->ID_DOKUMEN,
+            ],
+            'info_arsip_ktp' => $infoArsipKtp,
+        ], 200);
     }
 }

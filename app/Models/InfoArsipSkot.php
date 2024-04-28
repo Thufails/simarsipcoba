@@ -44,11 +44,11 @@ class InfoArsipSkot extends Model
 
     public function kecamatan()
     {
-        return $this->belongsTo(Kecamatan::class, 'ID_KECAMATAN', 'ID_KECAMATAN');
+        return $this->belongsTo(Kecamatan::class, 'ID_KECAMATAN');
     }
 
     public function kelurahan()
     {
-        return $this->belongsTo(Kelurahan::class, 'ID_KELURAHAN', 'ID_KELURAHAN');
+        return $this->belongsTo(Kelurahan::class, 'ID_KELURAHAN');
     }
 }

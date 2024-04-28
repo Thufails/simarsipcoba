@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('NO_DOK_SKOT', 25)->primary();
             $table->string('NAMA', 50);
             $table->string('NAMA_PANGGIL', 25);
-            $table->integer('NIK');
+            $table->bigInteger('NIK');
             $table->string('JENIS_KELAMIN', 15);
             $table->string('TEMPAT_LAHIR', 25);
             $table->date('TANGGAL_LAHIR');

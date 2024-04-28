@@ -45,8 +45,8 @@ $router->group(['prefix' => 'arsipktp'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'arsipkk'], function () use ($router) {
-    $router->post('/simpanKtp', 'InfoArsipKtpController@simpanKtp');
-    $router->post('/updateKtp/{ID_ARSIP}', 'InfoArsipKtpController@updateKtp');
+    $router->post('/simpanKk', 'InfoArsipKkController@simpanKk');
+    $router->post('/updateKk/{ID_ARSIP}', 'InfoArsipKkController@updateKk');
 });
 
 $router->group(['prefix' => 'arsippengangkatan'], function () use ($router) {
@@ -72,4 +72,19 @@ $router->group(['prefix' => 'arsipperkawinan'], function () use ($router) {
 $router->group(['prefix' => 'arsipperceraian'], function () use ($router) {
     $router->post('/simpanPerceraian', 'InfoArsipPerceraianController@simpanPerceraian');
     $router->post('/updatePerceraian/{ID_ARSIP}', 'InfoArsipPerceraianController@updatePerceraian');
+});
+
+$router->group(['prefix' => 'arsipskot'], function () use ($router) {
+    $router->post('/simpanSkot', 'InfoArsipSkotController@simpanSkot');
+    $router->post('/updateSkot/{ID_ARSIP}', 'InfoArsipSkotController@updateSkot');
+});
+
+$router->group(['prefix' => 'arsipsktt'], function () use ($router) {
+    $router->post('/simpanSktt', 'InfoArsipSkttController@simpanSktt');
+    $router->post('/updateSktt/{ID_ARSIP}', 'InfoArsipSkttController@updateSktt');
+});
+
+$router->group(['prefix' => 'arsipsuratpindah'], function () use ($router) {
+    $router->post('/simpanSuratPindah', 'InfoArsipSuratPindahController@simpanSuratPindah');
+    $router->post('/updateSuratPindah/{ID_ARSIP}', 'InfoArsipSuratPindahController@updateSuratPindah');
 });

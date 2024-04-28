@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('info_arsip_ktp', function (Blueprint $table) {
-            $table->bigInteger('NO_DOK_KTP')->primary();
+            $table->string('NO_DOK_KTP')->primary();
             $table->string('NAMA', 50);
             $table->string('JENIS_KELAMIN', 15);
             $table->string('TEMPAT_LAHIR', 25);
