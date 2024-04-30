@@ -250,8 +250,7 @@ class PencarianController extends Controller
                                             'FILE_FC_PASFOTO','FILE_KTP','FILE_KK','FILE_AKTA_KEMATIAN','FILE_AKTA_PERCERAIAN',
                                             'FILE_SPTJM','FILE_LAINNYA','FILE_AKTA_PERKAWINAN'],
 
-                    'infoArsipKk' => ['NAMA_KEPALA', 'FILE_LAMA','FILE_F101','FILE_NIKAH_CERAI','FILE_SK_PINDAH','FILE_SK_PINDAH_LUAR',
-                                    'FILE_SK_PENGGANTI','FILE_PUTUSAN_PRESIDEN','FILE_KK_LAMA','FILE_SK_PERISTIWA','FILE_SK_HILANG',
+                    'infoArsipKk' => ['NAMA_KEPALA', 'FILE_LAMA','FILE_F101','FILE_NIKAH_CERAI','FILE_SK_PINDAH','FILE_SK_PINDAH_LUAR','FILE_SK_PENGGANTI','FILE_PUTUSAN_PRESIDEN','FILE_KK_LAMA','FILE_SK_PERISTIWA','FILE_SK_HILANG',
                                     'FILE_KTP','FILE_LAINNYA','FILE_KK'],
 
                     'infoArsipSkot' => ['NAMA', 'NAMA_PANGGIL', 'FILE_LAMA','FILE_LAINNYA','FILE_SKOT'],
