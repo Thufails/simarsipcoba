@@ -509,7 +509,7 @@ class PencarianController extends Controller
                                 'FILE_KTP','FILE_LAINNYA','FILE_KK'],
             'infoArsipSkot' => ['FILE_LAMA','FILE_LAINNYA','FILE_SKOT'],
             'infoArsipSktt' => ['FILE_LAMA','FILE_LAINNYA','FILE_SKTT'],
-            'infoArsipKtp' => ['FILE_LAMA','FILE_KK','FILE_KUTIPAN_KTP','FILE_SK_HILANG','FILE_AKTA_KELAHIRAN',
+            'infoArsipKtp' => ['FILE_LAMA','FILE_KK','FILE_KUTIPAN_KTP','FILE_SK_HILANG','FILE_AKTA_LAHIR',
                                 'FILE_IJAZAH','FILE_SURAT_NIKAH_CERAI','FILE_SURAT_PINDAH','FILE_LAINNYA','FILE_KTP'],
         ];
 
