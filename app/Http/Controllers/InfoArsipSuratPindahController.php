@@ -274,11 +274,11 @@ class InfoArsipSuratPindahController extends Controller
         if (!$infoArsipSuratPindah) {
             return response()->json([
                 'success' => false,
-                'message' => 'Info arsip SKTT tidak ditemukan',
+                'message' => 'Info arsip Surat Pindah tidak ditemukan',
             ], 404);
         }
 
-        // Simpan data info arsip SKTT sebelum diupdate untuk memeriksa apakah ada perubahan
+        // Simpan data info arsip Surat Pindah sebelum diupdate untuk memeriksa apakah ada perubahan
         $infoArsipSuratPindahBeforeUpdate = clone $infoArsipSuratPindah;
 
         $infoArsipSuratPindah->NAMA_KEPALA = $request->input('NAMA_KEPALA');
@@ -353,7 +353,7 @@ class InfoArsipSuratPindahController extends Controller
                 'KETERANGAN' => $arsip->KETERANGAN,
                 'ID_DOKUMEN' => $arsip->ID_DOKUMEN,
             ],
-            'info_arsip_surat_pindah1  11' => $infoArsipSuratPindah,
+            'info_arsip_surat_pindah' => $infoArsipSuratPindah,
         ], 200);
     }
 
