@@ -289,12 +289,11 @@ class InfoArsipKtpController extends Controller
 
         foreach ($fileFields as $field) {
             if ($request->hasFile($field)) {
-                $file = $request->file($field);
-                $fileName = $file->getClientOriginalName();
-                $fileExtension = $file->getClientOriginalExtension();
                 $allowedExtensions = ['pdf'];
+                $file = $request->file($field);
+                $extension = $file->getClientOriginalExtension();
 
-                if (in_array($fileExtension, $allowedExtensions)) {
+                if (in_array($extension, $allowedExtensions)) {
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
                         $file->storeAs('Arsip Ktp', $fileName, 'public');
