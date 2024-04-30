@@ -131,7 +131,7 @@ class InfoArsipKematianController extends Controller
 
                 if (in_array($extension, $allowedExtensions)) {
                     if ($file->getSize() <= 25000000) {
-                        $fileName = time() . '_' . $file->getClientOriginalName();
+                        $fileName = $file->getClientOriginalName();
                         $file->storeAs('Arsip Kematian', $fileName, 'public');
                         $infoArsipKematian->$field = $fileName;
                     } else {

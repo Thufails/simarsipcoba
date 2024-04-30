@@ -297,7 +297,7 @@ class InfoArsipKtpController extends Controller
                 if (in_array($fileExtension, $allowedExtensions)) {
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $file = $file->storeAs('Arsip Ktp', $fileName, 'public');
+                        $file->storeAs('Arsip Ktp', $fileName, 'public');
                         $infoArsipKtp ->$field = $fileName;
                     } else {
                         return response()->json([

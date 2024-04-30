@@ -166,7 +166,7 @@ class InfoArsipSuratPindahController extends Controller
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
                         // Simpan file dan dapatkan pathnya
-                        $file = $file->storeAs('Arsip Surat Pindah', $fileName, 'public');
+                        $file->storeAs('Arsip Surat Pindah', $fileName, 'public');
                         $infoArsipSuratPindah->$field = $fileName;
                     } else {
                         return response()->json([
@@ -235,7 +235,7 @@ class InfoArsipSuratPindahController extends Controller
             ], 400);
         }
 
-        $idDokumen = JenisDokumen::where('NAMA_DOKUMEN', 'SKTT')->value('ID_DOKUMEN');
+        $idDokumen = JenisDokumen::where('NAMA_DOKUMEN', 'Surat  Pindah')->value('ID_DOKUMEN');
         // Temukan arsip berdasarkan ID_ARSIP
         $arsip = Arsip::find($ID_ARSIP);
         if (!$arsip) {
@@ -311,7 +311,7 @@ class InfoArsipSuratPindahController extends Controller
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
                         // Simpan file dan dapatkan pathnya
-                        $file = $file->storeAs('Arsip Surat Pindah', $fileName, 'public');
+                        $file->storeAs('Arsip Surat Pindah', $fileName, 'public');
                         $infoArsipSuratPindah->$field = $fileName;
                     } else {
                         return response()->json([
@@ -334,7 +334,7 @@ class InfoArsipSuratPindahController extends Controller
         if (!$infoArsipSuratPindah->isDirty()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Data Sktt tidak ada perubahan',
+                'message' => 'Data Surat Pindah tidak ada perubahan',
                 'data' => $infoArsipSuratPindahBeforeUpdate,
             ], 200);
         }
@@ -353,7 +353,7 @@ class InfoArsipSuratPindahController extends Controller
                 'KETERANGAN' => $arsip->KETERANGAN,
                 'ID_DOKUMEN' => $arsip->ID_DOKUMEN,
             ],
-            'info_arsip_kk' => $infoArsipSuratPindah,
+            'info_arsip_surat_pindah1  11' => $infoArsipSuratPindah,
         ], 200);
     }
 

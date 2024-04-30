@@ -275,8 +275,7 @@ class InfoArsipSkttController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        // Simpan file dan dapatkan pathnya
-                        $file = $file->storeAs('Arsip Sktt', $fileName, 'public');
+                        $file->storeAs('Arsip Sktt', $fileName, 'public');
                         $infoArsipSktt->$field = $fileName;
                     } else {
                         return response()->json([
@@ -318,7 +317,7 @@ class InfoArsipSkttController extends Controller
                 'KETERANGAN' => $arsip->KETERANGAN,
                 'ID_DOKUMEN' => $arsip->ID_DOKUMEN,
             ],
-            'info_arsip_kk' => $infoArsipSktt,
+            'info_arsip_Sktt' => $infoArsipSktt,
         ], 200);
     }
 

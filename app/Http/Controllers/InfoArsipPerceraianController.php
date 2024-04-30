@@ -224,7 +224,7 @@ class InfoArsipPerceraianController extends Controller
         if (!$arsip->isDirty()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Tidak ada perubahan pada Arsip',
+                'message' => 'Tidak ada perubahan pada Arsip Perceraian',
                 'data' => $arsipBeforeUpdate,
             ], 200);
         }

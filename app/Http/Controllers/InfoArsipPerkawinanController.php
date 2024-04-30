@@ -212,7 +212,6 @@ class InfoArsipPerkawinanController extends Controller
         $arsipBeforeUpdate = clone $arsip;
 
         // Update data arsip
-        $arsip->NO_DOK_PERKAWINAN = $request->input('NO_DOK_PERKAWINAN');
         $arsip->JUMLAH_BERKAS = $request->input('JUMLAH_BERKAS');
         $arsip->NO_BUKU = $request->input('NO_BUKU');
         $arsip->NO_RAK = $request->input('NO_RAK');
@@ -300,7 +299,7 @@ class InfoArsipPerkawinanController extends Controller
         if (!$infoArsipPerkawinan->isDirty()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Data Kelahiran tidak ada perubahan',
+                'message' => 'Data Perkawinan tidak ada perubahan',
                 'data' => $infoArsipPerkawinanBeforeUpdate,
             ], 200);
         }
