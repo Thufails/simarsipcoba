@@ -276,6 +276,7 @@ class InfoArsipKtpController extends Controller
         $infoArsipKtp->NAMA = $request->input('NAMA');
 
         $fileFields = [
+            'FILE_LAMA',
             'FILE_KK',
             'FILE_KUTIPAN_KTP',
             'FILE_SK_HILANG',
