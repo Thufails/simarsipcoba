@@ -237,6 +237,7 @@ class InfoArsipSuratPindahController extends Controller
 
         $idDokumen = JenisDokumen::where('NAMA_DOKUMEN', 'Surat Pindah')->value('ID_DOKUMEN');
         // Temukan arsip berdasarkan ID_ARSIP
+        
         $arsip = Arsip::find($ID_ARSIP);
         if (!$arsip) {
             return response()->json([

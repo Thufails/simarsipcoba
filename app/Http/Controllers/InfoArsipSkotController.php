@@ -200,7 +200,6 @@ class InfoArsipSkotController extends Controller
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN'=>'nullable|string|max:15',
             'NAMA' => 'required|string|max:50',
-            'NAMA_PANGGIL' => 'required|string|max:25',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_LAINNYA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_SKOT' => 'nullable|file|mimes:pdf|max:25000',
@@ -246,7 +245,6 @@ class InfoArsipSkotController extends Controller
                 'data' => $arsipBeforeUpdate,
             ], 200);
         }
-        // Simpan perubahan pada data arsip
         $arsip->save();
 
         $infoArsipSkot = InfoArsipSkot::where('ID_ARSIP', $ID_ARSIP)->first();
@@ -262,7 +260,6 @@ class InfoArsipSkotController extends Controller
         $infoArsipSkotBeforeUpdate = clone $infoArsipSkot;
 
         $infoArsipSkot->NAMA = $request->input('NAMA');
-        $infoArsipSkot->NAMA_PANGGIL = $request->input('NAMA_PANGGIL');
 
         $fileFields = [
             'FILE_LAMA',
@@ -312,6 +309,7 @@ class InfoArsipSkotController extends Controller
         }
         $infoArsipSkot ->save();
 
+        unset($infoArsipSkot->NAMA_PANGGIL);
         return response()->json([
             'success' => true,
             'message' => 'Data berhasil diperbarui',
