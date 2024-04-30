@@ -97,10 +97,7 @@ class PencarianController extends Controller
                      $arsipquery->where('NAMA_KEPALA', 'LIKE', '%' . $request->NAMA . '%');
                  })
                  ->orWhereHas('infoArsipSkot', function ($arsipquery) use ($request) {
-                     $arsipquery->where(function ($q) use ($request) {
-                         $q->where('NAMA', 'LIKE', '%' . $request->NAMA . '%')
-                           ->orWhere('NAMA_PANGGIL', 'LIKE', '%' . $request->NAMA . '%');
-                     });
+                    $arsipquery->where('NAMA', 'LIKE', '%' . $request->NAMA . '%');
                  })
                  ->orWhereHas('infoArsipSktt', function ($arsipquery) use ($request) {
                      $arsipquery->where('NAMA', 'LIKE', '%' . $request->NAMA . '%');
@@ -125,7 +122,7 @@ class PencarianController extends Controller
                  'infoArsipPengakuan' => ['NAMA_ANAK', 'FILE_LAMA', 'FILE_LAINNYA', 'FILE_PENGAKUAN'],
                  'infoArsipPerkawinan' => ['NAMA_PRIA', 'NAMA_WANITA', 'FILE_LAMA', 'FILE_LAINNYA', 'FILE_F201', 'FILE_FC_SK_KAWIN', 'FILE_FC_PASFOTO', 'FILE_KTP', 'FILE_KK', 'FILE_AKTA_KEMATIAN', 'FILE_AKTA_PERCERAIAN', 'FILE_SPTJM', 'FILE_LAINNYA', 'FILE_AKTA_PERKAWINAN'],
                  'infoArsipKk' => ['NAMA_KEPALA', 'FILE_LAMA', 'FILE_F101', 'FILE_NIKAH_CERAI', 'FILE_SK_PINDAH', 'FILE_SK_PINDAH_LUAR', 'FILE_SK_PENGGANTI', 'FILE_PUTUSAN_PRESIDEN', 'FILE_KK_LAMA', 'FILE_SK_PERISTIWA', 'FILE_SK_HILANG', 'FILE_KTP', 'FILE_LAINNYA', 'FILE_KK'],
-                 'infoArsipSkot' => ['NAMA', 'NAMA_PANGGIL', 'FILE_LAMA', 'FILE_LAINNYA', 'FILE_SKOT'],
+                 'infoArsipSkot' => ['NAMA', 'FILE_LAMA', 'FILE_LAINNYA', 'FILE_SKOT'],
                  'infoArsipSktt' => ['NAMA', 'FILE_LAMA', 'FILE_LAINNYA', 'FILE_SKTT'],
                  'infoArsipKtp' => ['NAMA', 'FILE_LAMA', 'FILE_KK', 'FILE_KUTIPAN_KTP', 'FILE_SK_HILANG', 'FILE_AKTA_LAHIR', 'FILE_IJAZAH', 'FILE_SURAT_NIKAH_CERAI', 'FILE_SURAT_PINDAH', 'FILE_LAINNYA', 'FILE_KTP'],
              ];
@@ -253,7 +250,7 @@ class PencarianController extends Controller
                     'infoArsipKk' => ['NAMA_KEPALA', 'FILE_LAMA','FILE_F101','FILE_NIKAH_CERAI','FILE_SK_PINDAH','FILE_SK_PINDAH_LUAR','FILE_SK_PENGGANTI','FILE_PUTUSAN_PRESIDEN','FILE_KK_LAMA','FILE_SK_PERISTIWA','FILE_SK_HILANG',
                                     'FILE_KTP','FILE_LAINNYA','FILE_KK'],
 
-                    'infoArsipSkot' => ['NAMA', 'NAMA_PANGGIL', 'FILE_LAMA','FILE_LAINNYA','FILE_SKOT'],
+                    'infoArsipSkot' => ['NAMA', 'FILE_LAMA','FILE_LAINNYA','FILE_SKOT'],
 
                     'infoArsipSktt' => ['NAMA', 'FILE_LAMA','FILE_LAINNYA','FILE_SKTT'],
 
@@ -404,7 +401,7 @@ class PencarianController extends Controller
                                             'FILE_SPTJM','FILE_LAINNYA','FILE_AKTA_PERKAWINAN'],
                 'infoArsipKk' => ['NAMA_KEPALA', 'FILE_LAMA','FILE_F101','FILE_NIKAH_CERAI','FILE_SK_PINDAH','FILE_SK_PINDAH_LUAR', 'FILE_SK_PENGGANTI','FILE_PUTUSAN_PRESIDEN','FILE_KK_LAMA','FILE_SK_PERISTIWA','FILE_SK_HILANG',
                                     'FILE_KTP','FILE_LAINNYA','FILE_KK'],
-                'infoArsipSkot' => ['NAMA', 'NAMA_PANGGIL', 'FILE_LAMA','FILE_LAINNYA','FILE_SKOT'],
+                'infoArsipSkot' => ['NAMA', 'FILE_LAMA','FILE_LAINNYA','FILE_SKOT'],
                 'infoArsipSktt' => ['NAMA', 'FILE_LAMA','FILE_LAINNYA','FILE_SKTT'],
                 'infoArsipKtp' => ['NAMA', 'FILE_LAMA','FILE_KK','FILE_KUTIPAN_KTP','FILE_SK_HILANG','FILE_AKTA_LAHIR',
                                     'FILE_IJAZAH','FILE_SURAT_NIKAH_CERAI','FILE_SURAT_PINDAH','FILE_LAINNYA','FILE_KTP'],
