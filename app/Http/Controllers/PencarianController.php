@@ -117,7 +117,7 @@ class PencarianController extends Controller
              $DOKUMEN = [];
              $models = [
                  'infoArsipPengangkatan' => ['NAMA_ANAK', 'FILE_LAMA', 'FILE_LAINNYA', 'FILE_PENGANGKATAN'],
-                 'infoArsipSuratPindah' => ['NAMA_KEPALA', 'FILE_LAMA', 'FILE_SKP_WNI', 'FILE_KTP_ASAL', 'FILE_NIKAH_CERAI', 'FILE_AKTA_KELAHIRAN', 'FILE_KK', 'FILE_F101', 'FILE_102', 'FILE_DOK_PENDUKUNG', 'FILE_LAINNYA', 'FILE_SURAT_PINDAH'],
+                 'infoArsipSuratPindah' => ['NAMA_KEPALA', 'FILE_LAMA', 'FILE_SKP_WNI', 'FILE_KTP_ASAL', 'FILE_NIKAH_CERAI', 'FILE_AKTA_KELAHIRAN', 'FILE_KK', 'FILE_F101', 'FILE_102','FILE_F103', 'FILE_DOK_PENDUKUNG', 'FILE_LAINNYA', 'FILE_SURAT_PINDAH'],
                  'infoArsipPerceraian' => ['NAMA_PRIA', 'NAMA_WANITA', 'FILE_LAMA', 'FILE_F201', 'FILE_FC_PP', 'FILE_KUTIPAN_PERKAWINAN', 'FILE_KTP', 'FILE_KK', 'FILE_SPTJM', 'FILE_LAINNYA', 'FILE_AKTA_PERCERAIAN', 'FILE_AKTA_PERKAWINAN'],
                  'infoArsipPengesahan' => ['NAMA_ANAK', 'FILE_LAMA', 'FILE_LAINNYA', 'FILE_PENGESAHAN'],
                  'infoArsipKematian' => ['NAMA', 'FILE_LAMA', 'FILE_F201', 'FILE_SK_KEMATIAN', 'FILE_KK', 'FILE_KTP', 'FILE_KTP_SUAMI_ISTRI', 'FILE_KUTIPAN_KEMATIAN', 'FILE_FC_PP', 'FILE_FC_DOK_PERJALANAN', 'FILE_DOK_PENDUKUNG', 'FILE_SPTJM', 'FILE_LAINNYA', 'FILE_AKTA_KEMATIAN'],
@@ -227,7 +227,7 @@ class PencarianController extends Controller
                     'infoArsipPengangkatan' => ['NAMA_ANAK', 'FILE_LAMA','FILE_LAINNYA','FILE_PENGANGKATAN'],
 
                     'infoArsipSuratPindah' => ['NAMA_KEPALA','FILE_LAMA','FILE_SKP_WNI','FILE_KTP_ASAL','FILE_NIKAH_CERAI',
-                                            'FILE_AKTA_KELAHIRAN','FILE_KK','FILE_F101','FILE_102','FILE_DOK_PENDUKUNG',
+                                            'FILE_AKTA_KELAHIRAN','FILE_KK','FILE_F101','FILE_102','FILE_F103','FILE_DOK_PENDUKUNG',
                                             'FILE_LAINNYA','FILE_SURAT_PINDAH'],
 
                     'infoArsipPerceraian' => ['NAMA_PRIA', 'NAMA_WANITA','FILE_LAMA','FILE_F201','FILE_FC_PP',
@@ -386,7 +386,7 @@ class PencarianController extends Controller
             $models = [
                 'infoArsipPengangkatan' => ['NAMA_ANAK', 'FILE_LAMA','FILE_LAINNYA','FILE_PENGANGKATAN'],
                 'infoArsipSuratPindah' => ['NAMA_KEPALA','FILE_LAMA','FILE_SKP_WNI','FILE_KTP_ASAL','FILE_NIKAH_CERAI',
-                                            'FILE_AKTA_KELAHIRAN','FILE_KK','FILE_F101','FILE_102','FILE_DOK_PENDUKUNG',
+                                            'FILE_AKTA_KELAHIRAN','FILE_KK','FILE_F101','FILE_102','FILE_F103','FILE_DOK_PENDUKUNG',
                                             'FILE_LAINNYA','FILE_SURAT_PINDAH'],
                 'infoArsipPerceraian' => ['NAMA_PRIA', 'NAMA_WANITA','FILE_LAMA','FILE_F201','FILE_FC_PP',
                                             'FILE_KUTIPAN_PERKAWINAN','FILE_KTP','FILE_KK','FILE_SPTJM','FILE_LAINNYA',
@@ -486,7 +486,7 @@ class PencarianController extends Controller
         $models = [
             'infoArsipPengangkatan' => ['FILE_LAMA','FILE_LAINNYA','FILE_PENGANGKATAN'],
             'infoArsipSuratPindah' => ['FILE_LAMA','FILE_SKP_WNI','FILE_KTP_ASAL','FILE_NIKAH_CERAI',
-                                        'FILE_AKTA_KELAHIRAN','FILE_KK','FILE_F101','FILE_102','FILE_DOK_PENDUKUNG',
+                                        'FILE_AKTA_KELAHIRAN','FILE_KK','FILE_F101','FILE_102','FILE_F103','FILE_DOK_PENDUKUNG',
                                         'FILE_LAINNYA','FILE_SURAT_PINDAH'],
             'infoArsipPerceraian' => ['FILE_LAMA','FILE_F201','FILE_FC_PP',
                                         'FILE_KUTIPAN_PERKAWINAN','FILE_KTP','FILE_KK','FILE_SPTJM','FILE_LAINNYA',
