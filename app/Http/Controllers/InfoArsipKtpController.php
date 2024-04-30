@@ -58,15 +58,16 @@ class InfoArsipKtpController extends Controller
             'ID_KECAMATAN'=> 'required|integer',
             'ID_KELURAHAN'=> 'required|integer',
             'TAHUN_PEMBUATAN_KTP' => 'required|date',
-            'FILE_KK' => 'nullable|file|max:25000',
-            'FILE_KUTIPAN_KTP' => 'nullable|file|max:25000',
-            'FILE_SK_HILANG' => 'nullable|file|max:25000',
-            'FILE_AKTA_LAHIR' => 'nullable|file|max:25000',
-            'FILE_IJAZAH' => 'nullable|file|max:25000',
-            'FILE_SURAT_NIKAH_CERAI' => 'nullable|file|max:25000',
-            'FILE_SURAT_PINDAH' => 'nullable|file|max:25000',
-            'FILE_LAINNYA' => 'nullable|file|max:25000',
-            'FILE_KTP' => 'nullable|file|max:25000',
+            'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
+            'FILE_KK' => 'nullable|file|mimes:pdf|max:25000',
+            'FILE_KUTIPAN_KTP' => 'nullable|file|mimes:pdf|max:25000',
+            'FILE_SK_HILANG' => 'nullable|file|mimes:pdf|max:25000',
+            'FILE_AKTA_LAHIR' => 'nullable|file|mimes:pdf|max:25000',
+            'FILE_IJAZAH' => 'nullable|file|mimes:pdf|max:25000',
+            'FILE_SURAT_NIKAH_CERAI' => 'nullable|file|mimes:pdf|max:25000',
+            'FILE_SURAT_PINDAH' => 'nullable|file|mimes:pdf|max:25000',
+            'FILE_LAINNYA' => 'nullable|file|mimes:pdf|max:25000',
+            'FILE_KTP' => 'nullable|file|mimes:pdf|max:25000',
         ]);
 
         if ($validator->fails()) {
@@ -134,6 +135,7 @@ class InfoArsipKtpController extends Controller
         $infoArsiKtp->TAHUN_PEMBUATAN_KTP = $request->input('TAHUN_PEMBUATAN_KTP');
 
         $fileFields = [
+            'FILE_LAMA',
             'FILE_KK',
             'FILE_KUTIPAN_KTP',
             'FILE_SK_HILANG',
@@ -207,6 +209,7 @@ class InfoArsipKtpController extends Controller
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN' => 'nullable|string|max:15',
             'NAMA' => 'required|string|max:50',
+            'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_KK' => 'nullable|file|max:25000|mimes:pdf',
             'FILE_KUTIPAN_KTP' => 'nullable|file|max:25000|mimes:pdf',
             'FILE_SK_HILANG' => 'nullable|file|max:25000|mimes:pdf',
