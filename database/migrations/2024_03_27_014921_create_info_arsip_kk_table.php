@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger('KODEPOS');
             $table->string('PROV', 50);
             $table->string('KOTA', 50);
-            $table->date('TAHUN_PEMBUATAN_DOK_KK');
+            $table->bigInteger('TAHUN_PEMBUATAN_DOK_KK');
             $table->text('FILE_LAMA')->nullable();
             $table->text('FILE_F101')->nullable();
             $table->text('FILE_NIKAH_CERAI')->nullable();

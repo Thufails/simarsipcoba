@@ -48,7 +48,7 @@ class InfoArsipKelahiranController extends Controller
             'NAMA_AYAH' => 'required|string|max:50',
             'NAMA_IBU' => 'required|string|max:50',
             'NO_KK' => 'required|integer',
-            'TAHUN_PEMBUATAN_DOK_KELAHIRAN' => 'required|date',
+            'TAHUN_PEMBUATAN_DOK_KELAHIRAN' => 'required|integer',
             'STATUS_KELAHIRAN' => 'required|string|max:25',
             'STATUS_PENDUDUK' => 'required|string|max:25',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',

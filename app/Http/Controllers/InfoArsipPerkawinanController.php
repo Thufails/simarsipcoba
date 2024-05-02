@@ -47,7 +47,7 @@ class InfoArsipPerkawinanController extends Controller
             'IBU_PRIA' => 'required|string|max:50',
             'AYAH_WANITA' => 'required|string|max:50',
             'IBU_WANITA' => 'required|string|max:50',
-            'TAHUN_PEMBUATAN_DOK_PERKAWINAN' => 'required|date',
+            'TAHUN_PEMBUATAN_DOK_PERKAWINAN' => 'required|integer',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_F201' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_FC_SK_KAWIN' => 'nullable|file|mimes:pdf|max:25000',

@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('KOTA_TUJUAN', 25);
             $table->string('KEC_TUJUAN', 25);
             $table->string('KEL_TUJUAN', 25);
-            $table->date('THN_PEMBUATAN_DOK_SURAT_PINDAH');
+            $table->bigInteger('THN_PEMBUATAN_DOK_SURAT_PINDAH');
             $table->longText('FILE_LAMA')->nullable();
             $table->longText('FILE_SKP_WNI')->nullable();
             $table->longText('FILE_KTP_ASAL')->nullable();

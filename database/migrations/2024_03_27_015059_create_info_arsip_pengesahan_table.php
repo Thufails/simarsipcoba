@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('TANGGAL_PP');
             $table->string('NAMA_AYAH', 50);
             $table->string('NAMA_IBU', 50);
-            $table->date('TAHUN_PEMBUATAN_DOK_PENGESAHAN');
+            $table->bigInteger('TAHUN_PEMBUATAN_DOK_PENGESAHAN');
             $table->longText('FILE_LAMA')->nullable();
             $table->longText('FILE_LAINNYA')->nullable();
             $table->longText('FILE_PENGESAHAN')->nullable();

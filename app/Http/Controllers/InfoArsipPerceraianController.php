@@ -48,7 +48,7 @@ class InfoArsipPerceraianController extends Controller
             'DOMISILI_CERAI' => 'required|string|max:255',
             'NO_PERKAWINAN' => 'required|string|max:25',
             'TANGGAL_DOK_PERKAWINAN' => 'required|date',
-            'TAHUN_PEMBUATAN_DOK_PERCERAIAN' => 'required|date',
+            'TAHUN_PEMBUATAN_DOK_PERCERAIAN' => 'required|integer',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_F201' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_FC_PP' => 'nullable|file|mimes:pdf|max:25000',

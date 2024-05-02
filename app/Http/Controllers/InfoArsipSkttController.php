@@ -56,7 +56,7 @@ class InfoArsipSkttController extends Controller
             'KOTA' => 'required|string|max:50',
             'ID_KELURAHAN' =>'required|integer',
             'ID_KECAMATAN' => 'required|integer',
-            'TAHUN_PEMBUATAN_DOK_SKTT' => 'required|date',
+            'TAHUN_PEMBUATAN_DOK_SKTT' => 'required|integer',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_LAINNYA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_SKTT' => 'nullable|file|mimes:pdf|max:25000',

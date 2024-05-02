@@ -59,7 +59,7 @@ class InfoArsipSuratPindahController extends Controller
             'KOTA_TUJUAN' => 'required|string|max:25',
             'KEC_TUJUAN' => 'required|string|max:25',
             'KEL_TUJUAN' => 'required|string|max:25',
-            'THN_PEMBUATAN_DOK_SURAT_PINDAH' => 'required|date',
+            'THN_PEMBUATAN_DOK_SURAT_PINDAH' => 'required|integer',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_SKP_WNI' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_KTP_ASAL' => 'nullable|file|mimes:pdf|max:25000',
@@ -237,7 +237,7 @@ class InfoArsipSuratPindahController extends Controller
 
         $idDokumen = JenisDokumen::where('NAMA_DOKUMEN', 'Surat Pindah')->value('ID_DOKUMEN');
         // Temukan arsip berdasarkan ID_ARSIP
-        
+
         $arsip = Arsip::find($ID_ARSIP);
         if (!$arsip) {
             return response()->json([

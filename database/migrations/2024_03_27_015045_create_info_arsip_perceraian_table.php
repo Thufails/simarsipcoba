@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('DOMISILI_CERAI', 25);
             $table->string('NO_PERKAWINAN', 25);
             $table->date('TANGGAL_DOK_PERKAWINAN');
-            $table->date('TAHUN_PEMBUATAN_DOK_PERCERAIAN');
+            $table->bigInteger('TAHUN_PEMBUATAN_DOK_PERCERAIAN');
             $table->longText('FILE_LAMA')->nullable();
             $table->longText('FILE_F201')->nullable();
             $table->longText('FILE_FC_PP')->nullable();

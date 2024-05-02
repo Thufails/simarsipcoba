@@ -57,7 +57,7 @@ class InfoArsipKtpController extends Controller
             'KOTA' => 'required|string|max:50',
             'ID_KECAMATAN'=> 'required|integer',
             'ID_KELURAHAN'=> 'required|integer',
-            'TAHUN_PEMBUATAN_KTP' => 'required|date',
+            'TAHUN_PEMBUATAN_KTP' => 'required|integer',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_KK' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_KUTIPAN_KTP' => 'nullable|file|mimes:pdf|max:25000',

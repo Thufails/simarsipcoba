@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('JENIS_KELAMIN', 15);
             $table->string('AGAMA', 15);
             $table->date('TANGGAL_LAPOR');
-            $table->date('TAHUN_PEMBUATAN_DOK_KEMATIAN');
+            $table->bigInteger('TAHUN_PEMBUATAN_DOK_KEMATIAN');
             $table->longText('FILE_LAMA')->nullable();
             $table->longText('FILE_F201')->nullable();
             $table->longText('FILE_SK_KEMATIAN')->nullable();

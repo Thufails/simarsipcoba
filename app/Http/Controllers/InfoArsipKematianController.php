@@ -49,7 +49,7 @@ class InfoArsipKematianController extends Controller
             'JENIS_KELAMIN' => 'required|string|max:15',
             'AGAMA' => 'required|string|max:15',
             'TANGGAL_LAPOR' => 'required|date',
-            'TAHUN_PEMBUATAN_DOK_KEMATIAN' => 'required|date',
+            'TAHUN_PEMBUATAN_DOK_KEMATIAN' => 'required|integer',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_F201' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_SK_KEMATIAN' => 'nullable|file|mimes:pdf|max:25000',

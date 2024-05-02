@@ -60,7 +60,7 @@ class InfoArsipSkotController extends Controller
             'KOTA' => 'required|string|max:50',
             'ID_KELURAHAN' =>'required|integer',
             'ID_KECAMATAN' => 'required|integer',
-            'TAHUN_PEMBUATAN_DOK_SKOT' => 'required|date',
+            'TAHUN_PEMBUATAN_DOK_SKOT' => 'required|integer',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_LAINNYA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_SKOT' => 'nullable|file|mimes:pdf|max:25000',

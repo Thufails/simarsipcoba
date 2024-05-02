@@ -47,7 +47,7 @@ class InfoArsipPengakuanController extends Controller
             'NO_AKTA_KELAHIRAN' => 'required|string|max:25',
             'NAMA_AYAH' => 'required|string|max:50',
             'NAMA_IBU' => 'required|string|max:50',
-            'TAHUN_PEMBUATAN_DOK_PENGAKUAN' => 'required|date',
+            'TAHUN_PEMBUATAN_DOK_PENGAKUAN' => 'required|integer',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_LAINNYA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_PENGAKUAN' => 'nullable|file|mimes:pdf|max:25000',

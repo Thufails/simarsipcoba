@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('NAMA_AYAH', 50);
             $table->string('NAMA_IBU', 50);
             $table->bigInteger('NO_KK');
-            $table->date('TAHUN_PEMBUATAN_DOK_KELAHIRAN');
+            $table->bigInteger('TAHUN_PEMBUATAN_DOK_KELAHIRAN');
             $table->string('STATUS_KELAHIRAN', 25);
             $table->string('STATUS_PENDUDUK', 25);
             $table->longText('FILE_LAMA')->nullable();

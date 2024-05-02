@@ -47,7 +47,7 @@ class InfoArsipPengesahanController extends Controller
             'TANGGAL_PP' => 'required|date',
             'NAMA_AYAH' => 'required|string|max:50',
             'NAMA_IBU' => 'required|string|max:50',
-            'TAHUN_PEMBUATAN_DOK_PENGESAHAN' => 'required|date',
+            'TAHUN_PEMBUATAN_DOK_PENGESAHAN' => 'required|integer',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_LAINNYA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_PENGESAHAN' => 'nullable|file|mimes:pdf|max:25000',

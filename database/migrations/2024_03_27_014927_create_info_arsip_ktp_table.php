@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('ALAMAT', 50);
             $table->string('PROV', 50);
             $table->string('KOTA', 50);
-            $table->date('TAHUN_PEMBUATAN_KTP');
+            $table->bigInteger('TAHUN_PEMBUATAN_KTP');
             $table->longText('FILE_LAMA')->nullable();
             $table->longText('FILE_KK')->nullable();
             $table->longText('FILE_KUTIPAN_KTP')->nullable();

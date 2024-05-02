@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('ALAMAT', 50);
             $table->string('PROV', 50);
             $table->string('KOTA', 50);
-            $table->date('TAHUN_PEMBUATAN_DOK_SKOT');
+            $table->bigInteger('TAHUN_PEMBUATAN_DOK_SKOT');
             $table->longText('FILE_LAMA')->nullable();
             $table->text('FILE_LAINNYA')->nullable();
             $table->text('FILE_SKOT')->nullable();

@@ -50,7 +50,7 @@ class InfoArsipKkController extends Controller
             'KOTA' => 'nullable|string|max:50',
             'ID_KECAMATAN' => 'nullable|integer',
             'ID_KELURAHAN' => 'nullable|integer',
-            'TAHUN_PEMBUATAN_DOK_KK' => 'nullable|date',
+            'TAHUN_PEMBUATAN_DOK_KK' => 'nullable|integer',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_F101' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_NIKAH_CERAI' => 'nullable|file|mimes:pdf|max:25000',
