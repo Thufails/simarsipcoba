@@ -59,7 +59,11 @@ class PermissionController extends Controller
     {
         $permissions = Permission::all();
 
-        return response()->json(['permissions' => $permissions]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Permission Berhasil ditampilkan',
+            'permissions' => $permissions
+        ], 200);
     }
 
     public function approvePermission(Request $request, $ID_PERMISSION)
