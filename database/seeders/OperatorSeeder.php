@@ -27,6 +27,18 @@ class OperatorSeeder extends Seeder
                 'password' => Hash::make('password456'),
                 'ID_AKSES' => 3,
             ],
+            [
+                'NAMA_OPERATOR' => 'Dhika',
+                'EMAIL' => 'operator3@example.com',
+                'PASSWORD' => Hash::make('password123'),
+                'ID_AKSES' => 2,
+            ],
+            [
+                'NAMA_OPERATOR' => 'Badruz',
+                'EMAIL' => 'operator4@example.com',
+                'PASSWORD' => Hash::make('password123'),
+                'ID_AKSES' => 1,
+            ],
         ];
 
         // Memasukkan data operator ke dalam database

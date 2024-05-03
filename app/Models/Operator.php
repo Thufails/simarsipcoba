@@ -11,7 +11,9 @@ class Operator extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'NAMA_OPERATOR'
+        'NAMA_OPERATOR',
+        'EMAIL',
+        'PASSWORD'
     ];
 
     public function HakAkses()

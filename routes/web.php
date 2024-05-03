@@ -22,12 +22,22 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
     $router->post('login', 'AuthController@login');
 });
 
+$router->group(['prefix' => 'permission'], function () use ($router) {
+    $router->post('requestPermission/{ID_ARSIP}', 'PermissionController@requestPermission');
+    $router->get('getPermission', 'PermissionController@getPermission');
+    $router->post('approvePermission/{ID_PERMISSION}', 'PermissionController@approvePermission');
+});
+
 $router->group(['prefix' => 'pencarian'], function () use ($router) {
     $router->get('/filter', 'PencarianController@pencarianFilter');
     $router->get('/getAllArsip', 'PencarianController@getAllArsip');
     $router->get('/getArsipById/{ID_ARSIP}', 'PencarianController@getArsipById');
     $router->get('/getArsipDokumen/{ID_ARSIP}', 'PencarianController@getArsipDokumenById');
 });
+
+
+//--------------------------------------------------info arsip controller------------------------------------------------
+
 
 $router->group(['prefix' => 'arsipkelahiran'], function () use ($router) {
     $router->post('/simpanKelahiran', 'InfoArsipKelahiranController@simpanKelahiran');
