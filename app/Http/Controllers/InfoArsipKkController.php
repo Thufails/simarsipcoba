@@ -175,13 +175,13 @@ class InfoArsipKkController extends Controller
         if ($infoArsipKk ) {
             return response()->json([
                 'success' => true,
-                'message' => 'Arsip Ktp berhasil ditambahkan',
+                'message' => 'Arsip Kartu Keluarga berhasil ditambahkan',
                 'data' => $infoArsipKk ,
             ], 201);
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Arsip Ktp gagal ditambahkan',
+                'message' => 'Arsip Kartu Keluarga gagal ditambahkan',
                 'data' => ''
             ], 400);
         }
@@ -267,7 +267,7 @@ class InfoArsipKkController extends Controller
             ], 404);
         }
 
-        // Simpan data info arsip KTP sebelum diupdate untuk memeriksa apakah ada perubahan
+        // Simpan data info arsip kk sebelum diupdate untuk memeriksa apakah ada perubahan
         $infoArsipKkBeforeUpdate = clone $infoArsipKk;
 
         $infoArsipKk->NAMA_KEPALA = $request->input('NAMA_KEPALA');
@@ -323,7 +323,7 @@ class InfoArsipKkController extends Controller
         if (!$infoArsipKk->isDirty()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Data Ktp tidak ada perubahan',
+                'message' => 'Datak Kartu Keluarga tidak ada perubahan',
                 'data' => $infoArsipKkBeforeUpdate,
             ], 200);
         }
