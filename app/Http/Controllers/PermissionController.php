@@ -23,6 +23,17 @@ class PermissionController extends Controller
         //$this->middleware('auth:api',['except'=>['login', 'register']]);
     }
 
+    public function getPermission(Request $request)
+    {
+        $permissions = Permission::all();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Permission Berhasil ditampilkan',
+            'permissions' => $permissions
+        ], 200);
+    }
+
     public function requestPermission(Request $request, $ID_ARSIP)
     {
         $userRequestingId = Auth::user(); // ID pengguna yang meminta akses
@@ -37,7 +48,7 @@ class PermissionController extends Controller
         $permissionRequest = new Permission();
         $permissionRequest->ID_OPERATOR = $userRequestingId;
         $permissionRequest->ID_ARSIP = $document->ID_ARSIP;
-        $permissionRequest->STATUS = 'pending';
+        $permissionRequest->STATUS = 'PENDING';
         $permissionRequest->save();
 
         if ($permissionRequest) {
@@ -55,17 +66,6 @@ class PermissionController extends Controller
         }
     }
 
-    public function getPermission(Request $request)
-    {
-        $permissions = Permission::all();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Data Permission Berhasil ditampilkan',
-            'permissions' => $permissions
-        ], 200);
-    }
-
     public function approvePermission(Request $request, $ID_PERMISSION)
     {
         $permissionRequest = Permission::find($ID_PERMISSION);
@@ -79,13 +79,34 @@ class PermissionController extends Controller
         }
 
         // Perbarui status permintaan menjadi "approved"
-        $permissionRequest->update(['STATUS' => 'approved']);
+        $permissionRequest->update(['STATUS' => 'APPROVED']);
 
         return response()->json([
             'success' => true,
             'message' => 'Permintaan ijin telah disetujui',
         ], 200);
+    }
 
+
+    public function rejectedPermission(Request $request, $ID_PERMISSION)
+    {
+        $permissionRequest = Permission::find($ID_PERMISSION);
+
+        // Jika permintaan tidak ditemukan, kembalikan respons dengan status 404
+        if (!$permissionRequest) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Permintaan ijin tidak ditemukan',
+            ], 404);
+        }
+
+        // Perbarui status permintaan menjadi "REJECTED"
+        $permissionRequest->update(['STATUS' => 'REJECTER']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Permintaan ijin telah ditolak',
+        ], 200);
     }
 
 }

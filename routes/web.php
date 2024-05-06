@@ -23,9 +23,12 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'permission'], function () use ($router) {
-    $router->post('requestPermission/{ID_ARSIP}', 'PermissionController@requestPermission');
     $router->get('getPermission', 'PermissionController@getPermission');
+    $router->post('requestPermission/{ID_ARSIP}', 'PermissionController@requestPermission');
+    $router->post('requestScan/{ID_ARSIP}', 'PermissionController@requestScan');
     $router->post('approvePermission/{ID_PERMISSION}', 'PermissionController@approvePermission');
+    $router->post('scanDokumen/{ID_ARSIP}', 'PermissionController@scanDokumen');
+    $router->post('rejectedPermission/{ID_PERMISSION}', 'PermissionController@rejectedPermission');
 });
 
 $router->group(['prefix' => 'pencarian'], function () use ($router) {
