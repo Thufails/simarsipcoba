@@ -36,14 +36,57 @@ class PermissionController extends Controller
 
     public function requestPermission(Request $request, $ID_ARSIP)
     {
-        $userRequestingId = Auth::user(); // ID pengguna yang meminta akses
-        $document = Arsip::find($ID_ARSIP);
+        // Mendapatkan ID pengguna yang meminta akses
+        $userRequestingId = Auth::id();
+
+        // Mencari dokumen berdasarkan ID_ARSIP
+        $document = Arsip::with('jenisDokumen')
+                      ->with([
+                          'infoArsipPengangkatan',
+                          'infoArsipSuratPindah',
+                          'infoArsipPerceraian',
+                          'infoArsipPengesahan',
+                          'infoArsipKematian',
+                          'infoArsipKelahiran',
+                          'infoArsipPengakuan',
+                          'infoArsipPerkawinan',
+                          'infoArsipKk',
+                          'infoArsipSkot',
+                          'infoArsipSktt',
+                          'infoArsipKtp'
+                      ])->find($ID_ARSIP);
 
         // Validasi apakah dokumen ditemukan
         if (!$document) {
             return response()->json(['message' => 'Dokumen tidak ditemukan'], 404);
         }
-
+        $nama= [];
+        $models = [
+            'infoArsipPengangkatan' => ['NAMA_ANAK'],
+            'infoArsipSuratPindah' => ['NAMA_KEPALA'],
+            'infoArsipPerceraian' => ['NAMA_PRIA'],
+            'infoArsipPengesahan' => ['NAMA_ANAK'],
+            'infoArsipKematian' => ['NAMA'],
+            'infoArsipKelahiran' => ['NAMA'],
+            'infoArsipPengakuan' => ['NAMA_ANAK'],
+            'infoArsipPerkawinan' => ['NAMA_PRIA', 'NAMA_WANITA'],
+            'infoArsipKk' => ['NAMA_KEPALA'],
+            'infoArsipSkot' => ['NAMA'],
+            'infoArsipSktt' => ['NAMA'],
+            'infoArsipKtp' => ['NAMA'],
+        ];
+        // Periksa ID_ARSIP dan tentukan model yang sesuai
+        foreach ($models as $relation => $columns) {
+            // Cek apakah relasi tersedia dan setidaknya satu dokumen tidak kosong
+            if ($document->$relation) {
+                foreach ($columns as $column) {
+                    if (!empty($document->$relation->$column)) {
+                        // Tambahkan dokumen ke dalam array
+                        $nama[] = $document->$relation->$column;
+                    }
+                }
+            }
+        }
         // Proses permintaan ijin
         $permissionRequest = new Permission();
         $permissionRequest->ID_OPERATOR = $userRequestingId;
@@ -55,6 +98,7 @@ class PermissionController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Permintaan ijin berhasil diajukan. Menunggu persetujuan Arsiparis.',
+                'nama_pemilik' => $nama,
                 'data' => $permissionRequest,
             ], 201);
         } else {
