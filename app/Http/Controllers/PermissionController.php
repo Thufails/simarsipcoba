@@ -61,7 +61,6 @@ class PermissionController extends Controller
                     'updated_at' => $permission->updated_at,
                     'ID_ARSIP' => $permission->ID_ARSIP,
                     'ID_OPERATOR' => $permission->ID_OPERATOR,
-                    'arsips' => [], // Inisialisasi array untuk data arsip
                 ];
 
                 // Jika arsip ditemukan, tambahkan data arsip ke dalam izin
@@ -152,7 +151,7 @@ class PermissionController extends Controller
                         'KETERANGAN' => $arsip->KETERANGAN,
                     ];
 
-                    $formattedPermission['arsips'][] = $formattedArsip;
+                    $formattedPermission['arsips'] = $formattedArsip;
                 }
 
                 return $formattedPermission;
