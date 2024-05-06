@@ -91,7 +91,7 @@ class PermissionController extends Controller
         $permissionRequest = new Permission();
         $permissionRequest->ID_OPERATOR = $userRequestingId;
         $permissionRequest->ID_ARSIP = $document->ID_ARSIP;
-        $permissionRequest->STATUS = 'REQUEST LIHAT';
+        $permissionRequest->STATUS = 'Request Lihat';
         $permissionRequest->save();
 
         if ($permissionRequest) {
@@ -167,7 +167,7 @@ class PermissionController extends Controller
         $permissionRequest = new Permission();
         $permissionRequest->ID_OPERATOR = $userRequestingId;
         $permissionRequest->ID_ARSIP = $document->ID_ARSIP;
-        $permissionRequest->STATUS = 'REQUEST SCAN';
+        $permissionRequest->STATUS = 'Request Scan';
         $permissionRequest->save();
 
         if ($permissionRequest) {
@@ -199,7 +199,7 @@ class PermissionController extends Controller
         }
 
         // Perbarui status permintaan menjadi "DISETUJUI"
-        $permissionRequest->update(['STATUS' => 'DISETUJUI']);
+        $permissionRequest->update(['STATUS' => 'Disetujui']);
 
         return response()->json([
             'success' => true,
@@ -221,7 +221,7 @@ class PermissionController extends Controller
         }
 
         // Perbarui status permintaan menjadi "DITOLAK"
-        $permissionRequest->update(['STATUS' => 'DITOLAK']);
+        $permissionRequest->update(['STATUS' => 'Ditolak']);
 
         return response()->json([
             'success' => true,
