@@ -22,6 +22,7 @@ return new class extends Migration
             $table->bigInteger('RW');
             $table->string('PROV', 50);
             $table->string('KOTA', 50);
+            $table->bigInteger('KODEPOS');
             $table->string('ALAMAT_TUJUAN', 50);
             $table->bigInteger('RT_TUJUAN');
             $table->bigInteger('RW_TUJUAN');
@@ -29,6 +30,7 @@ return new class extends Migration
             $table->string('KOTA_TUJUAN', 25);
             $table->string('KEC_TUJUAN', 25);
             $table->string('KEL_TUJUAN', 25);
+            $table->bigInteger('KODEPOS_TUJUAN');
             $table->bigInteger('THN_PEMBUATAN_DOK_SURAT_PINDAH');
             $table->longText('FILE_LAMA')->nullable();
             $table->longText('FILE_SKP_WNI')->nullable();
