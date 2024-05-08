@@ -378,8 +378,30 @@ class PencarianController extends Controller
                 'KETERANGAN' => $arsip->KETERANGAN,
             ];
 
+            $models = [
+                'infoArsipPengangkatan',
+                'infoArsipSuratPindah',
+                'infoArsipPerceraian',
+                'infoArsipPengesahan',
+                'infoArsipKematian',
+                'infoArsipKelahiran',
+                'infoArsipPengakuan',
+                'infoArsipPerkawinan',
+                'infoArsipKk',
+                'infoArsipSkot',
+                'infoArsipSktt',
+                'infoArsipKtp'
+            ];
+
+            foreach ($models as $relation) {
+                if ($arsip->$relation) {
+                    // Menggabungkan data ke dalam $formattedArsip tanpa membungkusnya dalam array
+                    $formattedArsip['INFO_ARSIP'] = $arsip->$relation;
+                    break; // Berhenti setelah menemukan data yang ada
+                }
+            }
+
             $NAMA = [];
-            $DOKUMEN = [];
             $models = [
                 'infoArsipPengangkatan' => ['NAMA_ANAK', 'FILE_LAMA','FILE_LAINNYA','FILE_PENGANGKATAN'],
                 'infoArsipSuratPindah' => ['NAMA_KEPALA','FILE_LAMA','FILE_SKP_WNI','FILE_KTP_ASAL','FILE_NIKAH_CERAI',
