@@ -27,7 +27,7 @@ $router->group(['prefix' => 'permission'], function () use ($router) {
     $router->post('requestPermission/{ID_ARSIP}', 'PermissionController@requestPermission');
     $router->post('requestScan/{ID_ARSIP}', 'PermissionController@requestScan');
     $router->post('approvePermission/{ID_PERMISSION}', 'PermissionController@approvePermission');
-    $router->post('scanDokumen/{ID_ARSIP}', 'PermissionController@scanDokumen');
+    $router->post('scanDokumen/{ID_PERMISSION}/{ID_ARSIP}', 'PermissionController@scanDokumen');
     $router->post('rejectedPermission/{ID_PERMISSION}', 'PermissionController@rejectedPermission');
 });
 
