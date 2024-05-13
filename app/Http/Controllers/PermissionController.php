@@ -1072,7 +1072,7 @@ class PermissionController extends Controller
             'NO_DOK_PERCERAIAN' => 'nullable|string',
             'NO_DOK_PENGESAHAN' => 'nullable|string',
             'NO_DOK_KEMATIAN' => 'nullable|string',
-            'NO_DOK_KELAHIRAN' => 'nullable|string|unique:info_arsip_kelahiran',
+            'NO_DOK_KELAHIRAN' => 'nullable|string',
             'NO_DOK_PENGAKUAN' => 'nullable|string',
             'NO_DOK_PERKAWINAN' => 'nullable|string',
             'NO_DOK_KK' => 'nullable|string',
@@ -1101,68 +1101,174 @@ class PermissionController extends Controller
         // Mengisi NO_DOK_ berdasarkan jenis dokumen yang dipilih
         switch ($idDokumen->NAMA_DOKUMEN) {
             case 'Akta Pengangkatan Anak':
-                $noDokumen = $request->input('NO_DOK_PENGANGKATAN');
-                $arsip->infoArsipPengangkatan()->create(['NO_DOK_PENGANGKATAN' => $noDokumen]);
+                $noDokumen = $request->input('NO_DOKUMEN');
+                $namaDokumen = $request->input('NAMA');
+                $arsip->NO_DOK_PENGANGKATAN = $noDokumen;
+                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
+                $arsip->save();
+                $infoArsipPengangkatan = new InfoArsipPengangkatan();
+                $idArsip = $arsip->ID_ARSIP;
+                $infoArsipPengangkatan->ID_ARSIP = $idArsip;
+                $infoArsipPengangkatan->NO_DOK_PENGANGKATAN = $arsip->NO_DOK_PENGANGKATAN;
+                $infoArsipPengangkatan->NAMA_ANAK = $namaDokumen;
+                $infoArsipPengangkatan->save();
                 break;
             case 'Surat Pindah':
-                $noDokumen = $request->input('NO_DOK_SURAT_PINDAH');
-                $arsip->infoArsipSuratPindah()->create(['NO_DOK_SURAT_PINDAH' => $noDokumen]);
+                $noDokumen = $request->input('NO_DOKUMEN');
+                $namaDokumen = $request->input('NAMA');
+                $arsip->NO_DOK_SURAT_PINDAH = $noDokumen;
+                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
+                $arsip->save();
+                $infoArsipSuratPindah = new InfoArsipSuratPindah();
+                $idArsip = $arsip->ID_ARSIP;
+                $infoArsipSuratPindah->ID_ARSIP = $idArsip;
+                $infoArsipSuratPindah->NO_DOK_SURAT_PINDAH = $arsip->NO_DOK_SURAT_PINDAH;
+                $infoArsipSuratPindah->NAMA_KEPALA = $namaDokumen;
+                $infoArsipSuratPindah->save();
                 break;
             case 'Akta Perceraian':
-                $noDokumen = $request->input('NO_DOK_PERCERAIAN');
-                $arsip->infoArsipPerceraian()->create(['NO_DOK_PERCERAIAN' => $noDokumen]);
+                $noDokumen = $request->input('NO_DOKUMEN');
+                $namaDokumen = $request->input('NAMA');
+                $arsip->NO_DOK_PERCERAIAN = $noDokumen;
+                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
+                $arsip->save();
+                $infoArsipPerceraian = new InfoArsipPerceraian();
+                $idArsip = $arsip->ID_ARSIP;
+                $infoArsipPerceraian->ID_ARSIP = $idArsip;
+                $infoArsipPerceraian->NO_DOK_PERCERAIAN = $arsip->NO_DOK_PERCERAIAN;
+                $infoArsipPerceraian->NAMA_PRIA = $namaDokumen;
+                $infoArsipPerceraian->save();
                 break;
             case 'Akta Pengesahan Anak':
-                $noDokumen = $request->input('NO_DOK_PENGESAHAN');
-                $arsip->infoArsipPengesahan()->create(['NO_DOK_PENGESAHAN' => $noDokumen]);
+                $noDokumen = $request->input('NO_DOKUMEN');
+                $namaDokumen = $request->input('NAMA');
+                $arsip->NO_DOK_PENGESAHAN = $noDokumen;
+                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
+                $arsip->save();
+                $infoArsipPengesahan = new InfoArsipPengesahan();
+                $idArsip = $arsip->ID_ARSIP;
+                $infoArsipPengesahan->ID_ARSIP = $idArsip;
+                $infoArsipPengesahan->NO_DOK_PENGESAHAN = $arsip->NO_DOK_PENGESAHAN;
+                $infoArsipPengesahan->NAMA_ANAK = $namaDokumen;
+                $infoArsipPengesahan->save();
                 break;
             case 'Akta Kematian':
-                $noDokumen = $request->input('NO_DOK_KEMATIAN');
-                $arsip->infoArsipKematian()->create(['NO_DOK_KEMATIAN' => $noDokumen]);
-                break;
+                $noDokumen = $request->input('NO_DOKUMEN');
+                $namaDokumen = $request->input('NAMA');
+                $arsip->NO_DOK_KEMATIAN = $noDokumen;
+                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
+                $arsip->save();
+                $infoArsipKematian = new InfoArsipKematian();
+                $idArsip = $arsip->ID_ARSIP;
+                $infoArsipKematian->ID_ARSIP = $idArsip;
+                $infoArsipKematian->NO_DOK_KEMATIAN = $arsip->NO_DOK_KEMATIAN;
+                $infoArsipKematian->NAMA = $namaDokumen;
+                $infoArsipKematian->save();
             case 'Akta Kelahiran':
-                $noDokumen = $request->input('NO_DOK_KELAHIRAN');
-                $arsip->infoArsipKelahiran()->create(['NO_DOK_KELAHIRAN' => $noDokumen]);
+                $noDokumen = $request->input('NO_DOKUMEN');
+                $namaDokumen = $request->input('NAMA');
+                $arsip->NO_DOK_KELAHIRAN = $noDokumen;
+                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
+                $arsip->save();
+                $infoArsipKelahiran = new InfoArsipKelahiran();
+                $idArsip = $arsip->ID_ARSIP;
+                $infoArsipKelahiran->ID_ARSIP = $idArsip;
+                $infoArsipKelahiran->NO_DOK_KELAHIRAN = $arsip->NO_DOK_KELAHIRAN;
+                $infoArsipKelahiran->NAMA = $namaDokumen;
+                $infoArsipKelahiran->save();
                 break;
             case 'Akta Pengakuan Anak':
-                $noDokumen = $request->input('NO_DOK_PENGAKUAN');
-                $arsip->infoArsipPengakuan()->create(['NO_DOK_PENGAKUAN' => $noDokumen]);
+                $noDokumen = $request->input('NO_DOKUMEN');
+                $namaDokumen = $request->input('NAMA');
+                $arsip->NO_DOK_PENGAKUAN = $noDokumen;
+                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
+                $arsip->save();
+                $infoArsipPengakuan = new InfoArsipPengakuan();
+                $idArsip = $arsip->ID_ARSIP;
+                $infoArsipPengakuan->ID_ARSIP = $idArsip;
+                $infoArsipPengakuan->NO_DOK_PENGAKUAN = $arsip->NO_DOK_PENGAKUAN;
+                $infoArsipPengakuan->NAMA_ANAK = $namaDokumen;
+                $infoArsipPengakuan->save();
                 break;
             case 'Akta Perkawinan':
-                $noDokumen = $request->input('NO_DOK_PERKAWINAN');
-                $arsip->infoArsipPerkawinan()->create(['NO_DOK_PERKAWINAN' => $noDokumen]);
+                $noDokumen = $request->input('NO_DOKUMEN');
+                $namaDokumen = $request->input('NAMA');
+                $arsip->NO_DOK_PERKAWINAN = $noDokumen;
+                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
+                $arsip->save();
+                $infoArsipPerkawinan = new InfoArsipPerkawinan();
+                $idArsip = $arsip->ID_ARSIP;
+                $infoArsipPerkawinan->ID_ARSIP = $idArsip;
+                $infoArsipPerkawinan->NO_DOK_PERKAWINAN = $arsip->NO_DOK_PERKAWINAN;
+                $infoArsipPerkawinan->NAMA_PRIA = $namaDokumen;
+                $infoArsipPerkawinan->save();
                 break;
             case 'Kartu Keluarga':
-                $noDokumen = $request->input('NO_DOK_KK');
-                $arsip->infoArsipKk()->create(['NO_DOK_KK' => $noDokumen]);
+                $noDokumen = $request->input('NO_DOKUMEN');
+                $namaDokumen = $request->input('NAMA');
+                $arsip->NO_DOK_KK = $noDokumen;
+                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
+                $arsip->save();
+                $infoArsipKk = new InfoArsipKk();
+                $idArsip = $arsip->ID_ARSIP;
+                $infoArsipKk->ID_ARSIP = $idArsip;
+                $infoArsipKk->NO_DOK_KK = $arsip->NO_DOK_KK;
+                $infoArsipKk->NAMA_KEPALA = $namaDokumen;
+                $infoArsipKk->save();
                 break;
             case 'SKOT':
-                $noDokumen = $request->input('NO_DOK_SKOT');
-                $arsip->infoArsipSkot()->create(['NO_DOK_SKOT' => $noDokumen]);
+                $noDokumen = $request->input('NO_DOKUMEN');
+                $namaDokumen = $request->input('NAMA');
+                $arsip->NO_DOK_SKOT = $noDokumen;
+                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
+                $arsip->save();
+                $infoArsipSkot = new InfoArsipSkot();
+                $idArsip = $arsip->ID_ARSIP;
+                $infoArsipSkot->ID_ARSIP = $idArsip;
+                $infoArsipSkot->NO_DOK_SKOT = $arsip->NO_DOK_SKOT;
+                $infoArsipSkot->NAMA = $namaDokumen;
+                $infoArsipSkot->save();
                 break;
             case 'SKTT':
-                $noDokumen = $request->input('NO_DOK_SKTT');
-                $arsip->infoArsipSktt()->create(['NO_DOK_SKTT' => $noDokumen]);
+                $noDokumen = $request->input('NO_DOKUMEN');
+                $namaDokumen = $request->input('NAMA');
+                $arsip->NO_DOK_SKTT = $noDokumen;
+                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
+                $arsip->save();
+                $infoArsipSktt = new InfoArsipSktt();
+                $idArsip = $arsip->ID_ARSIP;
+                $infoArsipSktt->ID_ARSIP = $idArsip;
+                $infoArsipSktt->NO_DOK_SKTT = $arsip->NO_DOK_SKTT;
+                $infoArsipSktt->NAMA = $namaDokumen;
+                $infoArsipSktt->save();
                 break;
             case 'Kartu Tanda Penduduk':
-                $noDokumen = $request->input('NO_DOK_KTP');
-                $arsip->infoArsipKtp()->create(['NO_DOK_KTP' => $noDokumen]);
+                $noDokumen = $request->input('NO_DOKUMEN');
+                $namaDokumen = $request->input('NAMA');
+                $arsip->NO_DOK_KTP = $noDokumen;
+                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
+                $arsip->save();
+                $infoArsipKtp = new InfoArsipKtp();
+                $idArsip = $arsip->ID_ARSIP;
+                $infoArsipKtp->ID_ARSIP = $idArsip;
+                $infoArsipKtp->NO_DOK_KTP = $arsip->NO_DOK_KTP;
+                $infoArsipKtp->NAMA = $namaDokumen;
+                $infoArsipKtp->save();
                 break;
             // Tambahkan case untuk jenis dokumen lainnya sesuai kebutuhan
             default:
                 // Jika tidak ada kecocokan dengan NAMA_DOKUMEN yang diharapkan
                 // Lakukan tindakan yang sesuai, misalnya:
-                return response()->json(['error' => 'NAMA_DOKUMEN tidak valid'], 400);
+                return response()->json(['error' => 'Jenis Dokumen tidak valid'], 400);
         }
-        // Simpan arsip baru
-        $arsip->save();
 
         // Perbarui status permintaan menjadi "Sudah Diinput"
-        Permission::where('ID_PERMISSION', $ID_PERMISSION)->update(['STATUS' => 'Sudah Diinput']);
+        Permission::where('ID_PERMISSION', $ID_PERMISSION)->update(['STATUS' => 'Disetujui']);
 
         return response()->json([
             'success' => true,
-            'message' => 'Permintaan ijin telah ditolak',
+            'message' => 'Arsip Telah Diinputkan',
+            'data' => $arsip,
         ], 200);
     }
 
