@@ -38,6 +38,9 @@ $router->group(['prefix' => 'pencarian'], function () use ($router) {
     $router->get('/getArsipDokumen/{ID_ARSIP}', 'PencarianController@getArsipDokumenById');
 });
 
+$router->group(['prefix' => 'manajemen'], function () use ($router) {
+    $router->get('/getArsipById/{ID_PERMISSION}', 'ManajemenController@getArsipById');
+});
 
 //--------------------------------------------------info arsip controller------------------------------------------------
 
