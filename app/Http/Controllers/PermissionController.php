@@ -1045,7 +1045,7 @@ class PermissionController extends Controller
         // Simpan dokumen sesuai dengan jenis dokumen
         Permission::where('ID_PERMISSION', $ID_PERMISSION)
           ->where('ID_ARSIP', $ID_ARSIP)
-          ->update(['STATUS' => 'Sudah Discan']);
+          ->update(['STATUS' => 'Disetujui']);
         // Mengembalikan respons berhasil
         return response()->json([
             'success' => true,
