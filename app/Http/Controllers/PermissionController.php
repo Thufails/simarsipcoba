@@ -1092,13 +1092,11 @@ class PermissionController extends Controller
         // Membuat Arsip baru
         $arsip = new Arsip();
         $idDokumen = JenisDokumen::find($request->input('ID_DOKUMEN'));
-        // Jika kecamatan tidak ditemukan
         if (!$idDokumen) {
             return response()->json(['error' => 'Jenis Dokumen tidak valid'], 400);
         }
         $arsip->ID_DOKUMEN = $idDokumen->ID_DOKUMEN; // Mengisi JENIS_DOKUMEN dari dropdown
 
-        // Mengisi NO_DOK_ berdasarkan jenis dokumen yang dipilih
         switch ($idDokumen->NAMA_DOKUMEN) {
             case 'Akta Pengangkatan Anak':
                 $noDokumen = $request->input('NO_DOKUMEN');
