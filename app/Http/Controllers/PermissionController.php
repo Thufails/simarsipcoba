@@ -1003,7 +1003,6 @@ class PermissionController extends Controller
         // Proses permintaan Scan
         $permissionRequest = new Permission();
         $permissionRequest->ID_OPERATOR = $userRequestingId;
-        // $permissionRequest->ID_ARSIP = $document->ID_ARSIP;
         $permissionRequest->STATUS = 'Request Input';
         $permissionRequest->save();
 
@@ -1034,7 +1033,7 @@ class PermissionController extends Controller
         // Membuat Arsip baru
         $arsip = new Arsip();
         $idDokumen = JenisDokumen::find($request->input('ID_DOKUMEN'));
-        // Jika kecamatan tidak ditemukan
+        // Jika jenis dokumen tidak ditemukan
         if (!$idDokumen) {
             return response()->json(['error' => 'Jenis Dokumen tidak valid'], 400);
         }
@@ -1197,11 +1196,12 @@ class PermissionController extends Controller
                 $infoArsipKtp->NAMA = $namaDokumen;
                 $infoArsipKtp->save();
                 break;
-            // Tambahkan case untuk jenis dokumen lainnya sesuai kebutuhan
             default:
                 // Jika tidak ada kecocokan dengan NAMA_DOKUMEN yang diharapkan
                 return response()->json(['error' => 'Jenis Dokumen tidak valid'], 400);
         }
+        $permissionRequest->ID_ARSIP = $arsip->ID_ARSIP;
+        $permissionRequest->save();
 
         return response()->json([
             'success' => true,
