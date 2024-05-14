@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('info_arsip_perkawinan', function (Blueprint $table) {
             $table->string('NO_DOK_PERKAWINAN', 25)->primary();
-            $table->string('NAMA_PRIA', 50);
-            $table->string('NAMA_WANITA', 50);
-            $table->date('TANGGAL_DOK_PERKAWINAN');
-            $table->string('TEMPAT_KAWIN', 25);
-            $table->string('AGAMA_KAWIN', 15);
-            $table->string('AYAH_PRIA', 50);
-            $table->string('IBU_PRIA', 50);
-            $table->string('AYAH_WANITA', 50);
-            $table->string('IBU_WANITA', 50);
-            $table->bigInteger('TAHUN_PEMBUATAN_DOK_PERKAWINAN');
+            $table->string('NAMA_PRIA', 50)->nullable();
+            $table->string('NAMA_WANITA', 50)->nullable();
+            $table->date('TANGGAL_DOK_PERKAWINAN')->nullable();
+            $table->string('TEMPAT_KAWIN', 25)->nullable();
+            $table->string('AGAMA_KAWIN', 15)->nullable();
+            $table->string('AYAH_PRIA', 50)->nullable();
+            $table->string('IBU_PRIA', 50)->nullable();
+            $table->string('AYAH_WANITA', 50)->nullable();
+            $table->string('IBU_WANITA', 50)->nullable();
+            $table->bigInteger('TAHUN_PEMBUATAN_DOK_PERKAWINAN')->nullable();
             $table->longText('FILE_LAMA')->nullable();
             $table->longText('FILE_F201')->nullable();
             $table->longText('FILE_FC_SK_KAWIN')->nullable();

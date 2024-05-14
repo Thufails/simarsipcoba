@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('info_arsip_kelahiran', function (Blueprint $table) {
             $table->string('NO_DOK_KELAHIRAN', 25)->primary();
-            $table->string('NAMA', 50);
-            $table->string('TEMPAT_LAHIR', 25);
-            $table->date('TANGGAL_LAHIR');
-            $table->integer('ANAK_KE');
-            $table->string('NAMA_AYAH', 50);
-            $table->string('NAMA_IBU', 50);
-            $table->bigInteger('NO_KK');
-            $table->bigInteger('TAHUN_PEMBUATAN_DOK_KELAHIRAN');
-            $table->string('STATUS_KELAHIRAN', 25);
-            $table->string('STATUS_PENDUDUK', 25);
+            $table->string('NAMA', 50)->nullable();
+            $table->string('TEMPAT_LAHIR', 25)->nullable();
+            $table->date('TANGGAL_LAHIR')->nullable();
+            $table->integer('ANAK_KE')->nullable();
+            $table->string('NAMA_AYAH', 50)->nullable();
+            $table->string('NAMA_IBU', 50)->nullable();
+            $table->bigInteger('NO_KK')->nullable();
+            $table->bigInteger('TAHUN_PEMBUATAN_DOK_KELAHIRAN')->nullable();
+            $table->string('STATUS_KELAHIRAN', 25)->nullable();
+            $table->string('STATUS_PENDUDUK', 25)->nullable();
             $table->longText('FILE_LAMA')->nullable();
             $table->longText('FILE_KK')->nullable();
             $table->longText('FILE_KTP_AYAH')->nullable();

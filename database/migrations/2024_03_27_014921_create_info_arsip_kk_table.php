@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('info_arsip_kk', function (Blueprint $table) {
             $table->string('NO_DOK_KK')->primary();
-            $table->string('NAMA_KEPALA', 50);
-            $table->string('ALAMAT', 50);
-            $table->bigInteger('RT');
-            $table->bigInteger('RW');
-            $table->bigInteger('KODEPOS');
-            $table->string('PROV', 50);
-            $table->string('KOTA', 50);
-            $table->bigInteger('TAHUN_PEMBUATAN_DOK_KK');
+            $table->string('NAMA_KEPALA', 50)->nullable();
+            $table->string('ALAMAT', 50)->nullable();
+            $table->bigInteger('RT')->nullable();
+            $table->bigInteger('RW')->nullable();
+            $table->bigInteger('KODEPOS')->nullable();
+            $table->string('PROV', 50)->nullable();
+            $table->string('KOTA', 50)->nullable();
+            $table->bigInteger('TAHUN_PEMBUATAN_DOK_KK')->nullable();
             $table->text('FILE_LAMA')->nullable();
             $table->text('FILE_F101')->nullable();
             $table->text('FILE_NIKAH_CERAI')->nullable();
