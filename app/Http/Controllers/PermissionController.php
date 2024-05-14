@@ -344,29 +344,25 @@ class PermissionController extends Controller
     }
 
 
-    public function requestInput(Request $request)
+    public function accInput(Request $request, $ID_PERMISSION)
     {
-        $userRequestingId = Auth::user(); // ID pengguna yang meminta akses
+        $permissionRequest = Permission::find($ID_PERMISSION);
 
-        // Proses permintaan Scan
-        $permissionRequest = new Permission();
-        $permissionRequest->ID_OPERATOR = $userRequestingId;
-        $permissionRequest->STATUS = 'Request Input';
-        $permissionRequest->save();
-
-        if ($permissionRequest) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Permintaan Input berhasil Diajukan. Menunggu Arsiparis.',
-                'data' => $permissionRequest,
-            ], 201);
-        } else {
+        // Jika permintaan tidak ditemukan, kembalikan respons dengan status 404
+        if (!$permissionRequest) {
             return response()->json([
                 'success' => false,
-                'message' => 'Permintaan Input gagal diajukan.',
-                'data' => ''
-            ], 400);
+                'message' => 'Permintaan ijin tidak ditemukan',
+            ], 404);
         }
+
+        // Perbarui status permintaan menjadi "DISETUJUI"
+        $permissionRequest->update(['STATUS' => 'Disetujui']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Permintaan ijin telah disetujui',
+        ], 200);
     }
 
 
@@ -1000,17 +996,16 @@ class PermissionController extends Controller
         ], 200);
     }
 
-    public function isiInput(Request $request, $ID_PERMISSION)
+    public function requestInput(Request $request)
     {
-        $permissionRequest = Permission::find($ID_PERMISSION);
+        $userRequestingId = Auth::user(); // ID pengguna yang meminta akses
 
-        // Jika permintaan tidak ditemukan, kembalikan respons dengan status 404
-        if (!$permissionRequest) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Permintaan ijin tidak ditemukan',
-            ], 404);
-        }
+        // Proses permintaan Scan
+        $permissionRequest = new Permission();
+        $permissionRequest->ID_OPERATOR = $userRequestingId;
+        // $permissionRequest->ID_ARSIP = $document->ID_ARSIP;
+        $permissionRequest->STATUS = 'Request Input';
+        $permissionRequest->save();
 
         $validator = app('validator')->make($request->all(), [
             'ID_DOKUMEN' => 'nullable|integer',
@@ -1039,11 +1034,13 @@ class PermissionController extends Controller
         // Membuat Arsip baru
         $arsip = new Arsip();
         $idDokumen = JenisDokumen::find($request->input('ID_DOKUMEN'));
+        // Jika kecamatan tidak ditemukan
         if (!$idDokumen) {
             return response()->json(['error' => 'Jenis Dokumen tidak valid'], 400);
         }
         $arsip->ID_DOKUMEN = $idDokumen->ID_DOKUMEN; // Mengisi JENIS_DOKUMEN dari dropdown
 
+        // Mengisi NO_DOK_ berdasarkan jenis dokumen yang dipilih
         switch ($idDokumen->NAMA_DOKUMEN) {
             case 'Akta Pengangkatan Anak':
                 $noDokumen = $request->input('NO_DOKUMEN');
@@ -1203,17 +1200,14 @@ class PermissionController extends Controller
             // Tambahkan case untuk jenis dokumen lainnya sesuai kebutuhan
             default:
                 // Jika tidak ada kecocokan dengan NAMA_DOKUMEN yang diharapkan
-                // Lakukan tindakan yang sesuai, misalnya:
                 return response()->json(['error' => 'Jenis Dokumen tidak valid'], 400);
         }
-
-        // Perbarui status permintaan menjadi "Sudah Diinput"
-        Permission::where('ID_PERMISSION', $ID_PERMISSION)->update(['STATUS' => 'Disetujui']);
 
         return response()->json([
             'success' => true,
             'message' => 'Arsip Telah Diinputkan',
-            'data' => $arsip,
+            'permission' => $permissionRequest,
+            'arsip' => $arsip,
         ], 200);
     }
 
