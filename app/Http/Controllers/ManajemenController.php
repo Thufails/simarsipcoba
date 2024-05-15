@@ -1212,7 +1212,102 @@ class ManajemenController extends Controller
                 $infoArsipKelahiran->save();
                 break;
             case 'Akta Pengakuan Anak':
+                $validator = app('validator')->make($request->all(), [
+                    'JUMLAH_BERKAS' => 'nullable|integer',
+                    'NO_BUKU' => 'nullable|integer',
+                    'NO_RAK' => 'nullable|integer',
+                    'NO_BARIS' => 'nullable|integer',
+                    'NO_BOKS' => 'nullable|integer',
+                    'LOK_SIMPAN' => 'nullable|string|max:25',
+                    'KETERANGAN'=>'nullable|string|max:15',
+                    // 'NO_DOK_PENGAKUAN' => 'nullable|string|max:25|',
+                    // 'NAMA_ANAK' => 'nullable|string|max:50',
+                    'TANGGAL_LAHIR' => 'nullable|date',
+                    'TEMPAT_LAHIR' => 'nullable|string|max:25',
+                    'JENIS_KELAMIN' => 'nullable|string|max:15',
+                    'NO_PP' => 'nullable|string|max:25',
+                    'TANGGAL_PP' => 'nullable|date',
+                    'NO_AKTA_KELAHIRAN' => 'nullable|string|max:25',
+                    'NAMA_AYAH' => 'nullable|string|max:50',
+                    'NAMA_IBU' => 'nullable|string|max:50',
+                    'TAHUN_PEMBUATAN_DOK_PENGAKUAN' => 'nullable|integer',
+                    'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
+                    'FILE_LAINNYA' => 'nullable|file|mimes:pdf|max:25000',
+                    'FILE_PENGAKUAN' => 'nullable|file|mimes:pdf|max:25000',
+                ]);
+
+                if ($validator->fails()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Validasi gagal',
+                        'errors' => $validator->errors()
+                    ], 400);
+                }
+
+                $idDokumen = JenisDokumen::where('NAMA_DOKUMEN', 'Akta Pengakuan Anak')->value('ID_DOKUMEN');
+                // Temukan arsip berdasarkan ID_ARSIP
+                $arsip = Arsip::find($ID_ARSIP);
+
+                if (!$arsip) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Arsip tidak ditemukan',
+                    ], 404);
+                }
+
+                // Simpan data arsip sebelum diupdate untuk memeriksa apakah ada perubahan
+                $arsipBeforeUpdate = clone $arsip;
+
+                // Update data arsip
+                $arsip->JUMLAH_BERKAS = $request->input('JUMLAH_BERKAS');
+                $arsip->NO_BUKU = $request->input('NO_BUKU');
+                $arsip->NO_RAK = $request->input('NO_RAK');
+                $arsip->NO_BARIS = $request->input('NO_BARIS');
+                $arsip->NO_BOKS = $request->input('NO_BOKS');
+                $arsip->LOK_SIMPAN = $request->input('LOK_SIMPAN');
+                $arsip->KETERANGAN = $request->input('KETERANGAN');
+                $arsip->ID_DOKUMEN = $idDokumen;
+                $arsip->TANGGAL_PINDAI = Carbon::now();
+
+                // Periksa apakah ada perubahan pada data arsip
+                if (!$arsip->isDirty()) {
+                    // Jika tidak ada perubahan, kembalikan respons tanpa melakukan penyimpanan ulang
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Tidak ada perubahan pada Arsip',
+                        'data' => $arsipBeforeUpdate,
+                    ], 200);
+                }
+
+                // Simpan perubahan pada data arsip
+                $arsip->save();
+
+                // Temukan info arsip pengakuan yang terkait
                 $infoArsipPengakuan = InfoArsipPengakuan::where('ID_ARSIP', $ID_ARSIP)->first();
+
+                if (!$infoArsipPengakuan) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Info arsip pengakuan tidak ditemukan',
+                    ], 404);
+                }
+
+                // Simpan data info arsip pengakuan sebelum diupdate untuk memeriksa apakah ada perubahan
+                $infoArsipPengakuanBeforeUpdate = clone $infoArsipPengakuan;
+
+                // Update data info arsip pengakuan
+                // Isi kolom-kolom lainnya sesuai dengan nilai dari request
+                // $infoArsipPengakuan->NAMA_ANAK = $request->input('NAMA_ANAK');
+                $infoArsipPengakuan->TEMPAT_LAHIR = $request->input('TEMPAT_LAHIR');
+                $infoArsipPengakuan->TANGGAL_LAHIR = $request->input('TANGGAL_LAHIR');
+                $infoArsipPengakuan->JENIS_KELAMIN = $request->input('JENIS_KELAMIN');
+                $infoArsipPengakuan->NO_PP = $request->input('NO_PP');
+                $infoArsipPengakuan->TANGGAL_PP = $request->input('TANGGAL_PP');
+                $infoArsipPengakuan->NO_AKTA_KELAHIRAN = $request->input('NO_AKTA_KELAHIRAN');
+                $infoArsipPengakuan->NAMA_AYAH = $request->input('NAMA_AYAH');
+                $infoArsipPengakuan->NAMA_IBU = $request->input('NAMA_IBU');
+                $infoArsipPengakuan->TAHUN_PEMBUATAN_DOK_PENGAKUAN = $request->input('TAHUN_PEMBUATAN_DOK_PENGAKUAN');
+
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_LAINNYA',
@@ -1249,6 +1344,16 @@ class ManajemenController extends Controller
                             ], 400);
                         }
                     }
+                }
+
+                // Periksa apakah ada perubahan pada data info arsip pengakuan
+                if (!$infoArsipPengakuan->isDirty()) {
+                    // Jika tidak ada perubahan, kembalikan respons tanpa melakukan penyimpanan ulang
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Data Pengakuan tidak ada perubahan',
+                        'data' => $infoArsipPengakuanBeforeUpdate,
+                    ], 200);
                 }
                 $infoArsipPengakuan->save();
                 break;
