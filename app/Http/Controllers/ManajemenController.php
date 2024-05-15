@@ -75,6 +75,7 @@ class ManajemenController extends Controller
             // Format data sesuai kebutuhan
             $formattedArsip = [
                 'ID_PERMISSION' => $permissionRequest->ID_PERMISSION,
+                'STATUS' => $permissionRequest->STATUS,
                 'ID_ARSIP' => $arsip->ID_ARSIP,
                 'ID_DOKUMEN' => $arsip->ID_DOKUMEN,
                 'NAMA_DOKUMEN' => $arsip->jenisDokumen->NAMA_DOKUMEN ?? null,
@@ -197,7 +198,6 @@ class ManajemenController extends Controller
             }
 
             $formattedArsip['DOKUMEN'] = $formattedDokumen;
-
 
             return response()->json([
                 'success' => true,
