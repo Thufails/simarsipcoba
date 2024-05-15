@@ -422,6 +422,7 @@ class ManajemenController extends Controller
                         'KOTA' => 'nullable|string|max:50',
                         'ID_KECAMATAN' => 'nullable|integer',
                         'ID_KELURAHAN' =>'nullable|integer',
+                        'KODEPOS' =>'nullable|integer',
                         'ALAMAT_TUJUAN' => 'nullable|string|max:50',
                         'RT_TUJUAN' => 'nullable|integer',
                         'RW_TUJUAN' => 'nullable|integer',
@@ -429,6 +430,7 @@ class ManajemenController extends Controller
                         'KOTA_TUJUAN' => 'nullable|string|max:25',
                         'KEC_TUJUAN' => 'nullable|string|max:25',
                         'KEL_TUJUAN' => 'nullable|string|max:25',
+                        'KODEPOS_TUJUAN' =>'nullable|integer',
                         'THN_PEMBUATAN_DOK_SURAT_PINDAH' => 'nullable|integer',
                         'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
                         'FILE_SKP_WNI' => 'nullable|file|mimes:pdf|max:25000',
@@ -510,6 +512,7 @@ class ManajemenController extends Controller
                     $infoArsipSuratPindah->RW = $request->input('RW');
                     $infoArsipSuratPindah->PROV = $request->input('PROV');
                     $infoArsipSuratPindah->KOTA = $request->input('KOTA');
+                    $infoArsipSuratPindah->KODEPOS = $request->input('KODEPOS');
                     $infoArsipSuratPindah->ALAMAT_TUJUAN = $request->input('ALAMAT_TUJUAN');
                     $infoArsipSuratPindah->RT_TUJUAN = $request->input('RT_TUJUAN');
                     $infoArsipSuratPindah->RW_TUJUAN = $request->input('RW_TUJUAN');
@@ -517,8 +520,24 @@ class ManajemenController extends Controller
                     $infoArsipSuratPindah->KOTA_TUJUAN = $request->input('KOTA_TUJUAN');
                     $infoArsipSuratPindah->KEC_TUJUAN = $request->input('KEC_TUJUAN');
                     $infoArsipSuratPindah->KEL_TUJUAN = $request->input('KEL_TUJUAN');
+                    $infoArsipSuratPindah->KODEPOS_TUJUAN = $request->input('KODEPOS_TUJUAN');
                     $infoArsipSuratPindah->THN_PEMBUATAN_DOK_SURAT_PINDAH = $request->input('THN_PEMBUATAN_DOK_SURAT_PINDAH');
+                    $kecamatan = Kecamatan::find($request->input('ID_KECAMATAN'));
+                    // Jika kecamatan tidak ditemukan
+                    if (!$kecamatan) {
+                        return response()->json(['error' => 'Kecamatan tidak valid'], 400);
+                    }
+                    $infoArsipSuratPindah->ID_KECAMATAN = $kecamatan->ID_KECAMATAN;
 
+                    $id_kelurahan = $request->input('ID_KELURAHAN');
+                    $kelurahan = Kelurahan::where('ID_KELURAHAN', $id_kelurahan)
+                                ->where('ID_KECAMATAN', $kecamatan->ID_KECAMATAN)
+                                ->first();
+                    // Jika kelurahan tidak ditemukan
+                    if (!$kelurahan) {
+                        return response()->json(['error' => 'Kelurahan tidak ditemukan sesuai kecamatan yang dipilih'], 400);
+                    }
+                    $infoArsipSuratPindah->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
                     $fileFields = [
                         'FILE_LAMA',
                         'FILE_SKP_WNI',
