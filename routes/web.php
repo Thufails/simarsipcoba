@@ -41,6 +41,7 @@ $router->group(['prefix' => 'pencarian'], function () use ($router) {
 
 $router->group(['prefix' => 'manajemen'], function () use ($router) {
     $router->get('/getArsipById/{ID_PERMISSION}', 'ManajemenController@getArsipById');
+    $router->post('editInput/{ID_PERMISSION}/{ID_ARSIP}', 'ManajemenController@editInput');
 });
 
 //--------------------------------------------------info arsip controller------------------------------------------------
