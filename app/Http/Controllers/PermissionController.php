@@ -344,28 +344,6 @@ class PermissionController extends Controller
     }
 
 
-    public function accInput(Request $request, $ID_PERMISSION)
-    {
-        $permissionRequest = Permission::find($ID_PERMISSION);
-
-        // Jika permintaan tidak ditemukan, kembalikan respons dengan status 404
-        if (!$permissionRequest) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Permintaan ijin tidak ditemukan',
-            ], 404);
-        }
-
-        // Perbarui status permintaan menjadi "DISETUJUI"
-        $permissionRequest->update(['STATUS' => 'Disetujui']);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Permintaan ijin telah disetujui',
-        ], 200);
-    }
-
-
     public function approvePermission(Request $request, $ID_PERMISSION)
     {
         $permissionRequest = Permission::find($ID_PERMISSION);
