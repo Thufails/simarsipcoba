@@ -970,7 +970,7 @@ class PermissionController extends Controller
         // Mengembalikan respons berhasil
         return response()->json([
             'success' => true,
-            'message' => 'Dokumen berhasil diunggah untuk arsip dengan ID ' . $ID_ARSIP,
+            'message' => 'Dokumen berhasil diunggah'
         ], 200);
     }
 
