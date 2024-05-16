@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\infoArsipKematian;
+use App\Models\InfoArsipKematian;
 use App\Models\User;
 use App\Models\Arsip;
 use App\Models\InfoArsipKelahiran;
