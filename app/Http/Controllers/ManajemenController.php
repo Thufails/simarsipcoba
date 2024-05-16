@@ -2259,7 +2259,7 @@ class ManajemenController extends Controller
         // Mengembalikan respons berhasil
         return response()->json([
             'success' => true,
-            'message' => 'Dokumen berhasil diupdate untuk arsip dengan ID ' . $ID_ARSIP,
+            'message' => 'Dokumen berhasil diupdate'
         ], 200);
     }
 
