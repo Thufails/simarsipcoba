@@ -174,6 +174,7 @@ class InfoArsipPerkawinanController extends Controller
             'NO_BOKS' => 'nullable|integer',
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN' => 'nullable|string|max:15',
+            'NO_DOK_PERKAWINAN' => 'required|string|max:25|unique:info_arsip_perkawinan',
             'NAMA_PRIA' => 'required|string|max:50',
             'NAMA_WANITA' => 'required|string|max:50',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
@@ -212,6 +213,7 @@ class InfoArsipPerkawinanController extends Controller
         $arsipBeforeUpdate = clone $arsip;
 
         // Update data arsip
+        $arsip->NO_DOK_PERKAWINAN = $request->input('NO_DOK_PERKAWINAN');
         $arsip->JUMLAH_BERKAS = $request->input('JUMLAH_BERKAS');
         $arsip->NO_BUKU = $request->input('NO_BUKU');
         $arsip->NO_RAK = $request->input('NO_RAK');
@@ -248,6 +250,7 @@ class InfoArsipPerkawinanController extends Controller
         $infoArsipPerkawinanBeforeUpdate = clone $infoArsipPerkawinan;
 
         // Update data info arsip perkawinan
+        $infoArsipPerkawinan->NO_DOK_PERKAWINAN = $arsip->NO_DOK_PERKAWINAN;
         $infoArsipPerkawinan->NAMA_PRIA = $request->input('NAMA_PRIA');
         $infoArsipPerkawinan->NAMA_WANITA = $request->input('NAMA_WANITA');
 

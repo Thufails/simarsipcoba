@@ -178,6 +178,7 @@ class InfoArsipKematianController extends Controller
             'NO_BOKS' => 'nullable|integer',
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN'=>'nullable|string|max:15',
+            'NO_DOK_KEMATIAN' => 'required|string|max:25|unique:info_arsip_kematian',
             'NAMA' => 'required|string|max:50',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_F201' => 'nullable|file|mimes:pdf|max:25000',
@@ -216,6 +217,7 @@ class InfoArsipKematianController extends Controller
         $arsipBeforeUpdate = clone $arsip;
 
         // Update data arsip
+        $arsip->NO_DOK_KEMATIAN = $request->input('NO_DOK_KEMATIAN');
         $arsip->JUMLAH_BERKAS = $request->input('JUMLAH_BERKAS');
         $arsip->NO_BUKU = $request->input('NO_BUKU');
         $arsip->NO_RAK = $request->input('NO_RAK');
@@ -249,6 +251,7 @@ class InfoArsipKematianController extends Controller
         $infoArsipKematianBeforeUpdate = clone $infoArsipKematian;
 
         // Update data info arsip kematian
+        $infoArsipKematian->NO_DOK_KEMATIAN = $arsip->NO_DOK_KEMATIAN;
         $infoArsipKematian->NAMA = $request->input('NAMA');
         $fileFields = [
             'FILE_LAMA',

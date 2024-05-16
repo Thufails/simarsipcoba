@@ -158,6 +158,7 @@ class InfoArsipPengakuanController extends Controller
             'NO_BOKS' => 'nullable|integer',
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN' => 'nullable|string|max:15',
+            'NO_DOK_PENGAKUAN' => 'required|string|max:25|unique:info_arsip_pengakuan',
             'NAMA_ANAK' => 'required|string|max:50',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_LAINNYA' => 'nullable|file|mimes:pdf|max:25000',
@@ -186,6 +187,7 @@ class InfoArsipPengakuanController extends Controller
         // Simpan data arsip sebelum diupdate untuk memeriksa apakah ada perubahan
         $arsipBeforeUpdate = clone $arsip;
 
+        $arsip->NO_DOK_PENGAKUAN = $request->input('NO_DOK_PENGAKUAN');
         $arsip->JUMLAH_BERKAS = $request->input('JUMLAH_BERKAS');
         $arsip->NO_BUKU = $request->input('NO_BUKU');
         $arsip->NO_RAK = $request->input('NO_RAK');
@@ -220,6 +222,7 @@ class InfoArsipPengakuanController extends Controller
 
         // Simpan data info arsip pengakuan sebelum diupdate untuk memeriksa apakah ada perubahan
         $infoArsipPengakuanBeforeUpdate = clone $infoArsipPengakuan;
+        $infoArsipPengakuan->NO_DOK_PENGAKUAN = $arsip->NO_DOK_PENGAKUAN;
         $infoArsipPengakuan->NAMA_ANAK = $request->input('NAMA_ANAK');
 
         $fileFields = [

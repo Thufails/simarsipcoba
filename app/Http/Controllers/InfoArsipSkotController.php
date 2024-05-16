@@ -198,6 +198,7 @@ class InfoArsipSkotController extends Controller
             'NO_BOKS' => 'nullable|integer',
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN'=>'nullable|string|max:15',
+            'NO_DOK_SKOT' => 'required|string|max:25|unique:info_arsip_skot',
             'NAMA' => 'required|string|max:50',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_LAINNYA' => 'nullable|file|mimes:pdf|max:25000',
@@ -226,6 +227,7 @@ class InfoArsipSkotController extends Controller
         $arsipBeforeUpdate = clone $arsip;
 
         // update data ke dalam tabel "arsip"
+        $arsip->NO_DOK_SKOT = $request->input('NO_DOK_SKOT');
         $arsip->JUMLAH_BERKAS = $request->input('JUMLAH_BERKAS');
         $arsip->NO_BUKU = $request->input('NO_BUKU');
         $arsip->NO_RAK = $request->input('NO_RAK');
@@ -258,6 +260,7 @@ class InfoArsipSkotController extends Controller
         // Simpan data info arsip SKOT sebelum diupdate untuk memeriksa apakah ada perubahan
         $infoArsipSkotBeforeUpdate = clone $infoArsipSkot;
 
+        $infoArsipSkot->NO_DOK_SKOT = $arsip->NO_DOK_SKOT;
         $infoArsipSkot->NAMA = $request->input('NAMA');
 
         $fileFields = [

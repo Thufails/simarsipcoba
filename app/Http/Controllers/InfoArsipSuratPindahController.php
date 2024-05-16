@@ -216,6 +216,7 @@ class InfoArsipSuratPindahController extends Controller
             'NO_BOKS' => 'nullable|integer',
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN'=>'nullable|string|max:15',
+            'NO_DOK_SURAT_PINDAH' => 'required|string|max:25|unique:info_arsip_surat_pindah',
             'NAMA_KEPALA' => 'required|string|max:50',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_SKP_WNI' => 'nullable|file|mimes:pdf|max:25000',
@@ -254,6 +255,7 @@ class InfoArsipSuratPindahController extends Controller
         $arsipBeforeUpdate = clone $arsip;
 
         // update data ke dalam tabel "arsip"
+        $arsip->NO_DOK_SURAT_PINDAH = $request->input('NO_DOK_SURAT_PINDAH');
         $arsip->JUMLAH_BERKAS = $request->input('JUMLAH_BERKAS');
         $arsip->NO_BUKU = $request->input('NO_BUKU');
         $arsip->NO_RAK = $request->input('NO_RAK');
@@ -286,6 +288,7 @@ class InfoArsipSuratPindahController extends Controller
         // Simpan data info arsip Surat Pindah sebelum diupdate untuk memeriksa apakah ada perubahan
         $infoArsipSuratPindahBeforeUpdate = clone $infoArsipSuratPindah;
 
+        $infoArsipSuratPindah->NO_DOK_SURAT_PINDAH = $arsip->NO_DOK_SURAT_PINDAH;
         $infoArsipSuratPindah->NAMA_KEPALA = $request->input('NAMA_KEPALA');
 
         $fileFields = [

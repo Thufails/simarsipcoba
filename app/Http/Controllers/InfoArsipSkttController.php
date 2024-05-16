@@ -191,6 +191,7 @@ class InfoArsipSkttController extends Controller
             'NO_BOKS' => 'nullable|integer',
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN'=>'nullable|string|max:15',
+            'NO_DOK_SKTT' => 'required|string|max:25|unique:info_arsip_sktt',
             'NAMA' => 'required|string|max:50',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_LAINNYA' => 'nullable|file|mimes:pdf|max:25000',
@@ -219,6 +220,7 @@ class InfoArsipSkttController extends Controller
         $arsipBeforeUpdate = clone $arsip;
 
         // update data ke dalam tabel "arsip"
+        $arsip->NO_DOK_SKTT = $request->input('NO_DOK_SKTT');
         $arsip->JUMLAH_BERKAS = $request->input('JUMLAH_BERKAS');
         $arsip->NO_BUKU = $request->input('NO_BUKU');
         $arsip->NO_RAK = $request->input('NO_RAK');
@@ -254,6 +256,7 @@ class InfoArsipSkttController extends Controller
         $infoArsipSkttBeforeUpdate = clone $infoArsipSktt;
 
         // Simpan data ke dalam tabel "info_arsip_sktt"
+        $infoArsipSktt->NO_DOK_SKTT = $arsip->NO_DOK_SKTT;
         $infoArsipSktt->NAMA = $request->input('NAMA');
 
         $fileFields = [

@@ -185,6 +185,7 @@ class InfoArsipKelahiranController extends Controller
             'NO_BOKS' => 'nullable|integer',
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN'=>'nullable|string|max:15',
+            'NO_DOK_KELAHIRAN' => 'required|string|max:25|unique:info_arsip_kelahiran',
             'NAMA' => 'required|string|max:50',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_KK' => 'nullable|file|mimes:pdf|max:25000',
@@ -224,6 +225,7 @@ class InfoArsipKelahiranController extends Controller
         $arsipBeforeUpdate = clone $arsip;
 
         // Update data arsip
+        $arsip->NO_DOK_KELAHIRAN = $request->input('NO_DOK_KELAHIRAN');
         $arsip->JUMLAH_BERKAS = $request->input('JUMLAH_BERKAS');
         $arsip->NO_BUKU = $request->input('NO_BUKU');
         $arsip->NO_RAK = $request->input('NO_RAK');
@@ -262,6 +264,7 @@ class InfoArsipKelahiranController extends Controller
 
         // Update data info arsip kelahiran
         $infoArsipKelahiran->NAMA = $request->input('NAMA');
+        $infoArsipKelahiran->NO_DOK_KELAHIRAN = $arsip->NO_DOK_KELAHIRAN;
 
 
         $fileFields = [
