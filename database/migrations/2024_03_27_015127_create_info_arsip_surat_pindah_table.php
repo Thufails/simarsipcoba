@@ -18,8 +18,8 @@ return new class extends Migration
             $table->bigInteger('NIK_KEPALA')->nullable();
             $table->string('ALASAN_PINDAH', 50)->nullable();
             $table->string('ALAMAT', 50)->nullable();
-            $table->bigInteger('RT')->nullable();
-            $table->bigInteger('RW')->nullable();
+            $table->string('RT')->nullable();
+            $table->string('RW')->nullable();
             $table->string('PROV', 50)->nullable();
             $table->string('KOTA', 50)->nullable();
             $table->bigInteger('KODEPOS')->nullable();

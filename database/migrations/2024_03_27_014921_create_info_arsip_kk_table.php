@@ -15,8 +15,8 @@ return new class extends Migration
             $table->string('NO_DOK_KK')->primary();
             $table->string('NAMA_KEPALA', 50)->nullable();
             $table->string('ALAMAT', 50)->nullable();
-            $table->bigInteger('RT')->nullable();
-            $table->bigInteger('RW')->nullable();
+            $table->string('RT')->nullable();
+            $table->string('RW')->nullable();
             $table->bigInteger('KODEPOS')->nullable();
             $table->string('PROV', 50)->nullable();
             $table->string('KOTA', 50)->nullable();
