@@ -1083,6 +1083,7 @@ class PermissionController extends Controller
                 $infoArsipKematian->NO_DOK_KEMATIAN = $arsip->NO_DOK_KEMATIAN;
                 $infoArsipKematian->NAMA = $namaDokumen;
                 $infoArsipKematian->save();
+                break;
             case 'Akta Kelahiran':
                 $noDokumen = $request->input('NO_DOKUMEN');
                 $namaDokumen = $request->input('NAMA');
