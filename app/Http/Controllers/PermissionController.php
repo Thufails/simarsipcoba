@@ -165,7 +165,7 @@ class PermissionController extends Controller
                     'KETERANGAN' => $arsip->KETERANGAN,
                 ];
 
-                $formattedPermission['arsips'] = $formattedArsip;
+                $formattedPermission['archive'] = $formattedArsip;
             }
 
             return $formattedPermission;

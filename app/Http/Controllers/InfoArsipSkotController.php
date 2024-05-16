@@ -92,7 +92,6 @@ class InfoArsipSkotController extends Controller
         $arsip->save();
 
         $idArsip = $arsip->ID_ARSIP;
-        // Simpan data ke dalam tabel "info_arsip_kelahiran"
         $infoArsipSkot = new InfoArsipSkot();
         $infoArsipSkot->ID_ARSIP = $idArsip;
         $infoArsipSkot->NO_DOK_SKOT = $arsip->NO_DOK_SKOT;

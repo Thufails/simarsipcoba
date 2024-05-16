@@ -87,7 +87,6 @@ class InfoArsipSkttController extends Controller
         $arsip->TANGGAL_PINDAI = Carbon::now();
         $arsip->save();
 
-        // Simpan data ke dalam tabel "info_arsip_kelahiran"
         $infoArsipSktt = new InfoArsipSktt();
         $infoArsipSktt->ID_ARSIP = $arsip->ID_ARSIP;
         $infoArsipSktt->NO_DOK_SKTT = $arsip->NO_DOK_SKTT;
