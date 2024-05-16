@@ -164,8 +164,10 @@ class PermissionController extends Controller
                     'TANGGAL_PINDAI' => $arsip->TANGGAL_PINDAI,
                     'KETERANGAN' => $arsip->KETERANGAN,
                 ];
-
-                $formattedPermission['archive'] = $formattedArsip;
+                $formattedPermission['NAMA_DOKUMEN'] = $arsip->NAMA_DOKUMEN;
+                $formattedPermission['NO_DOKUMEN'] = $arsip->NO_DOKUMEN;
+                $formattedPermission['NAMA'] = $NAMA;
+                // $formattedPermission['archive'] = $formattedArsip;
             }
 
             return $formattedPermission;
