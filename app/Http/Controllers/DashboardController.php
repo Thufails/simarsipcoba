@@ -13,7 +13,7 @@ use App\Models\Arsip;
 use App\Models\HakAkses;
 use App\Models\InfoArsipPengangkatan;
 use App\Models\InfoArsipKelahiran;
-use App\Models\infoArsipKematian;
+use App\Models\InfoArsipKematian;
 use App\Models\InfoArsipKtp;
 use App\Models\InfoArsipPengakuan;
 use App\Models\InfoArsipPengesahan;
@@ -49,7 +49,7 @@ class DashboardController extends Controller
             $totalPengangkatan = InfoArsipPengangkatan::count();
             $totalPerceraian = InfoArsipPerceraian::count();
             $totalPengesahan = InfoArsipPengesahan::count();
-            $totalKematian = infoArsipKematian::count();
+            $totalKematian = InfoArsipKematian::count();
             $totalKelahiran = InfoArsipKelahiran::count();
             $totalPengakuan = InfoArsipPengakuan::count();
             $totalPerkawinan = InfoArsipPerkawinan::count();
