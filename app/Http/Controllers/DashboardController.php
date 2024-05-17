@@ -12,6 +12,7 @@ use App\Models\HistoryPelayanan;
 use App\Models\Arsip;
 use App\Models\HakAkses;
 use App\Models\JenisDokumen;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -23,62 +24,34 @@ class DashboardController extends Controller
 
     public function index ()
     {
-        $historyPelayanan = HistoryPelayanan::all();
-
-        $totalArsip = Arsip::count();
-
-        $jumlahUserOnline = Operator::where('is_online', true)->count();
-
-    }
-
-    public function rekapitulasi ()
-    {
         try {
             // Menghitung total data dalam tabel arsip
-            $total = Arsip::count();
+            $totalArsip = Arsip::count();
+
+            // Menghitung total data dalam tabel permission untuk hari ini
+            $totalRequestToday = Permission::whereDate('created_at', Carbon::today())->count();
+
+            // Menghitung total data dalam tabel permission
+            $totalRequest = Permission::count();
 
             // Jika berhasil menghitung, kembalikan response sukses
             return response()->json([
                 'success' => true,
-                'message' => 'Berhasil Menampilkan Data Arsip',
-                'total_data' => $total
+                'message' => 'Berhasil Menampilkan Dashboard',
+                'total_data_arsip' => $totalArsip,
+                'total_request_today' => $totalRequestToday,
+                'total_all_request' => $totalRequest
             ], 200);
         } catch (\Exception $e) {
             // Jika ada kesalahan, kembalikan response gagal
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal Menampilkan Data Arsip',
+                'message' => 'Gagal Menampilkan Data',
                 'data' => '',
             ], 500);
         }
     }
 
-    public function requestToday()
-    {
-
-    }
-
-    public function requestTotal()
-    {
-        try {
-            // Menghitung total data dalam tabel arsip
-            $total = Permission::count();
-
-            // Jika berhasil menghitung, kembalikan response sukses
-            return response()->json([
-                'success' => true,
-                'message' => 'Berhasil Menampilkan Total Request',
-                'total_request' => $total
-            ], 200);
-        } catch (\Exception $e) {
-            // Jika ada kesalahan, kembalikan response gagal
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal Menampilkan Data Request',
-                'data' => '',
-            ], 500);
-        }
-    }
 
     public function logout ()
     {
