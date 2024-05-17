@@ -23,6 +23,7 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'dashboard'], function () use ($router) {
+    $router->get('/', 'DashboardController@index');
     $router->get('rekapitulasi', 'DashboardController@rekapitulasi');
     $router->get('requestToday', 'DashboardController@requestToday');
     $router->get('requestTotal', 'DashboardController@requestTotal');
