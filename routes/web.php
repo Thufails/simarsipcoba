@@ -22,6 +22,15 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
     $router->post('login', 'AuthController@login');
 });
 
+$router->group(['prefix' => 'dashboard'], function () use ($router) {
+    $router->get('rekapitulasi', 'DashboardController@rekapitulasi');
+    $router->get('requestToday', 'DashboardController@requestToday');
+    $router->get('requestTotal', 'DashboardController@requestTotal');
+    $router->post('onlineUser', 'DashboardController@onlineUser');
+    $router->post('logout', 'DashboardController@login');
+
+});
+
 $router->group(['prefix' => 'permission'], function () use ($router) {
     $router->get('getPermission', 'PermissionController@getPermission');
     $router->post('requestPermission/{ID_ARSIP}', 'PermissionController@requestPermission');
