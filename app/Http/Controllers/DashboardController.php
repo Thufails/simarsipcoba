@@ -11,6 +11,18 @@ use App\Models\Operator;
 use App\Models\HistoryPelayanan;
 use App\Models\Arsip;
 use App\Models\HakAkses;
+use App\Models\InfoArsipPengangkatan;
+use App\Models\InfoArsipKelahiran;
+use App\Models\infoArsipKematian;
+use App\Models\InfoArsipKtp;
+use App\Models\InfoArsipPengakuan;
+use App\Models\InfoArsipPengesahan;
+use App\Models\InfoArsipPerkawinan;
+use App\Models\InfoArsipSkot;
+use App\Models\InfoArsipSktt;
+use App\Models\InfoArsipKk;
+use App\Models\InfoArsipPerceraian;
+use App\Models\InfoArsipSuratPindah;
 use App\Models\JenisDokumen;
 use Carbon\Carbon;
 
@@ -33,6 +45,19 @@ class DashboardController extends Controller
 
             // Menghitung total data dalam tabel permission
             $totalRequest = Permission::count();
+            // Menghitung total data setiap tabel info arsip
+            $totalPengangkatan = InfoArsipPengangkatan::count();
+            $totalPerceraian = InfoArsipPerceraian::count();
+            $totalPengesahan = InfoArsipPengesahan::count();
+            $totalKematian = infoArsipKematian::count();
+            $totalKelahiran = InfoArsipKelahiran::count();
+            $totalPengakuan = InfoArsipPengakuan::count();
+            $totalPerkawinan = InfoArsipPerkawinan::count();
+            $totalKk = InfoArsipKk::count();
+            $totalSkot = InfoArsipSkot::count();
+            $totalSktt = InfoArsipSktt::count();
+            $totalKtp = InfoArsipKtp::count();
+            $totalSuratPindah = InfoArsipSuratPindah::count();
 
             // Jika berhasil menghitung, kembalikan response sukses
             return response()->json([
@@ -40,7 +65,23 @@ class DashboardController extends Controller
                 'message' => 'Berhasil Menampilkan Dashboard',
                 'total_data_arsip' => $totalArsip,
                 'total_request_today' => $totalRequestToday,
-                'total_all_request' => $totalRequest
+                'total_all_request' => $totalRequest,
+                'arsip_capil' => [
+                    'arsip_percecraian'=>$totalPerceraian,
+                    'arsip_pengesahan'=>$totalPengesahan,
+                    'arsip_kematian'=>$totalKematian,
+                    'arsip_kelahiran'=>$totalKelahiran,
+                    'arsip_pengakuan'=>$totalPengakuan,
+                    'arsip_perkawinan'=>$totalPerkawinan,
+                    'arsip_pengangkatan'=>$totalPengangkatan
+                ],
+                'arsip_dafduk' => [
+                    'arsip_suratpindah'=>$totalSuratPindah,
+                    'arsip_kk'=>$totalKk,
+                    'arsip_skot'=>$totalSkot,
+                    'arsip_sktt'=>$totalSktt,
+                    'arsip_ktp'=>$totalKtp
+                ]
             ], 200);
         } catch (\Exception $e) {
             // Jika ada kesalahan, kembalikan response gagal
