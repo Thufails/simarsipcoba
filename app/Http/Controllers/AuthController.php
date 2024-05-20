@@ -119,23 +119,5 @@ class AuthController extends Controller
         }
     }
 
-    public function showUser()
-    {
-        // Memeriksa apakah pengguna memiliki token JWT yang valid
-        if (!Auth::check()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized',
-                'data' => []
-            ], 401);
-        }
-
-        $user = Auth::user();
-        return response()->json([
-            'success' => true,
-            'message' => 'Profile has been Showed',
-            'data' => $user,
-        ], 200);
-    }
 
 }

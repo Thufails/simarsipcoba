@@ -24,7 +24,9 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
 
 $router->group(['prefix' => 'dashboard', 'middleware' => 'auth'], function () use ($router) {
     $router->get('/', 'DashboardController@index');
+    $router->post('showUser', 'DashboardController@showUser');
     $router->post('logout', 'DashboardController@logout');
+
 });
 
 $router->group(['prefix' => 'permission'], function () use ($router) {

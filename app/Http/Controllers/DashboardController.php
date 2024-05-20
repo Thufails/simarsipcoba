@@ -26,6 +26,8 @@ use App\Models\InfoArsipSuratPindah;
 use App\Models\JenisDokumen;
 use App\Models\Session;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+
 
 class DashboardController extends Controller
 {
@@ -94,6 +96,24 @@ class DashboardController extends Controller
         }
     }
 
+    public function showUser()
+    {
+        // Memeriksa apakah pengguna memiliki token JWT yang valid
+        if (!Auth::check()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized',
+                'data' => []
+            ], 401);
+        }
+
+        $user = Auth::user();
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile has been Showed',
+            'data' => $user,
+        ], 200);
+    }
 
     public function logout(Request $request)
     {
