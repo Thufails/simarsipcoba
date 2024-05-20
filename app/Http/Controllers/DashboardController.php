@@ -24,6 +24,7 @@ use App\Models\InfoArsipKk;
 use App\Models\InfoArsipPerceraian;
 use App\Models\InfoArsipSuratPindah;
 use App\Models\JenisDokumen;
+use App\Models\Session;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -94,9 +95,28 @@ class DashboardController extends Controller
     }
 
 
-    public function logout ()
+    public function logout(Request $request)
     {
+        $token = $request->header('Authorization');
+        if (strpos($token, 'Bearer ') === 0) {
+            $token = substr($token, 7);
+        }
 
+        $session = Session::where('JWT_TOKEN', $token)->first();
+        if (!$session) {
+            return response()->json(['message' => 'Token not found'], 404);
+        }
+        // Mendapatkan objek Operator terkait dengan Session
+        $operator = $session->operator()->first();
+        $nama_operator = $operator->NAMA_OPERATOR;
+
+        $session->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil Logout',
+            'nama_operator' => $nama_operator,
+        ], 200);
     }
 
 }

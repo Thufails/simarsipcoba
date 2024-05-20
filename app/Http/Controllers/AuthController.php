@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\HakAkses;
+use App\Models\Operator;
+use App\Models\Session;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -23,20 +25,29 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validated = $this->validate($request, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|min:6'
+            'NAMA_OPERATOR' => 'required|max:255',
+            'EMAIL' => 'required|EMAIL|max:255|unique:operator,EMAIL',
+            'PASSWORD' => 'required|min:6',
+            'ID_AKSES' => 'required|exists:hak_akses,ID_AKSES'
         ]);
-        $user = new User();
-        $user->name = $validated['name'];
-        $user->email = $validated['email'];
-        $user->password = Hash::make($validated['password']);
-        $user->save();
-        if ($user) {
+
+        $hakAkses = HakAkses::find($validated['ID_AKSES']);
+
+        if (!$hakAkses) {
+            return response()->json(['error' => 'Invalid ID_AKSES provided.'], 400);
+        }
+
+        $operator = new Operator();
+        $operator->NAMA_OPERATOR = $validated['NAMA_OPERATOR'];
+        $operator->EMAIL = $validated['EMAIL'];
+        $operator->PASSWORD = Hash::make($validated['PASSWORD']);
+        $operator->ID_AKSES = $hakAkses->ID_AKSES;
+        $operator->save();
+        if ($operator) {
             return response()->json([
                 'success' => true,
                 'message' => 'Successfully Registered',
-                'data' => $user
+                'data' => $operator
             ], 201);
         } else {
             return response()->json([
@@ -47,106 +58,63 @@ class AuthController extends Controller
         }
     }
 
-    // public function login(Request $request)
-    // {
-    //     $validated = $this->validate($request, [
-    //         'email' => 'required|exists:users,email',
-    //         'password' => 'required'
-    //     ]);
-
-    //     $user = User::where('email', $validated['email'])->first();
-    //     if (!Hash::check($validated['password'], $user->password)) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'email or password incorrect',
-    //         ], 401);
-    //     }
-    //     $payload = [
-    //         'iat' => intval(microtime(true)),
-    //         'exp' => intval(microtime(true)) + (60 * 60 * 1000),
-    //         'uid' => $user->id
-    //     ];
-    //     // $algorithm = 'HS256'; (optional)
-    //     $token = JWT::encode($payload, env('JWT_SECRET'), 'HS256');
-
-    //     if (!$token) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Failed to generate token',
-    //         ], 500);
-    //     }
-
-    //     // Save token to database
-    //     $user->jwt_token = $token;
-    //     $user->save();
-
-    //     if ($token) {
-    //         return response()->json([
-    //             'success' => true,
-    //             'message' => 'Successfully Login',
-    //             'access_token' => $token
-    //         ], 201);
-    //     } else {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Login Failed',
-    //             'data' => ''
-    //         ], 400);
-    //     }
-    // }
     public function login(Request $request)
     {
-        $email = $request->input('email');
-        $password = $request->input('password');
+        // Validasi input
+        $validated = $this->validate($request, [
+            'EMAIL' => 'required|EMAIL|exists:operator,EMAIL',
+            'PASSWORD' => 'required'
+        ]);
+
+        // Ambil operator berdasarkan EMAIL
+        $operator = Operator::where('EMAIL', $validated['EMAIL'])->first();
+
+        // Periksa kecocokan PASSWORD
+        if (!$operator || !Hash::check($validated['PASSWORD'], $operator->PASSWORD)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'EMAIL or PASSWORD incorrect',
+            ], 401);
+        }
+
+        // Set waktu kedaluwarsa token (misalnya, 6 jam)
+        $expirationTimeInSeconds = 6 * 60 * 60; // 6 jam dalam detik
+        // Hitung waktu kedaluwarsa dalam detik sejak epoch
+        $expirationTime = time() + $expirationTimeInSeconds;
+        // Konversi durasi waktu kedaluwarsa menjadi format jam
+        $expiresInHours = $expirationTimeInSeconds / 3600;
+
+        // Buat payload JWT
+        $payload = [
+            'iat' => time(),
+            'exp' => $expirationTime,
+            'uid' => $operator->ID_OPERATOR
+        ];
 
         try {
-
-            $user = User::where('email', $email)->first();
-
-            if (!$user) {
-                return response()->json([
-                    'error' => true,
-                    'message' => "Email tidak terdaftar di sistem kami",
-                ], 404);
-            }
-
-            // // Cek apakah admin aktif
-            // $activeCheck = User::where('email', $email)->where('status', 'Active')->first();
-
-            // // Admin tidak aktif
-            // if (!$activeCheck) {
-            //     return response()->json([
-            //         'error' => true,
-            //         'message' => "Silakan aktifkan email Anda terlebih dahulu.",
-            //     ], 401);
-            // }
-
-            if (!Hash::check($password, $user->password)) {
-                return response()->json([
-                    'error' => true,
-                    'message' => "Kata sandi salah",
-                ], 401);
-            }
-
-            $payload = [
-            'iat' => intval(microtime(true)),
-            'exp' => intval(microtime(true)) + (60 * 60 * 1000),
-            'uid' => $user->id
-            ];
-            
+            // Encode payload menjadi token JWT
             $token = JWT::encode($payload, env('JWT_SECRET'), 'HS256');
 
+            $nama_operator = Operator::where('ID_OPERATOR', $operator->ID_OPERATOR)->value('NAMA_OPERATOR');
+                // Save token and user ID_OPERATOR to Session table
+                $session = new Session();
+                $session->JWT_TOKEN = $token;
+                $session->ID_OPERATOR = $operator->ID_OPERATOR; // Assuming this is the field name for the operator's ID
+                $session->save();
+
+            // Tanggapan sukses
             return response()->json([
-                'error' => false,
-                'message' => "Login berhasil",
-                'response' => [
-                    'token' => $token,
-                ],
+                'success' => true,
+                'message' => 'Berhasil Login',
+                'nama_operator' => $nama_operator,
+                'access_token' => $token,
+                'token_expired' => 'Kadaluwarsa dalam '.$expiresInHours . ' jam',
             ], 200);
-        } catch (\Exception $error) {
+        } catch (\Exception $e) {
+            // Tanggapan jika gagal menghasilkan token
             return response()->json([
-                'error' => true,
-                'message' => $error->getMessage(),
+                'success' => false,
+                'message' => 'Failed to generate token',
             ], 500);
         }
     }
@@ -169,4 +137,5 @@ class AuthController extends Controller
             'data' => $user,
         ], 200);
     }
+
 }

@@ -185,11 +185,10 @@ class PermissionController extends Controller
     }
 }
 
-
     public function requestPermission(Request $request, $ID_ARSIP)
     {
         // Mendapatkan ID pengguna yang meminta akses
-        $userRequestingId = Auth::id(); // Menggunakan id() untuk mendapatkan langsung ID
+        $userRequestingId = Auth::user(); // Menggunakan id() untuk mendapatkan langsung ID
 
         // Mencari dokumen berdasarkan ID_ARSIP
         $document = Arsip::with('jenisDokumen')

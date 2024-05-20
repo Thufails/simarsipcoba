@@ -20,4 +20,9 @@ class Operator extends Model
     {
         return $this->belongsTo(HakAkses::class, 'ID_AKSES');
     }
+
+    public function Session()
+    {
+        return $this->hasMany(Operator::class, 'ID_OPERATOR');
+    }
 }
