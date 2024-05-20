@@ -76,6 +76,8 @@ class AuthController extends Controller
                 'message' => 'EMAIL or PASSWORD incorrect',
             ], 401);
         }
+        //delete session ketika melakukan relog
+        Session::where('ID_OPERATOR', $operator->ID_OPERATOR)->delete();
 
         // Set waktu kedaluwarsa token (misalnya, 6 jam)
         $expirationTimeInSeconds = 6 * 60 * 60; // 6 jam dalam detik
