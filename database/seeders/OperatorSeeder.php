@@ -17,14 +17,14 @@ class OperatorSeeder extends Seeder
         $operators = [
             [
                 'NAMA_OPERATOR' => 'Rafi',
-                'email' => 'operator1@example.com',
-                'password' => Hash::make('password123'),
+                'EMAIL' => 'operator1@example.com',
+                'PASSWORD' => Hash::make('password123'),
                 'ID_AKSES' => 3,
             ],
             [
                 'NAMA_OPERATOR' => 'Idris',
-                'email' => 'operator2@example.com',
-                'password' => Hash::make('password456'),
+                'EMAIL' => 'operator2@example.com',
+                'PASSWORD' => Hash::make('password456'),
                 'ID_AKSES' => 3,
             ],
             [

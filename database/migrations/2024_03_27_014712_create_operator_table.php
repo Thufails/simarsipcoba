@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('operator', function (Blueprint $table) {
             $table->id('ID_OPERATOR');
             $table->string('NAMA_OPERATOR');
-            $table->string('email')->unique();
-            $table->string('password');
+            $table->string('EMAIL')->unique();
+            $table->string('PASSWORD');
             $table->timestamps();
 
             $table->foreignId('ID_AKSES')->nullable();
