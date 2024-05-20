@@ -98,6 +98,7 @@ class AuthController extends Controller
             $token = JWT::encode($payload, env('JWT_SECRET'), 'HS256');
 
             $nama_operator = Operator::where('ID_OPERATOR', $operator->ID_OPERATOR)->value('NAMA_OPERATOR');
+            $ID_AKSES = Operator::where('ID_OPERATOR', $operator->ID_OPERATOR)->value('ID_AKSES');
                 // Save token and user ID_OPERATOR to Session table
                 $session = new Session();
                 $session->JWT_TOKEN = $token;
@@ -109,6 +110,7 @@ class AuthController extends Controller
                 'success' => true,
                 'message' => 'Berhasil Login',
                 'nama_operator' => $nama_operator,
+                'ID_AKSES' => $ID_AKSES,
                 'access_token' => $token,
                 'token_expired' => 'Kadaluwarsa dalam '.$expiresInHours . ' jam',
             ], 200);
