@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\HakAkses;
 use App\Models\Operator;
 use App\Models\Session;
+use Carbon\Carbon;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -102,6 +103,8 @@ class AuthController extends Controller
                 // Save token and user ID_OPERATOR to Session table
                 $session = new Session();
                 $session->JWT_TOKEN = $token;
+                $expirationTime = Carbon::now()->addHours(13);
+                $session->EXPIRED_AT = $expirationTime;
                 $session->ID_OPERATOR = $operator->ID_OPERATOR; // Assuming this is the field name for the operator's ID
                 $session->save();
 

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('session', function (Blueprint $table) {
             $table->id('ID_SESSION');
             $table->string('JWT_TOKEN');
+            $table->string('EXPIRED_AT');
             $table->timestamps();
 
             $table->foreignId('ID_OPERATOR')->nullable();

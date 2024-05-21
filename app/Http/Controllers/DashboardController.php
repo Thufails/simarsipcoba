@@ -46,6 +46,9 @@ class DashboardController extends Controller
             // Menghitung total data dalam tabel permission untuk hari ini
             $totalRequestToday = Permission::whereDate('created_at', Carbon::today())->count();
 
+            // Menghitung total user login
+            $totalLoginToady = Session::whereDate('created_at', Carbon::today())->count();
+
             // Menghitung total data dalam tabel permission
             $totalRequest = Permission::count();
             // Menghitung total data setiap tabel info arsip
@@ -67,6 +70,7 @@ class DashboardController extends Controller
                 'success' => true,
                 'message' => 'Berhasil Menampilkan Dashboard',
                 'total_data_arsip' => $totalArsip,
+                'total_user_online' => $totalLoginToady,
                 'total_request_today' => $totalRequestToday,
                 'total_all_request' => $totalRequest,
                 'arsip_capil' => [
