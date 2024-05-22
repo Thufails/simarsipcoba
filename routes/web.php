@@ -29,7 +29,7 @@ $router->group(['prefix' => 'dashboard', 'middleware' => 'auth'], function () us
 
 });
 
-$router->group(['prefix' => 'permission'], function () use ($router) {
+$router->group(['prefix' => 'permission',  'middleware' => 'auth'], function () use ($router) {
     $router->get('getPermission', 'PermissionController@getPermission');
     $router->post('requestPermission/{ID_ARSIP}', 'PermissionController@requestPermission');
     $router->post('requestScan/{ID_ARSIP}', 'PermissionController@requestScan');

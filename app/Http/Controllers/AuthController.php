@@ -81,11 +81,11 @@ class AuthController extends Controller
         Session::where('ID_OPERATOR', $operator->ID_OPERATOR)->delete();
 
         // Set waktu kedaluwarsa token (misalnya, 6 jam)
-        $expirationTimeInSeconds = 6 * 60 * 60; // 6 jam dalam detik
+        $expirationTimeInSeconds = 60 * 60; // 5 menit dalam detik
         // Hitung waktu kedaluwarsa dalam detik sejak epoch
         $expirationTime = time() + $expirationTimeInSeconds;
         // Konversi durasi waktu kedaluwarsa menjadi format jam
-        $expiresInHours = $expirationTimeInSeconds / 3600;
+        $expiresInMinutes = $expirationTimeInSeconds / 60;
 
         // Buat payload JWT
         $payload = [
@@ -103,7 +103,7 @@ class AuthController extends Controller
                 // Save token and user ID_OPERATOR to Session table
                 $session = new Session();
                 $session->JWT_TOKEN = $token;
-                $expirationTime = Carbon::now()->addHours(13);
+                // $expirationTime = Carbon::now()->addHours(13);
                 $session->EXPIRED_AT = $expirationTime;
                 $session->ID_OPERATOR = $operator->ID_OPERATOR; // Assuming this is the field name for the operator's ID
                 $session->save();
@@ -115,7 +115,7 @@ class AuthController extends Controller
                 'nama_operator' => $nama_operator,
                 'ID_AKSES' => $ID_AKSES,
                 'access_token' => $token,
-                'token_expired' => 'Kadaluwarsa dalam '.$expiresInHours . ' jam',
+                'token_expired' => 'Kadaluwarsa dalam '.$expiresInMinutes . ' Menit',
             ], 200);
         } catch (\Exception $e) {
             // Tanggapan jika gagal menghasilkan token

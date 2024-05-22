@@ -188,7 +188,7 @@ class PermissionController extends Controller
     public function requestPermission(Request $request, $ID_ARSIP)
     {
         // Mendapatkan ID pengguna yang meminta akses
-        $userRequestingId = Auth::user(); // Menggunakan id() untuk mendapatkan langsung ID
+        $userRequestingId = Auth::id(); // Menggunakan id() untuk mendapatkan langsung ID
 
         // Mencari dokumen berdasarkan ID_ARSIP
         $document = Arsip::with('jenisDokumen')
@@ -266,7 +266,7 @@ class PermissionController extends Controller
 
     public function requestScan(Request $request, $ID_ARSIP)
     {
-        $userRequestingId = Auth::user(); // ID pengguna yang meminta akses
+        $userRequestingId = Auth::id(); // ID pengguna yang meminta akses
 
             $document = Arsip::with('jenisDokumen')
                       ->with([
@@ -975,7 +975,7 @@ class PermissionController extends Controller
 
     public function requestInput(Request $request)
     {
-        $userRequestingId = Auth::user(); // ID pengguna yang meminta akses
+        $userRequestingId = Auth::id(); // ID pengguna yang meminta akses
 
         // Proses permintaan Scan
         $permissionRequest = new Permission();
