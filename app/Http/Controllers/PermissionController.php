@@ -976,7 +976,7 @@ class PermissionController extends Controller
 
     public function requestInput(Request $request)
     {
-        $userRequestingId = Auth::user(); // ID pengguna yang meminta akses
+        $userRequestingId = Auth::id(); // ID pengguna yang meminta akses
 
         // Proses permintaan Scan
         $permissionRequest = new Permission();
