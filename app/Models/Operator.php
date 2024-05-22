@@ -10,13 +10,14 @@ use Laravel\Lumen\Auth\Authorizable;
 
 class Operator extends Model implements AuthenticatableContract, AuthorizableContract
 {
+    use Authenticatable, Authorizable, HasFactory;
+    
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
 
-    use Authenticatable, Authorizable, HasFactory;
     protected $table = 'operator';
     protected $primaryKey = 'ID_OPERATOR';
     public $timestamps = true;
