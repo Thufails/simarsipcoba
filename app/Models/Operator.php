@@ -10,6 +10,12 @@ use Laravel\Lumen\Auth\Authorizable;
 
 class Operator extends Model implements AuthenticatableContract, AuthorizableContract
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+
     use Authenticatable, Authorizable, HasFactory;
     protected $table = 'operator';
     protected $primaryKey = 'ID_OPERATOR';
@@ -17,8 +23,16 @@ class Operator extends Model implements AuthenticatableContract, AuthorizableCon
 
     protected $fillable = [
         'NAMA_OPERATOR',
-        'EMAIL',
-        'PASSWORD'
+        'EMAIL'
+    ];
+
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'PASSWORD',
     ];
 
     public function HakAkses()
