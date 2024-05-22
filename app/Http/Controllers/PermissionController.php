@@ -38,7 +38,7 @@ class PermissionController extends Controller
 
     public function getPermission(Request $request)
 {
-    $permissions = Permission::all();
+    $permissions = Permission::with('Operator')->get();
 
     // Loop melalui setiap izin dan cari yang sesuai dengan ID_ARSIP yang diberikan
     $arsipIds = $permissions->pluck('ID_ARSIP')->toArray();
@@ -74,6 +74,7 @@ class PermissionController extends Controller
                 'updated_at' => $permission->updated_at,
                 'ID_ARSIP' => $permission->ID_ARSIP,
                 'ID_OPERATOR' => $permission->ID_OPERATOR,
+                'NAMA_OPERATOR' => optional($permission->operator)->NAMA_OPERATOR
                 // 'arsips' => $formattedArsip, // Inisialisasi array untuk data arsip
             ];
 
