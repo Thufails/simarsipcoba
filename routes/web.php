@@ -39,14 +39,14 @@ $router->group(['prefix' => 'permission',  'middleware' => 'auth'], function () 
     $router->post('rejectedPermission/{ID_PERMISSION}', 'PermissionController@rejectedPermission');
 });
 
-$router->group(['prefix' => 'pencarian'], function () use ($router) {
+$router->group(['prefix' => 'pencarian', 'middleware' => 'auth'], function () use ($router) {
     $router->get('/filter', 'PencarianController@pencarianFilter');
     $router->get('/getAllArsip', 'PencarianController@getAllArsip');
     $router->get('/getArsipById/{ID_ARSIP}', 'PencarianController@getArsipById');
     $router->get('/getArsipDokumen/{ID_ARSIP}', 'PencarianController@getArsipDokumenById');
 });
 
-$router->group(['prefix' => 'manajemen'], function () use ($router) {
+$router->group(['prefix' => 'manajemen', 'middleware' => 'auth'], function () use ($router) {
     $router->get('/getArsipById/{ID_PERMISSION}', 'ManajemenController@getArsipById');
     $router->post('editInput/{ID_PERMISSION}/{ID_ARSIP}', 'ManajemenController@editInput');
 });
@@ -54,62 +54,62 @@ $router->group(['prefix' => 'manajemen'], function () use ($router) {
 //--------------------------------------------------info arsip controller------------------------------------------------
 
 
-$router->group(['prefix' => 'arsipkelahiran'], function () use ($router) {
+$router->group(['prefix' => 'arsipkelahiran', 'middleware' => 'auth'], function () use ($router) {
     $router->post('/simpanKelahiran', 'InfoArsipKelahiranController@simpanKelahiran');
     $router->post('/updateKelahiran/{ID_ARSIP}', 'InfoArsipKelahiranController@updateKelahiran');
 });
 
-$router->group(['prefix' => 'arsipkematian'], function () use ($router) {
+$router->group(['prefix' => 'arsipkematian', 'middleware' => 'auth'], function () use ($router) {
     $router->post('/simpanKematian', 'InfoArsipKematianController@simpanKematian');
     $router->post('/updateKematian/{ID_ARSIP}', 'InfoArsipKematianController@updateKematian');
 });
 
-$router->group(['prefix' => 'arsipktp'], function () use ($router) {
+$router->group(['prefix' => 'arsipktp', 'middleware' => 'auth'], function () use ($router) {
     $router->post('/simpanKtp', 'InfoArsipKtpController@simpanKtp');
     $router->post('/updateKtp/{ID_ARSIP}', 'InfoArsipKtpController@updateKtp');
 });
 
-$router->group(['prefix' => 'arsipkk'], function () use ($router) {
+$router->group(['prefix' => 'arsipkk', 'middleware' => 'auth'], function () use ($router) {
     $router->post('/simpanKk', 'InfoArsipKkController@simpanKk');
     $router->post('/updateKk/{ID_ARSIP}', 'InfoArsipKkController@updateKk');
 });
 
-$router->group(['prefix' => 'arsippengangkatan'], function () use ($router) {
+$router->group(['prefix' => 'arsippengangkatan', 'middleware' => 'auth'], function () use ($router) {
     $router->post('/simpanPengangkatan', 'InfoArsipPengangkatanController@simpanPengangkatan');
     $router->post('/updatePengangkatan/{ID_ARSIP}', 'InfoArsipPengangkatanController@updatePengangkatan');
 });
 
-$router->group(['prefix' => 'arsippengesahan'], function () use ($router) {
+$router->group(['prefix' => 'arsippengesahan', 'middleware' => 'auth'], function () use ($router) {
     $router->post('/simpanPengesahan', 'InfoArsipPengesahanController@simpanPengesahan');
     $router->post('/updatePengesahan/{ID_ARSIP}', 'InfoArsipPengesahanController@updatePengesahan');
 });
 
-$router->group(['prefix' => 'arsippengakuan'], function () use ($router) {
+$router->group(['prefix' => 'arsippengakuan', 'middleware' => 'auth'], function () use ($router) {
     $router->post('/simpanPengakuan', 'InfoArsipPengakuanController@simpanPengakuan');
     $router->post('/updatePengakuan/{ID_ARSIP}', 'InfoArsipPengakuanController@updatePengakuan');
 });
 
-$router->group(['prefix' => 'arsipperkawinan'], function () use ($router) {
+$router->group(['prefix' => 'arsipperkawinan', 'middleware' => 'auth'], function () use ($router) {
     $router->post('/simpanPerkawinan', 'InfoArsipPerkawinanController@simpanPerkawinan');
     $router->post('/updatePerkawinan/{ID_ARSIP}', 'InfoArsipPerkawinanController@updatePerkawinan');
 });
 
-$router->group(['prefix' => 'arsipperceraian'], function () use ($router) {
+$router->group(['prefix' => 'arsipperceraian', 'middleware' => 'auth'], function () use ($router) {
     $router->post('/simpanPerceraian', 'InfoArsipPerceraianController@simpanPerceraian');
     $router->post('/updatePerceraian/{ID_ARSIP}', 'InfoArsipPerceraianController@updatePerceraian');
 });
 
-$router->group(['prefix' => 'arsipskot'], function () use ($router) {
+$router->group(['prefix' => 'arsipskot', 'middleware' => 'auth'], function () use ($router) {
     $router->post('/simpanSkot', 'InfoArsipSkotController@simpanSkot');
     $router->post('/updateSkot/{ID_ARSIP}', 'InfoArsipSkotController@updateSkot');
 });
 
-$router->group(['prefix' => 'arsipsktt'], function () use ($router) {
+$router->group(['prefix' => 'arsipsktt', 'middleware' => 'auth'], function () use ($router) {
     $router->post('/simpanSktt', 'InfoArsipSkttController@simpanSktt');
     $router->post('/updateSktt/{ID_ARSIP}', 'InfoArsipSkttController@updateSktt');
 });
 
-$router->group(['prefix' => 'arsipsuratpindah'], function () use ($router) {
+$router->group(['prefix' => 'arsipsuratpindah', 'middleware' => 'auth'], function () use ($router) {
     $router->post('/simpanSuratPindah', 'InfoArsipSuratPindahController@simpanSuratPindah');
     $router->post('/updateSuratPindah/{ID_ARSIP}', 'InfoArsipSuratPindahController@updateSuratPindah');
 });
