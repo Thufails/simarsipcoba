@@ -199,7 +199,7 @@ class InfoArsipKkController extends Controller
             'NO_BOKS' => 'nullable|integer',
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN'=>'nullable|string|max:15',
-            'NO_DOK_KK' => 'required|integer|unique:info_arsip_kk',
+            'NO_DOK_KK' => 'required|integer',
             'NAMA_KEPALA' => 'nullable|string|max:50',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_F101' => 'nullable|file|mimes:pdf|max:25000',

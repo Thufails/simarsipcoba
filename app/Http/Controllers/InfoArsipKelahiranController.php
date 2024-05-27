@@ -185,7 +185,7 @@ class InfoArsipKelahiranController extends Controller
             'NO_BOKS' => 'nullable|integer',
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN'=>'nullable|string|max:15',
-            'NO_DOK_KELAHIRAN' => 'required|string|max:25|unique:info_arsip_kelahiran',
+            'NO_DOK_KELAHIRAN' => 'required|string|max:25',
             'NAMA' => 'required|string|max:50',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_KK' => 'nullable|file|mimes:pdf|max:25000',

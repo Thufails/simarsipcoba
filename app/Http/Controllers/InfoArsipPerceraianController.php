@@ -173,7 +173,7 @@ class InfoArsipPerceraianController extends Controller
             'NO_BOKS' => 'nullable|integer',
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN'=>'nullable|string|max:15',
-            'NO_DOK_PERCERAIAN' => 'required|string|max:25|unique:info_arsip_perceraian',
+            'NO_DOK_PERCERAIAN' => 'required|string|max:25',
             'NAMA_PRIA' => 'required|string|max:50',
             'NAMA_WANITA' => 'required|string|max:50',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',

@@ -158,7 +158,7 @@ class InfoArsipPengesahanController extends Controller
             'NO_BOKS' => 'nullable|integer',
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN' => 'nullable|string|max:15',
-            'NO_DOK_PENGESAHAN' => 'required|string|max:25|unique:info_arsip_pengesahan',
+            'NO_DOK_PENGESAHAN' => 'required|string|max:25',
             'NAMA_ANAK' => 'required|string|max:50',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_LAINNYA' => 'nullable|file|mimes:pdf|max:25000',

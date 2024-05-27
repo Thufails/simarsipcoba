@@ -216,7 +216,7 @@ class InfoArsipSuratPindahController extends Controller
             'NO_BOKS' => 'nullable|integer',
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN'=>'nullable|string|max:15',
-            'NO_DOK_SURAT_PINDAH' => 'required|string|max:25|unique:info_arsip_surat_pindah',
+            'NO_DOK_SURAT_PINDAH' => 'required|string|max:25',
             'NAMA_KEPALA' => 'required|string|max:50',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_SKP_WNI' => 'nullable|file|mimes:pdf|max:25000',

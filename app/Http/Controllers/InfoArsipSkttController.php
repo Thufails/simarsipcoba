@@ -191,7 +191,7 @@ class InfoArsipSkttController extends Controller
             'NO_BOKS' => 'nullable|integer',
             'LOK_SIMPAN' => 'nullable|string|max:25',
             'KETERANGAN'=>'nullable|string|max:15',
-            'NO_DOK_SKTT' => 'required|string|max:25|unique:info_arsip_sktt',
+            'NO_DOK_SKTT' => 'required|string|max:25',
             'NAMA' => 'required|string|max:50',
             'FILE_LAMA' => 'nullable|file|mimes:pdf|max:25000',
             'FILE_LAINNYA' => 'nullable|file|mimes:pdf|max:25000',
