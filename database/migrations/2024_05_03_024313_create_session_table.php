@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('ID_SESSION');
             $table->string('JWT_TOKEN');
             $table->string('STATUS');
-            $table->time('EXPIRED_AT');
+            $table->dateTime('EXPIRED_AT');
             $table->timestamps();
 
             $table->foreignId('ID_OPERATOR')->nullable();
