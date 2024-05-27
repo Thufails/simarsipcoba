@@ -51,6 +51,10 @@ $router->group(['prefix' => 'manajemen', 'middleware' => 'auth'], function () us
     $router->post('editInput/{ID_PERMISSION}/{ID_ARSIP}', 'ManajemenController@editInput');
 });
 
+$router->group(['prefix' => 'operator', 'middleware' => 'auth'], function () use ($router) {
+    $router->get('/showOperator', 'OperatorController@showOperator');
+});
+
 //--------------------------------------------------info arsip controller------------------------------------------------
 
 

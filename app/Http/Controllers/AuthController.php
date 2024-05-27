@@ -81,7 +81,7 @@ class AuthController extends Controller
         // Session::where('ID_OPERATOR', $operator->ID_OPERATOR)->delete();
 
         // Set waktu kedaluwarsa token (misalnya, 6 jam)
-        $expirationTimeInSeconds = 60 * 60; // 5 menit dalam detik
+        $expirationTimeInSeconds = 5 * 60; // 5 menit dalam detik
         // Hitung waktu kedaluwarsa dalam detik sejak epoch
         $expirationTime = time() + $expirationTimeInSeconds;
         // Konversi durasi waktu kedaluwarsa menjadi format jam
@@ -103,8 +103,8 @@ class AuthController extends Controller
                 // Save token and user ID_OPERATOR to Session table
                 $session = new Session();
                 $session->JWT_TOKEN = $token;
-                // $expirationTime = Carbon::now()->addHours(13);
-                $session->EXPIRED_AT = $expirationTime;
+                $session->STATUS = 'Aktif';
+                $session->EXPIRED_AT = Carbon::now()->setTimezone('GMT+7')->addMinutes(3);
                 $session->ID_OPERATOR = $operator->ID_OPERATOR; // Assuming this is the field name for the operator's ID
                 $session->save();
 
