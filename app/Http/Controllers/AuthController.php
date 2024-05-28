@@ -78,7 +78,7 @@ class AuthController extends Controller
             ], 401);
         }
         //delete session ketika melakukan relog
-        // Session::where('ID_OPERATOR', $operator->ID_OPERATOR)->delete();
+        Session::where('ID_OPERATOR', $operator->ID_OPERATOR)->delete();
 
         // Set waktu kedaluwarsa token (misalnya, 6 jam)
         $expirationTimeInSeconds = 5 * 60; // 5 menit dalam detik
