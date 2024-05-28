@@ -11,7 +11,7 @@ use Laravel\Lumen\Auth\Authorizable;
 class Operator extends Model implements AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable, HasFactory;
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -43,6 +43,6 @@ class Operator extends Model implements AuthenticatableContract, AuthorizableCon
 
     public function Session()
     {
-        return $this->hasMany(Operator::class, 'ID_OPERATOR');
+        return $this->hasMany(Session::class, 'ID_OPERATOR');
     }
 }

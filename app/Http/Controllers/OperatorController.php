@@ -25,26 +25,26 @@ class OperatorController extends Controller
 
     public function showOperator()
     {
-        // Mengambil data ID_SESSION, ID_OPERATOR dari tabel session dan EMAIL serta NAMA_OPERATOR dari tabel operator
-        $session = Session::with('operator:ID_OPERATOR,EMAIL,NAMA_OPERATOR')
-            ->select('ID_SESSION', 'ID_OPERATOR', 'STATUS')
+        $operators = Operator::with('session')
+            ->select('ID_OPERATOR', 'NAMA_OPERATOR', 'EMAIL','ID_AKSES')
             ->get();
 
-        // Format data agar EMAIL dan NAMA_OPERATOR dapat ditampilkan dalam struktur JSON
-        $sessionData = $session->map(function ($item) {
+        $operatorData = $operators->map(function ($operator) {
+            $status = $operator->session->isEmpty() ? 'Nonaktif' : $operator->session->first()->STATUS;
+
             return [
-                'ID_SESSION' => $item->ID_SESSION,
-                'ID_OPERATOR' => $item->ID_OPERATOR,
-                'NAMA_OPERATOR' => $item->operator->NAMA_OPERATOR,
-                'EMAIL' => $item->operator->EMAIL,
-                'STATUS' => $item->STATUS,
+                'ID_OPERATOR' => $operator->ID_OPERATOR,
+                'NAMA_OPERATOR' => $operator->NAMA_OPERATOR,
+                'EMAIL' => $operator->EMAIL,
+                'ID_AKSES' => $operator->ID_AKSES,
+                'STATUS' => $status,
             ];
         });
 
         return response()->json([
             'success' => true,
             'message' => 'Profile has been Showed',
-            'data' => $sessionData,
+            'data' => $operatorData,
         ], 200);
     }
 
