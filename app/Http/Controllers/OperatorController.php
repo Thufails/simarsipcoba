@@ -48,6 +48,41 @@ class OperatorController extends Controller
         ], 200);
     }
 
+    public function changeAkses(Request $request, $ID_OPERATOR)
+    {
+        $validated = $this->validate($request, [
+            'ID_AKSES' => 'required|exists:hak_akses,ID_AKSES'
+        ]);
+
+        $operator = Operator::find($ID_OPERATOR);
+        if (!$operator) {
+            return response()->json(['error' => 'Operator tidak ditemukan'], 404);
+        }
+
+        $hakAkses = HakAkses::find($validated['ID_AKSES']);
+        if (!$hakAkses) {
+            return response()->json(['error' => 'Invalid ID_AKSES provided.'], 400);
+        }
+
+        $operator->ID_AKSES = $hakAkses->ID_AKSES;
+        $operator->save();
+
+        if ($operator) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Hak akses berhasil diperbarui',
+                'data' => $operator
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memperbarui hak akses',
+                'data' => null
+            ], 400);
+        }
+    }
+
+
     public function deleteOperator(Request $request, $ID_OPERATOR)
     {
         try {
