@@ -48,4 +48,17 @@ class OperatorController extends Controller
         ], 200);
     }
 
+    public function deleteOperator(Request $request, $ID_OPERATOR)
+    {
+        try {
+            $operator = Operator::findOrFail($ID_OPERATOR);
+
+            $operator->delete();
+
+            return response()->json(['message' => 'Operator berhasil dihapus'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Gagal menghapus operator'], 500);
+        }
+    }
+
 }

@@ -53,6 +53,7 @@ $router->group(['prefix' => 'manajemen', 'middleware' => 'auth'], function () us
 
 $router->group(['prefix' => 'operator', 'middleware' => 'auth'], function () use ($router) {
     $router->get('/showOperator', 'OperatorController@showOperator');
+    $router->delete('/{ID_OPERATOR}', 'OperatorController@deleteOperator');
 });
 
 //--------------------------------------------------info arsip controller------------------------------------------------
