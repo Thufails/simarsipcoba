@@ -81,7 +81,7 @@ class AuthController extends Controller
         Session::where('ID_OPERATOR', $operator->ID_OPERATOR)->delete();
 
         // Set waktu kedaluwarsa token (misalnya, 6 jam)
-        $expirationTimeInSeconds = 5 * 60; // 5 menit dalam detik
+        $expirationTimeInSeconds = 60 * 60; // 5 menit dalam detik
         // Hitung waktu kedaluwarsa dalam detik sejak epoch
         $expirationTime = time() + $expirationTimeInSeconds;
         // Konversi durasi waktu kedaluwarsa menjadi format jam
