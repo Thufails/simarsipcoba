@@ -433,7 +433,7 @@ class RekapitulasiController extends Controller
         }
     }
 
-    public function filterBaseJenis (Request $request)
+    public function filterBaseKelamin (Request $request)
     {
         $validator = app('validator')->make($request->all(), [
             'JENIS_DOKUMEN' => 'nullable|exists:jenis_dokumen,ID_DOKUMEN',
