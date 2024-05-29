@@ -516,14 +516,9 @@ class RekapitulasiController extends Controller
         $query = Arsip::with('jenisDokumen')
             ->with([
                 'infoArsipPengangkatan',
-                'infoArsipSuratPindah',
-                'infoArsipPerceraian',
                 'infoArsipPengesahan',
                 'infoArsipKematian',
-                'infoArsipKelahiran',
                 'infoArsipPengakuan',
-                'infoArsipPerkawinan',
-                'infoArsipKk',
                 'infoArsipSkot',
                 'infoArsipSktt',
                 'infoArsipKtp'
