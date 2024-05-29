@@ -133,12 +133,19 @@ class RekapitulasiController extends Controller
             ];
         });
 
-        // Mengembalikan data dokumen dalam format JSON
-        return response()->json([
-            'success' => true,
-            'message' => 'Sukses Menampilkan Arsip by Kecamatan: ' . $namaKecamatan,
-            'dokumen' => $formattedArsips,
-        ], 200);
+        if ($formattedArsips->isNotEmpty()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Sukses Menampilkan Rekapitulasi Kecamatan '. $namaKecamatan,
+                'arsips' => $formattedArsips
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data Arsip',
+                'arsips' => []
+            ], 404);
+        }
     }
 
     public function filterBaseKelurahan (Request $request)
@@ -251,12 +258,19 @@ class RekapitulasiController extends Controller
             ];
         });
 
-        // Mengembalikan data dokumen dalam format JSON
-        return response()->json([
-            'success' => true,
-            'message' => 'Sukses Menampilkan Arsip by Kelurahan: ' . $namaKelurahan,
-            'dokumen' => $formattedArsips,
-        ], 200);
+        if ($formattedArsips->isNotEmpty()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Sukses Menampilkan Rekapitulasi Kelurahan '. $namaKelurahan,
+                'arsips' => $formattedArsips
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data Arsip',
+                'arsips' => []
+            ], 404);
+        }
     }
 
     public function filterBaseTahun (Request $request)
@@ -421,7 +435,135 @@ class RekapitulasiController extends Controller
 
     public function filterBaseJenis (Request $request)
     {
+        $validator = app('validator')->make($request->all(), [
+            'JENIS_DOKUMEN' => 'nullable|exists:jenis_dokumen,ID_DOKUMEN',
+            'JENIS_KELAMIN' => 'nullable|string',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validasi gagal',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $jenisKelamin = $request->JENIS_KELAMIN;
+        $query = Arsip::with('jenisDokumen');
+
+        if ($request->has('JENIS_DOKUMEN') && $request->JENIS_DOKUMEN != null) {
+            $query->whereHas('jenisDokumen', function ($q) use ($request) {
+                $q->where('ID_DOKUMEN', $request->JENIS_DOKUMEN);
+            });
+        }
+        $query->where(function ($q) use ($request) {
+            $q->whereHas('infoArsipPengangkatan', function ($query) use ($request) {
+                $query->where('JENIS_KELAMIN', $request->JENIS_KELAMIN);
+            })->orWhereHas('infoArsipPengesahan', function ($query) use ($request) {
+                $query->where('JENIS_KELAMIN', $request->JENIS_KELAMIN);
+            })->orWhereHas('infoArsipSkot', function ($query) use ($request) {
+                $query->where('JENIS_KELAMIN', $request->JENIS_KELAMIN);
+            })->orWhereHas('infoArsipSktt', function ($query) use ($request) {
+                $query->where('JENIS_KELAMIN', $request->JENIS_KELAMIN);
+            })->orWhereHas('infoArsipKtp', function ($query) use ($request) {
+                $query->where('JENIS_KELAMIN', $request->JENIS_KELAMIN);
+            })->orWhereHas('infoArsipKematian', function ($query) use ($request) {
+                $query->where('JENIS_KELAMIN', $request->JENIS_KELAMIN);
+            })->orWhereHas('infoArsipPengakuan', function ($query) use ($request) {
+                $query->where('JENIS_KELAMIN', $request->JENIS_KELAMIN);
+            });
+        });
+
+        $arsips = $query->get();
+
+        $formattedArsips = $arsips->map(function ($arsip) {
+            $models = [
+                'infoArsipPengangkatan' => ['NAMA_ANAK', 'FILE_LAMA', 'FILE_LAINNYA', 'FILE_PENGANGKATAN'],
+                'infoArsipPengesahan' => ['NAMA_ANAK', 'FILE_LAMA', 'FILE_LAINNYA', 'FILE_PENGESAHAN'],
+                'infoArsipKematian' => ['NAMA', 'FILE_LAMA', 'FILE_F201', 'FILE_SK_KEMATIAN', 'FILE_KK', 'FILE_KTP', 'FILE_KTP_SUAMI_ISTRI', 'FILE_KUTIPAN_KEMATIAN', 'FILE_FC_PP', 'FILE_FC_DOK_PERJALANAN', 'FILE_DOK_PENDUKUNG', 'FILE_SPTJM', 'FILE_LAINNYA', 'FILE_AKTA_KEMATIAN'],
+                'infoArsipPengakuan' => ['NAMA_ANAK', 'FILE_LAMA', 'FILE_LAINNYA', 'FILE_PENGAKUAN'],
+                'infoArsipSkot' => ['NAMA', 'NAMA_PANGGIL', 'FILE_LAMA', 'FILE_LAINNYA', 'FILE_SKOT'],
+                'infoArsipSktt' => ['NAMA', 'FILE_LAMA', 'FILE_LAINNYA', 'FILE_SKTT'],
+                'infoArsipKtp' => ['NAMA', 'FILE_LAMA', 'FILE_KK', 'FILE_KUTIPAN_KTP', 'FILE_SK_HILANG', 'FILE_AKTA_LAHIR', 'FILE_IJAZAH', 'FILE_SURAT_NIKAH_CERAI', 'FILE_SURAT_PINDAH', 'FILE_LAINNYA', 'FILE_KTP'],
+            ];
+
+            foreach ($models as $relation => $columns) {
+                if (is_array($columns)) {
+                    foreach ($columns as $column) {
+                        if (!empty($arsip->$relation->$column)) {
+                            if (strpos($column, 'NAMA'&'NAMA_') !== false) {
+                                $NAMA[] = $arsip->$relation->$column;
+                            } elseif (strpos($column, 'FILE_') !== false) {
+                                $DOKUMEN[] = $arsip->$relation->$column;
+                            }
+                        }
+                    }
+                } else {
+                    if (!empty($arsip->$relation->$columns)) {
+                        if (strpos($columns, 'NAMA'&'NAMA_') !== false) {
+                            $NAMA[] = $arsip->$relation->$columns;
+                        } elseif (strpos($columns, 'FILE_') !== false) {
+                            $DOKUMEN[] = $arsip->$relation->$columns;
+                        }
+                    }
+                }
+            }
+
+            $formattedNama = [];
+            foreach ($models as $relation => $columns) {
+                foreach ($columns as $column) {
+                    if (!empty($arsip->$relation->$column) && strpos($column, 'NAMA') !== false) {
+                        $formattedNama[$column] = $arsip->$relation->$column;
+                    }
+                }
+            }
+
+            $formattedDokumen = [];
+            foreach ($models as $relation => $columns) {
+                foreach ($columns as $column) {
+                    if (!empty($arsip->$relation->$column) && strpos($column, 'FILE_') !== false) {
+                        $formattedDokumen[$column] = $arsip->$relation->$column;
+                    }
+                }
+            }
+
+            return [
+                'ID_ARSIP' => $arsip->ID_ARSIP,
+                    'ID_DOKUMEN' => $arsip->ID_DOKUMEN,
+                    'NAMA_DOKUMEN' => $arsip->jenisDokumen->NAMA_DOKUMEN ?? null,
+                    'NO_DOKUMEN' => implode(', ', array_filter([
+                        $arsip->NO_DOK_SURAT_PINDAH,
+                        $arsip->NO_DOK_KK,
+                        $arsip->NO_DOK_SKOT,
+                        $arsip->NO_DOK_SKTT,
+                        $arsip->NO_DOK_KTP,
+                    ])),
+                    'NAMA' => implode(', ', $NAMA),
+                    'DOKUMEN' => $formattedDokumen,
+                    'JUMLAH_BERKAS' => $arsip->JUMLAH_BERKAS,
+                    'NO_BUKU' => $arsip->NO_BUKU,
+                    'NO_RAK' => $arsip->NO_RAK,
+                    'NO_BARIS' => $arsip->NO_BARIS,
+                    'NO_BOKS' => $arsip->NO_BOKS,
+                    'LOK_SIMPAN' => $arsip->LOK_SIMPAN,
+                    'TANGGAL_PINDAI' => $arsip->TANGGAL_PINDAI,
+                    'KETERANGAN' => $arsip->KETERANGAN,
+            ];
+        });
+
+        if ($formattedArsips->isNotEmpty()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Sukses Menampilkan Rekapitulasi Jenis Kelamin '. $jenisKelamin,
+                'arsips' => $formattedArsips
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data Arsip',
+                'arsips' => []
+            ], 404);
+        }
     }
 
 

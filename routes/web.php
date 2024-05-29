@@ -61,6 +61,7 @@ $router->group(['prefix' => 'rekapitulasi', 'middleware' => 'auth'], function ()
     $router->get('/filterBaseKecamatan', 'RekapitulasiController@filterBaseKecamatan');
     $router->get('/filterBaseKelurahan', 'RekapitulasiController@filterBaseKelurahan');
     $router->get('/filterBaseTahun', 'RekapitulasiController@filterBaseTahun');
+    $router->get('/filterBaseKelamin', 'RekapitulasiController@filterBaseKelamin');
 });
 
 //--------------------------------------------------info arsip controller------------------------------------------------
