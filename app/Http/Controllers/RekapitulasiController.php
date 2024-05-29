@@ -120,7 +120,7 @@ class RekapitulasiController extends Controller
                 }
 
                 // Mendapatkan dokumen dari setiap tabel terkait
-                $DOKUMEN = [];
+
                 $columnsMapping = [
                     'infoArsipSuratPindah' => ['NAMA_KEPALA', 'FILE_LAMA', 'FILE_SKP_WNI', 'FILE_KTP_ASAL', 'FILE_NIKAH_CERAI', 'FILE_AKTA_KELAHIRAN', 'FILE_KK', 'FILE_F101', 'FILE_102', 'FILE_DOK_PENDUKUNG', 'FILE_LAINNYA', 'FILE_SURAT_PINDAH'],
                     'infoArsipKk' => ['NAMA_KEPALA', 'FILE_LAMA', 'FILE_F101', 'FILE_NIKAH_CERAI', 'FILE_SK_PINDAH', 'FILE_SK_PINDAH_LUAR', 'FILE_SK_PENGGANTI', 'FILE_PUTUSAN_PRESIDEN', 'FILE_KK_LAMA', 'FILE_SK_PERISTIWA', 'FILE_SK_HILANG', 'FILE_KTP', 'FILE_LAINNYA', 'FILE_KK'],
@@ -133,7 +133,7 @@ class RekapitulasiController extends Controller
                 foreach ($columnsMapping as $relation => $columns) {
                     foreach ($columns as $column) {
                         if (!empty($arsip->$relation->$column) && strpos($column, 'FILE_') !== false) {
-                            $DOKUMEN[] = $arsip->$relation->$column;
+                            $formattedDokumen[$column] = $arsip->$relation->$column;
                         }
                     }
                 }
@@ -255,7 +255,6 @@ class RekapitulasiController extends Controller
                 }
 
                 // Mendapatkan dokumen dari setiap tabel terkait
-                $DOKUMEN = [];
                 $columnsMapping = [
                     'infoArsipSuratPindah' => ['NAMA_KEPALA', 'FILE_LAMA', 'FILE_SKP_WNI', 'FILE_KTP_ASAL', 'FILE_NIKAH_CERAI', 'FILE_AKTA_KELAHIRAN', 'FILE_KK', 'FILE_F101', 'FILE_102', 'FILE_DOK_PENDUKUNG', 'FILE_LAINNYA', 'FILE_SURAT_PINDAH'],
                     'infoArsipKk' => ['NAMA_KEPALA', 'FILE_LAMA', 'FILE_F101', 'FILE_NIKAH_CERAI', 'FILE_SK_PINDAH', 'FILE_SK_PINDAH_LUAR', 'FILE_SK_PENGGANTI', 'FILE_PUTUSAN_PRESIDEN', 'FILE_KK_LAMA', 'FILE_SK_PERISTIWA', 'FILE_SK_HILANG', 'FILE_KTP', 'FILE_LAINNYA', 'FILE_KK'],
@@ -268,7 +267,7 @@ class RekapitulasiController extends Controller
                 foreach ($columnsMapping as $relation => $columns) {
                     foreach ($columns as $column) {
                         if (!empty($arsip->$relation->$column) && strpos($column, 'FILE_') !== false) {
-                            $DOKUMEN[] = $arsip->$relation->$column;
+                            $formattedDokumen[$column] = $arsip->$relation->$column;
                         }
                     }
                 }
@@ -431,7 +430,6 @@ class RekapitulasiController extends Controller
                 }
 
                 // Mendapatkan dokumen dari setiap tabel terkait
-                $DOKUMEN = [];
                 $columnsMapping = [
                     'infoArsipPengangkatan' => ['NAMA_ANAK', 'FILE_LAMA','FILE_LAINNYA','FILE_PENGANGKATAN'],
 
@@ -474,7 +472,7 @@ class RekapitulasiController extends Controller
                 foreach ($columnsMapping as $relation => $columns) {
                     foreach ($columns as $column) {
                         if (!empty($arsip->$relation->$column) && strpos($column, 'FILE_') !== false) {
-                            $DOKUMEN[] = $arsip->$relation->$column;
+                            $formattedDokumen[$column] = $arsip->$relation->$column;
                         }
                     }
                 }
@@ -599,7 +597,6 @@ class RekapitulasiController extends Controller
                 }
 
                 // Mendapatkan dokumen dari setiap tabel terkait
-                $DOKUMEN = [];
                 $columnsMapping = [
                     'infoArsipPengangkatan' => ['FILE_LAMA', 'FILE_LAINNYA', 'FILE_PENGANGKATAN'],
 
@@ -619,7 +616,7 @@ class RekapitulasiController extends Controller
                 foreach ($columnsMapping as $relation => $columns) {
                     foreach ($columns as $column) {
                         if (!empty($arsip->$relation->$column) && strpos($column, 'FILE_') !== false) {
-                            $DOKUMEN[] = $arsip->$relation->$column;
+                            $formattedDokumen[$column] = $arsip->$relation->$column;
                         }
                     }
                 }
