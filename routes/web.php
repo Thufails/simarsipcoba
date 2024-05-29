@@ -60,6 +60,7 @@ $router->group(['prefix' => 'operator', 'middleware' => 'auth'], function () use
 $router->group(['prefix' => 'rekapitulasi', 'middleware' => 'auth'], function () use ($router) {
     $router->get('/filterBaseKecamatan', 'RekapitulasiController@filterBaseKecamatan');
     $router->get('/filterBaseKelurahan', 'RekapitulasiController@filterBaseKelurahan');
+    $router->get('/filterBaseTahun', 'RekapitulasiController@filterBaseTahun');
 });
 
 //--------------------------------------------------info arsip controller------------------------------------------------
