@@ -612,6 +612,7 @@ class RekapitulasiController extends Controller
                                         'FILE_IJAZAH', 'FILE_SURAT_NIKAH_CERAI', 'FILE_SURAT_PINDAH', 'FILE_LAINNYA', 'FILE_KTP'],
                 ];
 
+                $formattedDokumen = [];
                 foreach ($columnsMapping as $relation => $columns) {
                     foreach ($columns as $column) {
                         if (!empty($arsip->$relation->$column) && strpos($column, 'FILE_') !== false) {
@@ -620,7 +621,7 @@ class RekapitulasiController extends Controller
                     }
                 }
 
-                $formattedArsip['DOKUMEN'] = $DOKUMEN;
+                $formattedArsip['DOKUMEN'] = $formattedDokumen;
 
                 return $formattedArsip;
             });
