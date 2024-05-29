@@ -57,6 +57,11 @@ $router->group(['prefix' => 'operator', 'middleware' => 'auth'], function () use
     $router->delete('/{ID_OPERATOR}', 'OperatorController@deleteOperator');
 });
 
+$router->group(['prefix' => 'rekapitulasi', 'middleware' => 'auth'], function () use ($router) {
+    $router->get('/filterBaseKecamatan', 'RekapitulasiController@filterBaseKecamatan');
+    $router->get('/filterBaseKelurahan', 'RekapitulasiController@filterBaseKelurahan');
+});
+
 //--------------------------------------------------info arsip controller------------------------------------------------
 
 
