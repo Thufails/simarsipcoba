@@ -42,14 +42,7 @@ class RekapitulasiController extends Controller
         $namaKecamatan = Kecamatan::where('ID_KECAMATAN', $request->ID_KECAMATAN)->value('NAMA_KECAMATAN');
         $query = Arsip::with('jenisDokumen')
             ->with([
-                'infoArsipPengangkatan',
                 'infoArsipSuratPindah',
-                'infoArsipPerceraian',
-                'infoArsipPengesahan',
-                'infoArsipKematian',
-                'infoArsipKelahiran',
-                'infoArsipPengakuan',
-                'infoArsipPerkawinan',
                 'infoArsipKk',
                 'infoArsipSkot',
                 'infoArsipSktt',
@@ -115,7 +108,13 @@ class RekapitulasiController extends Controller
                     if ($arsip->$relation) {
                         // Menggabungkan data ke dalam $formattedArsip tanpa membungkusnya dalam array
                         $formattedArsip['INFO_ARSIP'] = $arsip->$relation;
-                        break; // Berhenti setelah menemukan data yang ada
+                        $id_kecamatan = $arsip->$relation->ID_KECAMATAN;
+                        $namaKecamatan = Kecamatan::where('ID_KECAMATAN', $id_kecamatan)->value('NAMA_KECAMATAN');
+                        $formattedArsip['INFO_ARSIP']->ID_KECAMATAN = $namaKecamatan;
+                        $id_kelurahan = $arsip->$relation->ID_KELURAHAN;
+                        $namakelurahan = Kelurahan::where('ID_KELURAHAN', $id_kelurahan)->value('NAMA_KELURAHAN');
+                        $formattedArsip['INFO_ARSIP']->ID_KELURAHAN = $namakelurahan;
+                        break;
                     }
                 }
 
@@ -250,7 +249,13 @@ class RekapitulasiController extends Controller
                     if ($arsip->$relation) {
                         // Menggabungkan data ke dalam $formattedArsip tanpa membungkusnya dalam array
                         $formattedArsip['INFO_ARSIP'] = $arsip->$relation;
-                        break; // Berhenti setelah menemukan data yang ada
+                        $id_kecamatan = $arsip->$relation->ID_KECAMATAN;
+                        $namaKecamatan = Kecamatan::where('ID_KECAMATAN', $id_kecamatan)->value('NAMA_KECAMATAN');
+                        $formattedArsip['INFO_ARSIP']->ID_KECAMATAN = $namaKecamatan;
+                        $id_kelurahan = $arsip->$relation->ID_KELURAHAN;
+                        $namakelurahan = Kelurahan::where('ID_KELURAHAN', $id_kelurahan)->value('NAMA_KELURAHAN');
+                        $formattedArsip['INFO_ARSIP']->ID_KELURAHAN = $namakelurahan;
+                        break;
                     }
                 }
 
@@ -425,7 +430,13 @@ class RekapitulasiController extends Controller
                     if ($arsip->$relation) {
                         // Menggabungkan data ke dalam $formattedArsip tanpa membungkusnya dalam array
                         $formattedArsip['INFO_ARSIP'] = $arsip->$relation;
-                        break; // Berhenti setelah menemukan data yang ada
+                        $id_kecamatan = $arsip->$relation->ID_KECAMATAN;
+                        $namaKecamatan = Kecamatan::where('ID_KECAMATAN', $id_kecamatan)->value('NAMA_KECAMATAN');
+                        $formattedArsip['INFO_ARSIP']->ID_KECAMATAN = $namaKecamatan;
+                        $id_kelurahan = $arsip->$relation->ID_KELURAHAN;
+                        $namakelurahan = Kelurahan::where('ID_KELURAHAN', $id_kelurahan)->value('NAMA_KELURAHAN');
+                        $formattedArsip['INFO_ARSIP']->ID_KELURAHAN = $namakelurahan;
+                        break;
                     }
                 }
 
@@ -592,7 +603,13 @@ class RekapitulasiController extends Controller
                     if ($arsip->$relation) {
                         // Menggabungkan data ke dalam $formattedArsip tanpa membungkusnya dalam array
                         $formattedArsip['INFO_ARSIP'] = $arsip->$relation;
-                        break; // Berhenti setelah menemukan data yang ada
+                        $id_kecamatan = $arsip->$relation->ID_KECAMATAN;
+                        $namaKecamatan = Kecamatan::where('ID_KECAMATAN', $id_kecamatan)->value('NAMA_KECAMATAN');
+                        $formattedArsip['INFO_ARSIP']->ID_KECAMATAN = $namaKecamatan;
+                        $id_kelurahan = $arsip->$relation->ID_KELURAHAN;
+                        $namakelurahan = Kelurahan::where('ID_KELURAHAN', $id_kelurahan)->value('NAMA_KELURAHAN');
+                        $formattedArsip['INFO_ARSIP']->ID_KELURAHAN = $namakelurahan;
+                        break;
                     }
                 }
 
