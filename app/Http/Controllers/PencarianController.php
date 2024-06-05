@@ -531,14 +531,59 @@ class PencarianController extends Controller
         ];
 
         foreach ($models as $relation => $columns) {
+            // Cek apakah relasi tersedia dan setidaknya satu dokumen tidak kosong
             if ($arsip->$relation) {
                 foreach ($columns as $column) {
                     if (!empty($arsip->$relation->$column)) {
-                        $dokumen[] = $arsip->$relation->$column;
+                        // Ubah path sesuai dengan model yang sesuai
+                        switch ($relation) {
+                            case 'infoArsipKelahiran':
+                                $path = 'Arsip Kelahiran';
+                                break;
+                            case 'infoArsipKematian':
+                                $path = 'Arsip Kematian';
+                                break;
+                            case 'infoArsipKk':
+                                $path = 'Arsip Kk';
+                                break;
+                            case 'infoArsipKtp':
+                                $path = 'Arsip Ktp';
+                                break;
+                            case 'infoArsipPengakuan':
+                                $path = 'Arsip Pengakuan';
+                                break;
+                            case 'infoArsipPengangkatan':
+                                $path = 'Arsip Pengangkatan';
+                                break;
+                            case 'infoArsipPengesahan':
+                                $path = 'Arsip Pengesahan';
+                                break;
+                            case 'infoArsipPerceraian':
+                                $path = 'Arsip Perceraian';
+                                break;
+                            case 'infoArsipPerkawinan':
+                                $path = 'Arsip Perkawinan';
+                                break;
+                            case 'infoArsipSkot':
+                                $path = 'Arsip Skot';
+                                break;
+                            case 'infoArsipSktt':
+                                $path = 'Arsip Sktt';
+                                break;
+                            case 'infoArsipSuratPindah':
+                                $path = 'Arsip Surat Pindah';
+                                break;
+                            default:
+                                // Jika tidak sesuai dengan yang diharapkan, lanjutkan ke iterasi selanjutnya
+                                continue 2;
+                        }
+                        // Tambahkan dokumen ke dalam array
+                        $dokumen[] = storage_path('app/public/' . $path . '/' . $arsip->$relation->$column);
                     }
                 }
             }
         }
+        
         return response()->json([
             'success' => true,
             'message' => 'Sukses Menampilkan Arsip by id '. $arsip->ID_ARSIP,
