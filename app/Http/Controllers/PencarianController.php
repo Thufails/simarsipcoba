@@ -578,12 +578,12 @@ class PencarianController extends Controller
                                 continue 2;
                         }
                         // Tambahkan dokumen ke dalam array
-                        $dokumen[] = storage_path('app/public/' . $path . '/' . $arsip->$relation->$column);
+                        $dokumen[] = storage_path($path . '/' . $arsip->$relation->$column);
                     }
                 }
             }
         }
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Sukses Menampilkan Arsip by id '. $arsip->ID_ARSIP,
