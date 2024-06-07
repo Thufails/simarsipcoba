@@ -11,6 +11,7 @@ use App\Models\HistoryPelayanan;
 use App\Models\Arsip;
 use App\Models\HakAkses;
 use App\Models\JenisDokumen;
+use Illuminate\Support\Facades\Storage;
 
 class PencarianController extends Controller
 {
@@ -501,7 +502,6 @@ class PencarianController extends Controller
                 'message' => 'Arsip tidak ditemukan',
             ], 404);
         }
-        $dokumen = [];
         $models = [
             'infoArsipPengangkatan' => ['FILE_LAMA','FILE_LAINNYA','FILE_PENGANGKATAN'],
             'infoArsipSuratPindah' => ['FILE_LAMA','FILE_SKP_WNI','FILE_KTP_ASAL','FILE_NIKAH_CERAI',
@@ -577,8 +577,28 @@ class PencarianController extends Controller
                                 // Jika tidak sesuai dengan yang diharapkan, lanjutkan ke iterasi selanjutnya
                                 continue 2;
                         }
-                        // Tambahkan dokumen ke dalam array
-                        $dokumen[] = storage_path('app/public/' . $path . '/' . $arsip->$relation->$column);
+                        $folderPath = 'public/' . $path;
+                        $fileName = $arsip->$relation->$column;
+                        $filePath = $folderPath . '/' . $fileName;
+
+                        // Memeriksa apakah file ada di storage
+                        if (Storage::exists($filePath)) {
+                            $sameNamedFiles = Storage::allFiles($folderPath);
+
+                            foreach ($sameNamedFiles as $sameNamedFile) {
+                                // Memeriksa apakah file ada di daftar database
+                                if (in_array(basename($sameNamedFile), $arsip->$relation->pluck($column)->toArray())) {
+                                    $fileContents = Storage::get($sameNamedFile);
+                                    $base64Data = base64_encode($fileContents);
+                                    $dokumen[] = [
+                                        'file_name' => basename($sameNamedFile),
+                                        'base64' => $base64Data
+                                    ];
+                                }
+                            }
+                        } else {
+                            $dokumen['errors'][] = "File '$fileName' tidak ditemukan di folder '$folderPath'";
+                        }
                     }
                 }
             }
