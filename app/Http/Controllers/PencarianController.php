@@ -529,85 +529,20 @@ class PencarianController extends Controller
             'infoArsipKtp' => ['FILE_LAMA','FILE_KK','FILE_KUTIPAN_KTP','FILE_SK_HILANG','FILE_AKTA_LAHIR',
                                 'FILE_IJAZAH','FILE_SURAT_NIKAH_CERAI','FILE_SURAT_PINDAH','FILE_LAINNYA','FILE_KTP'],
         ];
-
+        
+        $formattedDokumen = [];
         foreach ($models as $relation => $columns) {
-            // Cek apakah relasi tersedia dan setidaknya satu dokumen tidak kosong
-            if ($arsip->$relation) {
-                foreach ($columns as $column) {
-                    if (!empty($arsip->$relation->$column)) {
-                        // Ubah path sesuai dengan model yang sesuai
-                        switch ($relation) {
-                            case 'infoArsipKelahiran':
-                                $path = 'Arsip Kelahiran';
-                                break;
-                            case 'infoArsipKematian':
-                                $path = 'Arsip Kematian';
-                                break;
-                            case 'infoArsipKk':
-                                $path = 'Arsip Kk';
-                                break;
-                            case 'infoArsipKtp':
-                                $path = 'Arsip Ktp';
-                                break;
-                            case 'infoArsipPengakuan':
-                                $path = 'Arsip Pengakuan';
-                                break;
-                            case 'infoArsipPengangkatan':
-                                $path = 'Arsip Pengangkatan';
-                                break;
-                            case 'infoArsipPengesahan':
-                                $path = 'Arsip Pengesahan';
-                                break;
-                            case 'infoArsipPerceraian':
-                                $path = 'Arsip Perceraian';
-                                break;
-                            case 'infoArsipPerkawinan':
-                                $path = 'Arsip Perkawinan';
-                                break;
-                            case 'infoArsipSkot':
-                                $path = 'Arsip Skot';
-                                break;
-                            case 'infoArsipSktt':
-                                $path = 'Arsip Sktt';
-                                break;
-                            case 'infoArsipSuratPindah':
-                                $path = 'Arsip Surat Pindah';
-                                break;
-                            default:
-                                // Jika tidak sesuai dengan yang diharapkan, lanjutkan ke iterasi selanjutnya
-                                continue 2;
-                        }
-                        $folderPath = 'public/' . $path;
-                        $fileName = $arsip->$relation->$column;
-                        $filePath = $folderPath . '/' . $fileName;
-
-                        // Memeriksa apakah file ada di storage
-                        if (Storage::exists($filePath)) {
-                            $sameNamedFiles = Storage::allFiles($folderPath);
-
-                            foreach ($sameNamedFiles as $sameNamedFile) {
-                                // Memeriksa apakah file ada di daftar database
-                                if (in_array(basename($sameNamedFile), $arsip->$relation->pluck($column)->toArray())) {
-                                    $fileContents = Storage::get($sameNamedFile);
-                                    $base64Data = base64_encode($fileContents);
-                                    $dokumen[] = [
-                                        'file_name' => basename($sameNamedFile),
-                                        'base64' => $base64Data
-                                    ];
-                                }
-                            }
-                        } else {
-                            $dokumen['errors'][] = "File '$fileName' tidak ditemukan di folder '$folderPath'";
-                        }
-                    }
+            foreach ($columns as $column) {
+                if (!empty($arsip->$relation->$column) && strpos($column, 'FILE_') !== false) {
+                    $formattedDokumen[$column] = $arsip->$relation->$column;
                 }
             }
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Sukses Menampilkan Arsip by id '. $arsip->ID_ARSIP,
-            'dokumen' => $dokumen,
+            'message' => 'Sukses Menampilkan Data Arsip',
+            'arsip' => $formattedDokumen
         ], 200);
     }
 
