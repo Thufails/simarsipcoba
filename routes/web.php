@@ -64,6 +64,10 @@ $router->group(['prefix' => 'rekapitulasi', 'middleware' => 'auth'], function ()
     $router->get('/filterBaseKelamin', 'RekapitulasiController@filterBaseKelamin');
 });
 
+$router->group(['prefix' => 'file', 'middleware' => 'auth'], function () use ($router) {
+    $router->get('/getDokumen', 'FileController@getDokumen');
+});
+
 //--------------------------------------------------info arsip controller------------------------------------------------
 
 
