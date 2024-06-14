@@ -105,7 +105,7 @@ class AuthController extends Controller
                 $session = new Session();
                 $session->JWT_TOKEN = $token;
                 $session->STATUS = 'Aktif';
-                $session->EXPIRED_AT = Carbon::now()->setTimezone('GMT+7')->addMinutes(3);
+                $session->EXPIRED_AT = Carbon::now()->addMinutes(3);
                 $session->ID_OPERATOR = $operator->ID_OPERATOR; // Assuming this is the field name for the operator's ID
                 $session->save();
 
