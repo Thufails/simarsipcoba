@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class InfoArsipKtpController extends Controller
 {
@@ -133,7 +134,7 @@ class InfoArsipKtpController extends Controller
         }
         $infoArsiKtp->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
         $infoArsiKtp->TAHUN_PEMBUATAN_KTP = $request->input('TAHUN_PEMBUATAN_KTP');
-
+        $tahunPembuatanDokKtp = $request->TAHUN_PEMBUATAN_KTP;
         $fileFields = [
             'FILE_LAMA',
             'FILE_KK',
@@ -159,8 +160,8 @@ class InfoArsipKtpController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        // Simpan file dan dapatkan pathnya
-                        $file = $file->storeAs('Arsip Ktp', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokKtp . '/Arsip Ktp';
+                        $file->storeAs($folderPath, $fileName, 'public');
                         // Simpan path file ke dalam database sesuai dengan field yang sesuai
                         $infoArsiKtp->$field = $fileName;
                     } else {
@@ -280,7 +281,7 @@ class InfoArsipKtpController extends Controller
 
         $infoArsipKtp->NO_DOK_KTP = $arsip->NO_DOK_KTP;
         $infoArsipKtp->NAMA = $request->input('NAMA');
-
+        $tahunPembuatanDokKtp = $infoArsipKtp->TAHUN_PEMBUATAN_KTP;
         $fileFields = [
             'FILE_LAMA',
             'FILE_KK',
@@ -303,7 +304,15 @@ class InfoArsipKtpController extends Controller
                 if (in_array($extension, $allowedExtensions)) {
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $file->storeAs('Arsip Ktp', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokKtp . '/Arsip Ktp';
+                        $oldFileName = $infoArsipKtp->$field;
+                        if ($oldFileName) {
+                            $oldFilePath = $folderPath . '/' . $oldFileName;
+                            if (Storage::disk('public')->exists($oldFilePath)) {
+                                Storage::disk('public')->delete($oldFilePath);
+                            }
+                        }
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipKtp ->$field = $fileName;
                     } else {
                         return response()->json([

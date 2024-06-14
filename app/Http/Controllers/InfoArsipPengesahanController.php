@@ -13,6 +13,7 @@ use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class InfoArsipPengesahanController extends Controller
 {
@@ -94,6 +95,7 @@ class InfoArsipPengesahanController extends Controller
         $infoArsipPengesahan->NAMA_IBU = $request->input('NAMA_IBU');
         $infoArsipPengesahan->TAHUN_PEMBUATAN_DOK_PENGESAHAN = $request->input('TAHUN_PEMBUATAN_DOK_PENGESAHAN');
 
+        $tahunPembuatanDokPengesahan = $request->TAHUTAHUN_PEMBUATAN_DOK_PENGESAHAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',
@@ -112,7 +114,8 @@ class InfoArsipPengesahanController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $file->storeAs('Arsip Pengesahan', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokPengesahan . '/Arsip Pengesahan';
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipPengesahan->$field = $fileName;
                     } else {
                         return response()->json([
@@ -227,6 +230,7 @@ class InfoArsipPengesahanController extends Controller
         $infoArsipPengesahan->NO_DOK_PENGESAHAN = $arsip->NO_DOK_PENGESAHAN;
         $infoArsipPengesahan->NAMA_ANAK = $request->input('NAMA_ANAK');
 
+        $tahunPembuatanDokPengesahan = $request->TAHUTAHUN_PEMBUATAN_DOK_PENGESAHAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',
@@ -245,7 +249,15 @@ class InfoArsipPengesahanController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $file->storeAs('Arsip Pengesahan', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokPengesahan . '/Arsip Kelahiran';
+                        $oldFileName = $infoArsipPengesahan->$field;
+                        if ($oldFileName) {
+                            $oldFilePath = $folderPath . '/' . $oldFileName;
+                            if (Storage::disk('public')->exists($oldFilePath)) {
+                                Storage::disk('public')->delete($oldFilePath);
+                            }
+                        }
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipPengesahan->$field = $fileName;
                     } else {
                         return response()->json([

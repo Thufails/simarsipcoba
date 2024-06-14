@@ -13,6 +13,7 @@ use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class InfoArsipPengangkatanController extends Controller
 {
@@ -92,6 +93,7 @@ class InfoArsipPengangkatanController extends Controller
         $infoArsipPengangkatan->NAMA_IBU = $request->input('NAMA_IBU');
         $infoArsipPengangkatan->THN_PEMBUATAN_DOK_PENGANGKATAN = $request->input('THN_PEMBUATAN_DOK_PENGANGKATAN');
 
+        $tahunPembuatanDokPengangkatan = $request->THN_PEMBUATAN_DOK_PENGANGKATAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',
@@ -110,7 +112,8 @@ class InfoArsipPengangkatanController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $file->storeAs('Arsip Pengangkatan', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokPengangkatan . '/Arsip Pengangkatan';
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipPengangkatan->$field = $fileName;
                     } else {
                         return response()->json([
@@ -226,6 +229,8 @@ class InfoArsipPengangkatanController extends Controller
         // Update data info arsip pengangkatan
         $infoArsipPengangkatan->NO_DOK_PENGANGKATAN = $arsip->NO_DOK_PENGANGKATAN;
         $infoArsipPengangkatan->NAMA_ANAK = $request->input('NAMA_ANAK');
+
+        $tahunPembuatanDokPengangkatan = $infoArsipPengangkatan->THN_PEMBUATAN_DOK_PENGANGKATAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',
@@ -244,7 +249,15 @@ class InfoArsipPengangkatanController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $file->storeAs('Arsip Pengangkatan', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokPengangkatan . '/Arsip Kelahiran';
+                        $oldFileName = $infoArsipPengangkatan->$field;
+                        if ($oldFileName) {
+                            $oldFilePath = $folderPath . '/' . $oldFileName;
+                            if (Storage::disk('public')->exists($oldFilePath)) {
+                                Storage::disk('public')->delete($oldFilePath);
+                            }
+                        }
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipPengangkatan->$field = $fileName;
                     } else {
                         return response()->json([

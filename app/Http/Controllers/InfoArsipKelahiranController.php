@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Storage;
 
 class InfoArsipKelahiranController extends Controller
 {
@@ -109,6 +109,7 @@ class InfoArsipKelahiranController extends Controller
         $infoArsipKelahiran->STATUS_PENDUDUK = $request->input('STATUS_PENDUDUK');
         // Simpan file-file jika diberikan
 
+        $tahunPembuatanDokKelahiran = $request->TAHUN_PEMBUATAN_DOK_KELAHIRAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_KK',
@@ -137,7 +138,8 @@ class InfoArsipKelahiranController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $file->storeAs('Arsip Kelahiran', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokKelahiran . '/Arsip Kelahiran';
+                        $file->storeAs($folderPath, $fileName, 'public');
                         // Simpan nama file ke dalam database sesuai dengan field yang sesuai
                         $infoArsipKelahiran->$field = $fileName;
                     } else {
@@ -266,7 +268,7 @@ class InfoArsipKelahiranController extends Controller
         $infoArsipKelahiran->NAMA = $request->input('NAMA');
         $infoArsipKelahiran->NO_DOK_KELAHIRAN = $arsip->NO_DOK_KELAHIRAN;
 
-
+        $tahunPembuatanDokKelahiran = $infoArsipKelahiran->TAHUN_PEMBUATAN_DOK_KELAHIRAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_KK',
@@ -295,7 +297,15 @@ class InfoArsipKelahiranController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $file->storeAs('Arsip Kelahiran', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokKelahiran . '/Arsip Kelahiran';
+                        $oldFileName = $infoArsipKelahiran->$field;
+                        if ($oldFileName) {
+                            $oldFilePath = $folderPath . '/' . $oldFileName;
+                            if (Storage::disk('public')->exists($oldFilePath)) {
+                                Storage::disk('public')->delete($oldFilePath);
+                            }
+                        }
+                        $file->storeAs($folderPath, $fileName, 'public');
                         // Simpan nama file ke dalam database sesuai dengan field yang sesuai
                         $infoArsipKelahiran->$field = $fileName;
                     } else {

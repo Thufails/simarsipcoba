@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class InfoArsipPengakuanController extends Controller
 {
@@ -94,6 +95,7 @@ class InfoArsipPengakuanController extends Controller
         $infoArsipPengakuan->NAMA_IBU = $request->input('NAMA_IBU');
         $infoArsipPengakuan->TAHUN_PEMBUATAN_DOK_PENGAKUAN = $request->input('TAHUN_PEMBUATAN_DOK_PENGAKUAN');
 
+        $tahunPembuatanDokPengakuan = $request->TAHUN_PEMBUATAN_DOK_PENGAKUAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',
@@ -106,12 +108,12 @@ class InfoArsipPengakuanController extends Controller
                 $allowedExtensions = ['pdf'];
                 $file = $request->file($field);
                 $extension = $file->getClientOriginalExtension();
-
                 if (in_array($extension, $allowedExtensions)) {
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $file->storeAs('Arsip Pengakuan', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokPengakuan . '/Arsip Pengakuan';
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipPengakuan->$field = $fileName;
                     } else {
                         return response()->json([
@@ -225,6 +227,7 @@ class InfoArsipPengakuanController extends Controller
         $infoArsipPengakuan->NO_DOK_PENGAKUAN = $arsip->NO_DOK_PENGAKUAN;
         $infoArsipPengakuan->NAMA_ANAK = $request->input('NAMA_ANAK');
 
+        $tahunPembuatanDokPengakuan = $infoArsipPengakuan->TAHUN_PEMBUATAN_DOK_PENGAKUAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',
@@ -242,7 +245,15 @@ class InfoArsipPengakuanController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $file->storeAs('Arsip Pengakuan', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokPengakuan . '/Arsip Pengakuan';
+                        $oldFileName = $infoArsipPengakuan->$field;
+                        if ($oldFileName) {
+                            $oldFilePath = $folderPath . '/' . $oldFileName;
+                            if (Storage::disk('public')->exists($oldFilePath)) {
+                                Storage::disk('public')->delete($oldFilePath);
+                            }
+                        }
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipPengakuan->$field = $fileName;
                     } else {
                         return response()->json([

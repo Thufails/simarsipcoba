@@ -15,6 +15,7 @@ use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class InfoArsipSkotController extends Controller
 {
@@ -131,6 +132,7 @@ class InfoArsipSkotController extends Controller
         }
         $infoArsipSkot->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
 
+        $tahunPembuatanDokSkot = $request->TAHUN_PEMBUATAN_DOK_SKOT;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',
@@ -149,9 +151,8 @@ class InfoArsipSkotController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        // Simpan file dan dapatkan pathnya
-                        $file = $file->storeAs('Arsip Skot', $fileName, 'public');
-                        // Simpan path file ke dalam database sesuai dengan field yang sesuai
+                        $folderPath = $tahunPembuatanDokSkot . '/Arsip Skot';
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipSkot->$field = $fileName;
                     } else {
                         return response()->json([
@@ -169,7 +170,6 @@ class InfoArsipSkotController extends Controller
                 }
             }
         }
-
         $infoArsipSkot->save();
 
         if ($infoArsipSkot) {
@@ -263,6 +263,7 @@ class InfoArsipSkotController extends Controller
         $infoArsipSkot->NO_DOK_SKOT = $arsip->NO_DOK_SKOT;
         $infoArsipSkot->NAMA = $request->input('NAMA');
 
+        $tahunPembuatanDokSkot = $request->TAHUN_PEMBUATAN_DOK_SKOT;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',
@@ -281,8 +282,15 @@ class InfoArsipSkotController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        // Simpan file dan dapatkan pathnya
-                        $file->storeAs('Arsip Skot', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokSkot . '/Arsip Skot';
+                        $oldFileName = $infoArsipSkot->$field;
+                        if ($oldFileName) {
+                            $oldFilePath = $folderPath . '/' . $oldFileName;
+                            if (Storage::disk('public')->exists($oldFilePath)) {
+                                Storage::disk('public')->delete($oldFilePath);
+                            }
+                        }
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipSkot->$field = $fileName;
                     } else {
                         return response()->json([

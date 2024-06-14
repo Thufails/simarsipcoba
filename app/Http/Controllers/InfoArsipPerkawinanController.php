@@ -13,6 +13,7 @@ use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class InfoArsipPerkawinanController extends Controller
 {
@@ -102,6 +103,7 @@ class InfoArsipPerkawinanController extends Controller
         $infoArsipPerkawinan->IBU_WANITA = $request->input('IBU_WANITA');
         $infoArsipPerkawinan->TAHUN_PEMBUATAN_DOK_PERKAWINAN = $request->input('TAHUN_PEMBUATAN_DOK_PERKAWINAN');
 
+        $tahunPembuatanDokPerkawinan = $request->TAHUN_PEMBUATAN_DOK_PERKAWINAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_F201',
@@ -128,7 +130,8 @@ class InfoArsipPerkawinanController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $file->storeAs('Arsip Perkawinan', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokPerkawinan . '/Arsip Perkawinan';
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipPerkawinan->$field = $fileName;
                     } else {
                         return response()->json([
@@ -254,6 +257,7 @@ class InfoArsipPerkawinanController extends Controller
         $infoArsipPerkawinan->NAMA_PRIA = $request->input('NAMA_PRIA');
         $infoArsipPerkawinan->NAMA_WANITA = $request->input('NAMA_WANITA');
 
+        $tahunPembuatanDokPerkawinan = $request->TAHUN_PEMBUATAN_DOK_PERKAWINAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_F201',
@@ -280,7 +284,15 @@ class InfoArsipPerkawinanController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $file->storeAs('Arsip Perkawinan', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokPerkawinan . '/Arsip Kelahiran';
+                        $oldFileName = $infoArsipPerkawinan->$field;
+                        if ($oldFileName) {
+                            $oldFilePath = $folderPath . '/' . $oldFileName;
+                            if (Storage::disk('public')->exists($oldFilePath)) {
+                                Storage::disk('public')->delete($oldFilePath);
+                            }
+                        }
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipPerkawinan->$field = $fileName;
                     } else {
                         return response()->json([

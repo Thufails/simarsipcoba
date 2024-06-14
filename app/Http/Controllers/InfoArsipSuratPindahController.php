@@ -15,6 +15,7 @@ use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class InfoArsipSuratPindahController extends Controller
 {
@@ -142,6 +143,7 @@ class InfoArsipSuratPindahController extends Controller
         }
         $infoArsipSuratPindah->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
 
+        $tahunPembuatanDokSuratPindah= $request->THN_PEMBUATAN_DOK_SURAT_PINDAH;
         $fileFields = [
             'FILE_LAMA',
             'FILE_SKP_WNI',
@@ -169,8 +171,8 @@ class InfoArsipSuratPindahController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        // Simpan file dan dapatkan pathnya
-                        $file->storeAs('Arsip Surat Pindah', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokSuratPindah . '/Arsip Surat Pindah';
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipSuratPindah->$field = $fileName;
                     } else {
                         return response()->json([
@@ -291,6 +293,7 @@ class InfoArsipSuratPindahController extends Controller
         $infoArsipSuratPindah->NO_DOK_SURAT_PINDAH = $arsip->NO_DOK_SURAT_PINDAH;
         $infoArsipSuratPindah->NAMA_KEPALA = $request->input('NAMA_KEPALA');
 
+        $tahunPembuatanDokSuratPindah= $infoArsipSuratPindah->THN_PEMBUATAN_DOK_SURAT_PINDAH;
         $fileFields = [
             'FILE_LAMA',
             'FILE_SKP_WNI',
@@ -318,8 +321,15 @@ class InfoArsipSuratPindahController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        // Simpan file dan dapatkan pathnya
-                        $file->storeAs('Arsip Surat Pindah', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokSuratPindah . '/Arsip Kelahiran';
+                        $oldFileName = $infoArsipSuratPindah->$field;
+                        if ($oldFileName) {
+                            $oldFilePath = $folderPath . '/' . $oldFileName;
+                            if (Storage::disk('public')->exists($oldFilePath)) {
+                                Storage::disk('public')->delete($oldFilePath);
+                            }
+                        }
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipSuratPindah->$field = $fileName;
                     } else {
                         return response()->json([

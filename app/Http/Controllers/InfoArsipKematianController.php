@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class InfoArsipKematianController extends Controller
 {
@@ -107,6 +108,7 @@ class InfoArsipKematianController extends Controller
         $infoArsipKematian->TANGGAL_LAPOR = $request->input('TANGGAL_LAPOR');
         $infoArsipKematian->TAHUN_PEMBUATAN_DOK_KEMATIAN = $request->input('TAHUN_PEMBUATAN_DOK_KEMATIAN');
 
+        $tahunPembuatanDokKematian = $request->TAHUN_PEMBUATAN_DOK_KEMATIAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_F201',
@@ -132,7 +134,8 @@ class InfoArsipKematianController extends Controller
                 if (in_array($extension, $allowedExtensions)) {
                     if ($file->getSize() <= 25000000) {
                         $fileName = $file->getClientOriginalName();
-                        $file->storeAs('Arsip Kematian', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokKematian . '/Arsip Kematian';
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipKematian->$field = $fileName;
                     } else {
                         return response()->json([
@@ -253,6 +256,7 @@ class InfoArsipKematianController extends Controller
         // Update data info arsip kematian
         $infoArsipKematian->NO_DOK_KEMATIAN = $arsip->NO_DOK_KEMATIAN;
         $infoArsipKematian->NAMA = $request->input('NAMA');
+        $tahunPembuatanDokKematian = $infoArsipKematian->TAHUN_PEMBUATAN_DOK_KELAHIRAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_F201',
@@ -280,7 +284,15 @@ class InfoArsipKematianController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $file->storeAs('Arsip Kematian', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokKematian . '/Arsip Kematian';
+                        $oldFileName = $infoArsipKematian->$field;
+                        if ($oldFileName) {
+                            $oldFilePath = $folderPath . '/' . $oldFileName;
+                            if (Storage::disk('public')->exists($oldFilePath)) {
+                                Storage::disk('public')->delete($oldFilePath);
+                            }
+                        }
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipKematian->$field = $fileName;
                     } else {
                         return response()->json([

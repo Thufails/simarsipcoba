@@ -15,6 +15,7 @@ use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class InfoArsipSkttController extends Controller
 {
@@ -125,6 +126,7 @@ class InfoArsipSkttController extends Controller
         }
         $infoArsipSktt->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
 
+        $tahunPembuatanDokSktt = $request->TAHUN_PEMBUATAN_DOK_SKTT;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',
@@ -143,9 +145,8 @@ class InfoArsipSkttController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        // Simpan file dan dapatkan pathnya
-                        $file = $file->storeAs('Arsip Sktt', $fileName, 'public');
-                        // Simpan path file ke dalam database sesuai dengan field yang sesuai
+                        $folderPath = $tahunPembuatanDokSktt . '/Arsip Sktt';
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipSktt->$field = $fileName;
                     } else {
                         return response()->json([
@@ -259,6 +260,7 @@ class InfoArsipSkttController extends Controller
         $infoArsipSktt->NO_DOK_SKTT = $arsip->NO_DOK_SKTT;
         $infoArsipSktt->NAMA = $request->input('NAMA');
 
+        $tahunPembuatanDokSktt = $request->TAHUN_PEMBUATAN_DOK_SKTT;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',
@@ -277,7 +279,15 @@ class InfoArsipSkttController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $file->storeAs('Arsip Sktt', $fileName, 'public');
+                        $folderPath = $tahunPembuatanDokSktt . '/Arsip Sktt';
+                        $oldFileName = $infoArsipSktt->$field;
+                        if ($oldFileName) {
+                            $oldFilePath = $folderPath . '/' . $oldFileName;
+                            if (Storage::disk('public')->exists($oldFilePath)) {
+                                Storage::disk('public')->delete($oldFilePath);
+                            }
+                        }
+                        $file->storeAs($folderPath, $fileName, 'public');
                         $infoArsipSktt->$field = $fileName;
                     } else {
                         return response()->json([
