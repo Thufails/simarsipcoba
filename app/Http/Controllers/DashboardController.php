@@ -112,10 +112,23 @@ class DashboardController extends Controller
         }
 
         $user = Auth::user();
+        $id_operator = $user->ID_OPERATOR;
+        $nama_operator = $user->NAMA_OPERATOR;
+        $email = $user->EMAIL;
+        $id_akses = $user->ID_AKSES;
+
+        $sessionStatus = Session::where('ID_OPERATOR', $id_operator)->pluck('STATUS')->first();
+
         return response()->json([
             'success' => true,
             'message' => 'Profile has been Showed',
-            'data' => $user,
+            'data' => [
+                'ID_OPERATOR' => $id_operator,
+                'NAMA_OPERATOR' => $nama_operator,
+                'EMAIL' => $email,
+                'ID_AKSES' => $id_akses,
+                'SESSION_STATUS' => $sessionStatus // Menambahkan status sesuai dengan session
+            ],
         ], 200);
     }
 
