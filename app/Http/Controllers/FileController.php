@@ -12,6 +12,7 @@ class FileController extends Controller
     public function getDokumen(Request $request)
     {
         $validator = app('validator')->make($request->all(), [
+            'TAHUN_PEMBUATAN' => 'nullable|integer',
             'JENIS_DOKUMEN' => 'nullable|exists:jenis_dokumen,ID_DOKUMEN',
             'NO_DOKUMEN' => 'nullable|string',
             'NAMA_FILE' => 'nullable|string',
@@ -204,34 +205,36 @@ class FileController extends Controller
             return response()->json(['error' => 'Data not found.'], 404);
         }
 
-        $path = '';
+        $pathtahun = $request->TAHUN_PEMBUATAN;
+
+        $pathdokumen = '';
         if ($arsip->infoArsipPengangkatan) {
-            $path = 'Arsip Pengangkatan';
+            $pathdokumen = 'Arsip Pengangkatan';
         } elseif ($arsip->infoArsipSuratPindah) {
-            $path = 'Arsip Surat Pindah';
+            $pathdokumen = 'Arsip Surat Pindah';
         } elseif ($arsip->infoArsipPerceraian) {
-            $path = 'Arsip Perceraian';
+            $pathdokumen = 'Arsip Perceraian';
         } elseif ($arsip->infoArsipPengesahan) {
-            $path = 'Arsip Pengesahan';
+            $pathdokumen = 'Arsip Pengesahan';
         } elseif ($arsip->infoArsipKematian) {
-            $path = 'Arsip Kematian';
+            $pathdokumen = 'Arsip Kematian';
         } elseif ($arsip->infoArsipKelahiran) {
-            $path = 'Arsip Kelahiran';
+            $pathdokumen = 'Arsip Kelahiran';
         } elseif ($arsip->infoArsipPengakuan) {
-            $path = 'Arsip Pengakuan';
+            $pathdokumen = 'Arsip Pengakuan';
         } elseif ($arsip->infoArsipPerkawinan) {
-            $path = 'Arsip Perkawinan';
+            $pathdokumen = 'Arsip Perkawinan';
         } elseif ($arsip->infoArsipKk) {
-            $path = 'Arsip Kk';
+            $pathdokumen = 'Arsip Kk';
         } elseif ($arsip->infoArsipSkot) {
-            $path = 'Arsip Skot';
+            $pathdokumen = 'Arsip Skot';
         } elseif ($arsip->infoArsipSktt) {
-            $path = 'Arsip Sktt';
+            $pathdokumen = 'Arsip Sktt';
         } elseif ($arsip->infoArsipKtp) {
-            $path = 'Arsip Ktp';
+            $pathdokumen = 'Arsip Ktp';
         }
 
-        $folderPath = 'public/' . $path;
+        $folderPath = 'public/'. $pathtahun .'/'. $pathdokumen;
         $fileName = $request->NAMA_FILE;
         $filePath = $folderPath . '/' . $fileName;
 
