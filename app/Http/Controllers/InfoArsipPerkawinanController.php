@@ -284,7 +284,7 @@ class InfoArsipPerkawinanController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $folderPath = $tahunPembuatanDokPerkawinan . '/Arsip Kelahiran';
+                        $folderPath = $tahunPembuatanDokPerkawinan . '/Arsip Perceraian';
                         $oldFileName = $infoArsipPerkawinan->$field;
                         if ($oldFileName) {
                             $oldFilePath = $folderPath . '/' . $oldFileName;
