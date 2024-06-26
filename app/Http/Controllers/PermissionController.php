@@ -983,13 +983,7 @@ class PermissionController extends Controller
 
     public function requestInput(Request $request)
     {
-        $userRequestingId = Auth::id(); // ID pengguna yang meminta akses
-
-        // Proses permintaan Scan
         $permissionRequest = new Permission();
-        $permissionRequest->ID_OPERATOR = $userRequestingId;
-        $permissionRequest->STATUS = 'Request Input';
-        $permissionRequest->save();
 
         $validator = app('validator')->make($request->all(), [
             'ID_DOKUMEN' => 'nullable|integer',
@@ -1040,10 +1034,16 @@ class PermissionController extends Controller
                 $infoArsipPengangkatan = new InfoArsipPengangkatan();
                 $infoArsipPengangkatan->NO_DOK_PENGANGKATAN = $arsip->NO_DOK_PENGANGKATAN;
                 $infoArsipPengangkatan->NAMA_ANAK = $namaDokumen;
-                DB::transaction(function () use ($arsip, $infoArsipPengangkatan) {
+                DB::transaction(function () use ($arsip, $infoArsipPengangkatan, $permissionRequest) {
                     $arsip->save();
                     $infoArsipPengangkatan->ID_ARSIP = $arsip->ID_ARSIP;
                     $infoArsipPengangkatan->save();
+                    $userRequestingId = Auth::id();
+                    $permissionRequest->ID_OPERATOR = $userRequestingId;
+                    $permissionRequest->STATUS = 'Request Input';
+                    $permissionRequest->save();
+                    $permissionRequest->ID_ARSIP = $arsip->ID_ARSIP;
+                    $permissionRequest->save();
                 });
                 break;
             case 'Surat Pindah':
@@ -1060,10 +1060,16 @@ class PermissionController extends Controller
                 $infoArsipSuratPindah = new InfoArsipSuratPindah();
                 $infoArsipSuratPindah->NO_DOK_SURAT_PINDAH = $arsip->NO_DOK_SURAT_PINDAH;
                 $infoArsipSuratPindah->NAMA_KEPALA = $namaDokumen;
-                DB::transaction(function () use ($arsip, $infoArsipSuratPindah) {
+                DB::transaction(function () use ($arsip, $infoArsipSuratPindah, $permissionRequest) {
                     $arsip->save();
                     $infoArsipSuratPindah->ID_ARSIP = $arsip->ID_ARSIP;
                     $infoArsipSuratPindah->save();
+                    $userRequestingId = Auth::id();
+                    $permissionRequest->ID_OPERATOR = $userRequestingId;
+                    $permissionRequest->STATUS = 'Request Input';
+                    $permissionRequest->save();
+                    $permissionRequest->ID_ARSIP = $arsip->ID_ARSIP;
+                    $permissionRequest->save();
                 });
                 break;
             case 'Akta Perceraian':
@@ -1080,10 +1086,16 @@ class PermissionController extends Controller
                 $infoArsipPerceraian = new InfoArsipPerceraian();
                 $infoArsipPerceraian->NO_DOK_PERCERAIAN = $arsip->NO_DOK_PERCERAIAN;
                 $infoArsipPerceraian->NAMA_PRIA = $namaDokumen;
-                DB::transaction(function () use ($arsip, $infoArsipPerceraian) {
+                DB::transaction(function () use ($arsip, $infoArsipPerceraian, $permissionRequest) {
                     $arsip->save();
                     $infoArsipPerceraian->ID_ARSIP = $arsip->ID_ARSIP;
                     $infoArsipPerceraian->save();
+                    $userRequestingId = Auth::id();
+                    $permissionRequest->ID_OPERATOR = $userRequestingId;
+                    $permissionRequest->STATUS = 'Request Input';
+                    $permissionRequest->save();
+                    $permissionRequest->ID_ARSIP = $arsip->ID_ARSIP;
+                    $permissionRequest->save();
                 });
                 break;
             case 'Akta Pengesahan Anak':
@@ -1100,10 +1112,16 @@ class PermissionController extends Controller
                 $infoArsipPengesahan = new InfoArsipPengesahan();
                 $infoArsipPengesahan->NO_DOK_PENGESAHAN = $arsip->NO_DOK_PENGESAHAN;
                 $infoArsipPengesahan->NAMA_ANAK = $namaDokumen;
-                DB::transaction(function () use ($arsip, $infoArsipPengesahan) {
+                DB::transaction(function () use ($arsip, $infoArsipPengesahan, $permissionRequest) {
                     $arsip->save();
                     $infoArsipPengesahan->ID_ARSIP = $arsip->ID_ARSIP;
                     $infoArsipPengesahan->save();
+                    $userRequestingId = Auth::id();
+                    $permissionRequest->ID_OPERATOR = $userRequestingId;
+                    $permissionRequest->STATUS = 'Request Input';
+                    $permissionRequest->save();
+                    $permissionRequest->ID_ARSIP = $arsip->ID_ARSIP;
+                    $permissionRequest->save();
                 });
                 break;
             case 'Akta Kematian':
@@ -1120,10 +1138,16 @@ class PermissionController extends Controller
                 $infoArsipKematian = new InfoArsipKematian();
                 $infoArsipKematian->NO_DOK_KEMATIAN = $arsip->NO_DOK_KEMATIAN;
                 $infoArsipKematian->NAMA = $namaDokumen;
-                DB::transaction(function () use ($arsip, $infoArsipKematian) {
+                DB::transaction(function () use ($arsip, $infoArsipKematian, $permissionRequest) {
                     $arsip->save();
                     $infoArsipKematian->ID_ARSIP = $arsip->ID_ARSIP;
                     $infoArsipKematian->save();
+                    $userRequestingId = Auth::id();
+                    $permissionRequest->ID_OPERATOR = $userRequestingId;
+                    $permissionRequest->STATUS = 'Request Input';
+                    $permissionRequest->save();
+                    $permissionRequest->ID_ARSIP = $arsip->ID_ARSIP;
+                    $permissionRequest->save();
                 });
                 break;
             case 'Akta Kelahiran':
@@ -1140,10 +1164,16 @@ class PermissionController extends Controller
                 $infoArsipKelahiran = new InfoArsipKelahiran();
                 $infoArsipKelahiran->NO_DOK_KELAHIRAN = $arsip->NO_DOK_KELAHIRAN;
                 $infoArsipKelahiran->NAMA = $namaDokumen;
-                DB::transaction(function () use ($arsip, $infoArsipKelahiran) {
+                DB::transaction(function () use ($arsip, $infoArsipKelahiran, $permissionRequest) {
                     $arsip->save();
                     $infoArsipKelahiran->ID_ARSIP = $arsip->ID_ARSIP;
                     $infoArsipKelahiran->save();
+                    $userRequestingId = Auth::id();
+                    $permissionRequest->ID_OPERATOR = $userRequestingId;
+                    $permissionRequest->STATUS = 'Request Input';
+                    $permissionRequest->save();
+                    $permissionRequest->ID_ARSIP = $arsip->ID_ARSIP;
+                    $permissionRequest->save();
                 });
                 break;
             case 'Akta Pengakuan Anak':
@@ -1160,10 +1190,16 @@ class PermissionController extends Controller
                 $infoArsipPengakuan = new InfoArsipPengakuan();
                 $infoArsipPengakuan->NO_DOK_PENGAKUAN = $arsip->NO_DOK_PENGAKUAN;
                 $infoArsipPengakuan->NAMA_ANAK = $namaDokumen;
-                DB::transaction(function () use ($arsip, $infoArsipPengakuan) {
+                DB::transaction(function () use ($arsip, $infoArsipPengakuan, $permissionRequest) {
                     $arsip->save();
                     $infoArsipPengakuan->ID_ARSIP = $arsip->ID_ARSIP;
                     $infoArsipPengakuan->save();
+                    $userRequestingId = Auth::id();
+                    $permissionRequest->ID_OPERATOR = $userRequestingId;
+                    $permissionRequest->STATUS = 'Request Input';
+                    $permissionRequest->save();
+                    $permissionRequest->ID_ARSIP = $arsip->ID_ARSIP;
+                    $permissionRequest->save();
                 });
                 break;
             case 'Akta Perkawinan':
@@ -1180,10 +1216,16 @@ class PermissionController extends Controller
                 $infoArsipPerkawinan = new InfoArsipPerkawinan();
                 $infoArsipPerkawinan->NO_DOK_PERKAWINAN = $arsip->NO_DOK_PERKAWINAN;
                 $infoArsipPerkawinan->NAMA_PRIA = $namaDokumen;
-                DB::transaction(function () use ($arsip, $infoArsipPerkawinan) {
+                DB::transaction(function () use ($arsip, $infoArsipPerkawinan, $permissionRequest) {
                     $arsip->save();
                     $infoArsipPerkawinan->ID_ARSIP = $arsip->ID_ARSIP;
                     $infoArsipPerkawinan->save();
+                    $userRequestingId = Auth::id();
+                    $permissionRequest->ID_OPERATOR = $userRequestingId;
+                    $permissionRequest->STATUS = 'Request Input';
+                    $permissionRequest->save();
+                    $permissionRequest->ID_ARSIP = $arsip->ID_ARSIP;
+                    $permissionRequest->save();
                 });
                 break;
             case 'Kartu Keluarga':
@@ -1200,10 +1242,16 @@ class PermissionController extends Controller
                 $infoArsipKk = new InfoArsipKk();
                 $infoArsipKk->NO_DOK_KK = $arsip->NO_DOK_KK;
                 $infoArsipKk->NAMA_KEPALA = $namaDokumen;
-                DB::transaction(function () use ($arsip, $infoArsipKk) {
+                DB::transaction(function () use ($arsip, $infoArsipKk, $permissionRequest) {
                     $arsip->save();
                     $$infoArsipKk->ID_ARSIP = $arsip->ID_ARSIP;
                     $$infoArsipKk->save();
+                    $userRequestingId = Auth::id();
+                    $permissionRequest->ID_OPERATOR = $userRequestingId;
+                    $permissionRequest->STATUS = 'Request Input';
+                    $permissionRequest->save();
+                    $permissionRequest->ID_ARSIP = $arsip->ID_ARSIP;
+                    $permissionRequest->save();
                 });
                 break;
             case 'SKOT':
@@ -1220,10 +1268,16 @@ class PermissionController extends Controller
                 $infoArsipSkot = new InfoArsipSkot();
                 $infoArsipSkot->NO_DOK_SKOT = $arsip->NO_DOK_SKOT;
                 $infoArsipSkot->NAMA = $namaDokumen;
-                DB::transaction(function () use ($arsip, $infoArsipSkot) {
+                DB::transaction(function () use ($arsip, $infoArsipSkot, $permissionRequest) {
                     $arsip->save();
                     $$infoArsipSkot->ID_ARSIP = $arsip->ID_ARSIP;
                     $$infoArsipSkot->save();
+                    $userRequestingId = Auth::id();
+                    $permissionRequest->ID_OPERATOR = $userRequestingId;
+                    $permissionRequest->STATUS = 'Request Input';
+                    $permissionRequest->save();
+                    $permissionRequest->ID_ARSIP = $arsip->ID_ARSIP;
+                    $permissionRequest->save();
                 });
                 break;
             case 'SKTT':
@@ -1240,10 +1294,16 @@ class PermissionController extends Controller
                 $infoArsipSktt = new InfoArsipSktt();
                 $infoArsipSktt->NO_DOK_SKTT = $arsip->NO_DOK_SKTT;
                 $infoArsipSktt->NAMA = $namaDokumen;
-                DB::transaction(function () use ($arsip, $infoArsipSktt) {
+                DB::transaction(function () use ($arsip, $infoArsipSktt, $permissionRequest) {
                     $arsip->save();
                     $$infoArsipSktt->ID_ARSIP = $arsip->ID_ARSIP;
                     $$infoArsipSktt->save();
+                    $userRequestingId = Auth::id();
+                    $permissionRequest->ID_OPERATOR = $userRequestingId;
+                    $permissionRequest->STATUS = 'Request Input';
+                    $permissionRequest->save();
+                    $permissionRequest->ID_ARSIP = $arsip->ID_ARSIP;
+                    $permissionRequest->save();
                 });
                 break;
             case 'Kartu Tanda Penduduk':
@@ -1260,19 +1320,22 @@ class PermissionController extends Controller
                 $infoArsipKtp = new InfoArsipKtp();
                 $infoArsipKtp->NO_DOK_KTP = $arsip->NO_DOK_KTP;
                 $infoArsipKtp->NAMA = $namaDokumen;
-                DB::transaction(function () use ($arsip, $infoArsipKtp) {
+                DB::transaction(function () use ($arsip, $infoArsipKtp, $permissionRequest) {
                     $arsip->save();
                     $$infoArsipKtp->ID_ARSIP = $arsip->ID_ARSIP;
                     $$infoArsipKtp->save();
+                    $userRequestingId = Auth::id();
+                    $permissionRequest->ID_OPERATOR = $userRequestingId;
+                    $permissionRequest->STATUS = 'Request Input';
+                    $permissionRequest->save();
+                    $permissionRequest->ID_ARSIP = $arsip->ID_ARSIP;
+                    $permissionRequest->save();
                 });
                 break;
             default:
                 // Jika tidak ada kecocokan dengan NAMA_DOKUMEN yang diharapkan
                 return response()->json(['error' => 'Jenis Dokumen tidak valid'], 400);
         }
-        $permissionRequest->ID_ARSIP = $arsip->ID_ARSIP;
-        $permissionRequest->save();
-
         return response()->json([
             'success' => true,
             'message' => 'Arsip Telah Diinputkan',
