@@ -321,7 +321,7 @@ class InfoArsipSuratPindahController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $folderPath = $tahunPembuatanDokSuratPindah . '/Arsip Kelahiran';
+                        $folderPath = $tahunPembuatanDokSuratPindah . '/Arsip Surat Pindah';
                         $oldFileName = $infoArsipSuratPindah->$field;
                         if ($oldFileName) {
                             $oldFilePath = $folderPath . '/' . $oldFileName;

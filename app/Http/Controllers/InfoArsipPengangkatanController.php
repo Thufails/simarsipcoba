@@ -249,7 +249,7 @@ class InfoArsipPengangkatanController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $folderPath = $tahunPembuatanDokPengangkatan . '/Arsip Kelahiran';
+                        $folderPath = $tahunPembuatanDokPengangkatan . '/Arsip Pengangkatan';
                         $oldFileName = $infoArsipPengangkatan->$field;
                         if ($oldFileName) {
                             $oldFilePath = $folderPath . '/' . $oldFileName;
