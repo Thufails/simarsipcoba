@@ -143,7 +143,7 @@ class InfoArsipSuratPindahController extends Controller
         }
         $infoArsipSuratPindah->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
 
-        $tahunPembuatanDokSuratPindah= $request->THN_PEMBUATAN_DOK_SURAT_PINDAH;
+        $tahunPembuatanDokSuratPindah= $infoArsipSuratPindah->THN_PEMBUATAN_DOK_SURAT_PINDAH;
         $fileFields = [
             'FILE_LAMA',
             'FILE_SKP_WNI',

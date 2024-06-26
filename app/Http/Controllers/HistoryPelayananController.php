@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
-class ArsipController extends Controller
+class HistoryPelayananController extends Controller
 {
     /**
      * Create a new controller instance.

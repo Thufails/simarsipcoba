@@ -109,7 +109,7 @@ class InfoArsipKelahiranController extends Controller
         $infoArsipKelahiran->STATUS_PENDUDUK = $request->input('STATUS_PENDUDUK');
         // Simpan file-file jika diberikan
 
-        $tahunPembuatanDokKelahiran = $request->TAHUN_PEMBUATAN_DOK_KELAHIRAN;
+        $tahunPembuatanDokKelahiran = $infoArsipKelahiran->TAHUN_PEMBUATAN_DOK_KELAHIRAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_KK',

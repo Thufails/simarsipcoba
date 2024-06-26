@@ -103,7 +103,7 @@ class InfoArsipPerkawinanController extends Controller
         $infoArsipPerkawinan->IBU_WANITA = $request->input('IBU_WANITA');
         $infoArsipPerkawinan->TAHUN_PEMBUATAN_DOK_PERKAWINAN = $request->input('TAHUN_PEMBUATAN_DOK_PERKAWINAN');
 
-        $tahunPembuatanDokPerkawinan = $request->TAHUN_PEMBUATAN_DOK_PERKAWINAN;
+        $tahunPembuatanDokPerkawinan = $infoArsipPerkawinan->TAHUN_PEMBUATAN_DOK_PERKAWINAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_F201',
@@ -257,7 +257,7 @@ class InfoArsipPerkawinanController extends Controller
         $infoArsipPerkawinan->NAMA_PRIA = $request->input('NAMA_PRIA');
         $infoArsipPerkawinan->NAMA_WANITA = $request->input('NAMA_WANITA');
 
-        $tahunPembuatanDokPerkawinan = $request->TAHUN_PEMBUATAN_DOK_PERKAWINAN;
+        $tahunPembuatanDokPerkawinan = $infoArsipPerkawinan->TAHUN_PEMBUATAN_DOK_PERKAWINAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_F201',
@@ -284,7 +284,7 @@ class InfoArsipPerkawinanController extends Controller
                     // Periksa ukuran file
                     if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                         $fileName = $file->getClientOriginalName();
-                        $folderPath = $tahunPembuatanDokPerkawinan . '/Arsip Perceraian';
+                        $folderPath = $tahunPembuatanDokPerkawinan . '/Arsip Perkawinan';
                         $oldFileName = $infoArsipPerkawinan->$field;
                         if ($oldFileName) {
                             $oldFilePath = $folderPath . '/' . $oldFileName;

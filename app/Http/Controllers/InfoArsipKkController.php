@@ -122,7 +122,7 @@ class InfoArsipKkController extends Controller
             return response()->json(['error' => 'Kelurahan tidak ditemukan sesuai kecamatan yang dipilih'], 400);
         }
         $infoArsipKk ->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
-        $tahunPembuatanDokKk = $request->TAHUN_PEMBUATAN_DOK_KK;
+        $tahunPembuatanDokKk = $infoArsipKk->TAHUN_PEMBUATAN_DOK_KK;
         $fileFields = [
             'FILE_LAMA',
             'FILE_F101',
@@ -275,6 +275,7 @@ class InfoArsipKkController extends Controller
 
         $infoArsipKk ->NO_DOK_KK = $arsip->NO_DOK_KK;
         $infoArsipKk->NAMA_KEPALA = $request->input('NAMA_KEPALA');
+        
         $tahunPembuatanDokKk = $infoArsipKk->TAHUN_PEMBUATAN_DOK_KK;
         $fileFields = [
             'FILE_LAMA',

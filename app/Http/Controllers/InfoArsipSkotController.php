@@ -132,7 +132,7 @@ class InfoArsipSkotController extends Controller
         }
         $infoArsipSkot->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
 
-        $tahunPembuatanDokSkot = $request->TAHUN_PEMBUATAN_DOK_SKOT;
+        $tahunPembuatanDokSkot = $infoArsipSkot->TAHUN_PEMBUATAN_DOK_SKOT;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',
@@ -263,7 +263,7 @@ class InfoArsipSkotController extends Controller
         $infoArsipSkot->NO_DOK_SKOT = $arsip->NO_DOK_SKOT;
         $infoArsipSkot->NAMA = $request->input('NAMA');
 
-        $tahunPembuatanDokSkot = $request->TAHUN_PEMBUATAN_DOK_SKOT;
+        $tahunPembuatanDokSkot = $infoArsipSkot->TAHUN_PEMBUATAN_DOK_SKOT;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',

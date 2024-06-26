@@ -99,30 +99,30 @@ class InfoArsipKtpController extends Controller
         $idArsip = $arsip->ID_ARSIP;
         $idDokKtp = $arsip->NO_DOK_KTP;
         // Simpan data ke dalam tabel "info_arsip_kelahiran"
-        $infoArsiKtp = new InfoArsipKtp();
-        $infoArsiKtp->ID_ARSIP = $idArsip;
-        $infoArsiKtp->NO_DOK_KTP = $idDokKtp;
-        $infoArsiKtp->NAMA = $request->input('NAMA');
-        $infoArsiKtp->JENIS_KELAMIN = $request->input('JENIS_KELAMIN');
-        $infoArsiKtp->TEMPAT_LAHIR = $request->input('TEMPAT_LAHIR');
-        $infoArsiKtp->TANGGAL_LAHIR = $request->input('TANGGAL_LAHIR');
-        $infoArsiKtp->AGAMA = $request->input('AGAMA');
-        $infoArsiKtp->STATUS_KAWIN = $request->input('STATUS_KAWIN');
-        $infoArsiKtp->KEBANGSAAN = $request->input('KEBANGSAAN');
-        $infoArsiKtp->NO_PASPOR = $request->input('NO_PASPOR');
-        $infoArsiKtp->HUB_KELUARGA = $request->input('HUB_KELUARGA');
-        $infoArsiKtp->PEKERJAAN = $request->input('PEKERJAAN');
-        $infoArsiKtp->GOLDAR = $request->input('GOLDAR');
-        $infoArsiKtp->ALAMAT = $request->input('ALAMAT');
-        $infoArsiKtp->PROV = $request->input('PROV');
-        $infoArsiKtp->KOTA = $request->input('KOTA');
+        $infoArsipKtp = new InfoArsipKtp();
+        $infoArsipKtp->ID_ARSIP = $idArsip;
+        $infoArsipKtp->NO_DOK_KTP = $idDokKtp;
+        $infoArsipKtp->NAMA = $request->input('NAMA');
+        $infoArsipKtp->JENIS_KELAMIN = $request->input('JENIS_KELAMIN');
+        $infoArsipKtp->TEMPAT_LAHIR = $request->input('TEMPAT_LAHIR');
+        $infoArsipKtp->TANGGAL_LAHIR = $request->input('TANGGAL_LAHIR');
+        $infoArsipKtp->AGAMA = $request->input('AGAMA');
+        $infoArsipKtp->STATUS_KAWIN = $request->input('STATUS_KAWIN');
+        $infoArsipKtp->KEBANGSAAN = $request->input('KEBANGSAAN');
+        $infoArsipKtp->NO_PASPOR = $request->input('NO_PASPOR');
+        $infoArsipKtp->HUB_KELUARGA = $request->input('HUB_KELUARGA');
+        $infoArsipKtp->PEKERJAAN = $request->input('PEKERJAAN');
+        $infoArsipKtp->GOLDAR = $request->input('GOLDAR');
+        $infoArsipKtp->ALAMAT = $request->input('ALAMAT');
+        $infoArsipKtp->PROV = $request->input('PROV');
+        $infoArsipKtp->KOTA = $request->input('KOTA');
 
         $kecamatan = Kecamatan::find($request->input('ID_KECAMATAN'));
         // Jika kecamatan tidak ditemukan
         if (!$kecamatan) {
             return response()->json(['error' => 'Kecamatan tidak valid'], 400);
         }
-        $infoArsiKtp->ID_KECAMATAN = $kecamatan->ID_KECAMATAN;
+        $infoArsipKtp->ID_KECAMATAN = $kecamatan->ID_KECAMATAN;
 
         $id_kelurahan = $request->input('ID_KELURAHAN');
         $kelurahan = Kelurahan::where('ID_KELURAHAN', $id_kelurahan)
@@ -132,9 +132,9 @@ class InfoArsipKtpController extends Controller
         if (!$kelurahan) {
             return response()->json(['error' => 'Kelurahan tidak ditemukan sesuai kecamatan yang dipilih'], 400);
         }
-        $infoArsiKtp->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
-        $infoArsiKtp->TAHUN_PEMBUATAN_KTP = $request->input('TAHUN_PEMBUATAN_KTP');
-        $tahunPembuatanDokKtp = $request->TAHUN_PEMBUATAN_KTP;
+        $infoArsipKtp->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
+        $infoArsipKtp->TAHUN_PEMBUATAN_KTP = $request->input('TAHUN_PEMBUATAN_KTP');
+        $tahunPembuatanDokKtp = $infoArsipKtp->TAHUN_PEMBUATAN_KTP;
         $fileFields = [
             'FILE_LAMA',
             'FILE_KK',
@@ -163,7 +163,7 @@ class InfoArsipKtpController extends Controller
                         $folderPath = $tahunPembuatanDokKtp . '/Arsip Ktp';
                         $file->storeAs($folderPath, $fileName, 'public');
                         // Simpan path file ke dalam database sesuai dengan field yang sesuai
-                        $infoArsiKtp->$field = $fileName;
+                        $infoArsipKtp->$field = $fileName;
                     } else {
                         return response()->json([
                             'success' => false,
@@ -181,13 +181,13 @@ class InfoArsipKtpController extends Controller
             }
         }
 
-        $infoArsiKtp->save();
+        $infoArsipKtp->save();
 
-        if ($infoArsiKtp) {
+        if ($infoArsipKtp) {
             return response()->json([
                 'success' => true,
                 'message' => 'Arsip Ktp berhasil ditambahkan',
-                'data' => $infoArsiKtp,
+                'data' => $infoArsipKtp,
             ], 201);
         } else {
             return response()->json([

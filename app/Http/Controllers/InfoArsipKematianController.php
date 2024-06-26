@@ -108,7 +108,7 @@ class InfoArsipKematianController extends Controller
         $infoArsipKematian->TANGGAL_LAPOR = $request->input('TANGGAL_LAPOR');
         $infoArsipKematian->TAHUN_PEMBUATAN_DOK_KEMATIAN = $request->input('TAHUN_PEMBUATAN_DOK_KEMATIAN');
 
-        $tahunPembuatanDokKematian = $request->TAHUN_PEMBUATAN_DOK_KEMATIAN;
+        $tahunPembuatanDokKematian = $infoArsipKematian->TAHUN_PEMBUATAN_DOK_KEMATIAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_F201',
@@ -256,6 +256,7 @@ class InfoArsipKematianController extends Controller
         // Update data info arsip kematian
         $infoArsipKematian->NO_DOK_KEMATIAN = $arsip->NO_DOK_KEMATIAN;
         $infoArsipKematian->NAMA = $request->input('NAMA');
+
         $tahunPembuatanDokKematian = $infoArsipKematian->TAHUN_PEMBUATAN_DOK_KELAHIRAN;
         $fileFields = [
             'FILE_LAMA',

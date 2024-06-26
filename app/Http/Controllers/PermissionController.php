@@ -23,6 +23,7 @@ use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PermissionController extends Controller
 {
@@ -399,6 +400,7 @@ class PermissionController extends Controller
         switch ($jenisDokumen) {
             case 'Akta Pengangkatan Anak':
                 $infoArsipPengangkatan = InfoArsipPengangkatan::where('ID_ARSIP', $ID_ARSIP)->first();
+                $tahunPembuatanDokPengangkatan = $infoArsipPengangkatan->THN_PEMBUATAN_DOK_PENGANGKATAN;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_LAINNYA',
@@ -417,8 +419,8 @@ class PermissionController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                $file->storeAs('Arsip Pengangkatan', $fileName, 'public');
-                                // Simpan nama file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokPengangkatan . '/Arsip Pengangkatan';
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipPengangkatan->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -440,6 +442,7 @@ class PermissionController extends Controller
                 break;
             case 'Surat Pindah':
                 $infoArsipSuratPindah = InfoArsipSuratPindah::where('ID_ARSIP', $ID_ARSIP)->first();
+                $tahunPembuatanDokSuratPindah= $infoArsipSuratPindah->THN_PEMBUATAN_DOK_SURAT_PINDAH;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_SKP_WNI',
@@ -467,9 +470,8 @@ class PermissionController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                // Simpan file dan dapatkan pathnya
-                                $file = $file->storeAs('Arsip Surat Pindah', $fileName, 'public');
-                                // Simpan path file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokSuratPindah . '/Arsip Surat Pindah';
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipSuratPindah->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -491,6 +493,7 @@ class PermissionController extends Controller
                 break;
             case 'Akta Perceraian':
                 $infoArsipPerceraian = InfoArsipPerceraian::where('ID_ARSIP', $ID_ARSIP)->first();
+                $tahunPembuatanDokPerceraian = $infoArsipPerceraian->TAHUN_PEMBUATAN_DOK_PERCERAIAN;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_F201',
@@ -515,8 +518,8 @@ class PermissionController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                $file->storeAs('Arsip Perceraian', $fileName, 'public');
-                                // Simpan nama file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokPerceraian . '/Arsip Perceraian';
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipPerceraian->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -538,6 +541,7 @@ class PermissionController extends Controller
                 break;
             case 'Akta Pengesahan Anak':
                 $infoArsipPengesahan = InfoArsipPengesahan::where('ID_ARSIP', $ID_ARSIP)->first();
+                $tahunPembuatanDokPengesahan = $infoArsipPengesahan->TAHUTAHUN_PEMBUATAN_DOK_PENGESAHAN;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_LAINNYA',
@@ -556,8 +560,8 @@ class PermissionController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                $file->storeAs('Arsip Pengesahan', $fileName, 'public');
-                                // Simpan nama file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokPengesahan . '/Arsip Pengesahan';
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipPengesahan->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -579,6 +583,7 @@ class PermissionController extends Controller
                 break;
             case 'Akta Kematian':
                 $infoArsipKematian = infoArsipKematian::where('ID_ARSIP', $ID_ARSIP)->first();
+                $tahunPembuatanDokKematian = $infoArsipKematian->TAHUN_PEMBUATAN_DOK_KELAHIRAN;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_F201',
@@ -602,13 +607,11 @@ class PermissionController extends Controller
                         $file = $request->file($field);
                         $extension = $file->getClientOriginalExtension();
 
-                        // Periksa apakah ekstensi file diizinkan
                         if (in_array($extension, $allowedExtensions)) {
-                            // Periksa ukuran file
-                            if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
+                            if ($file->getSize() <= 25000000) {
                                 $fileName = $file->getClientOriginalName();
-                                $file->storeAs('Arsip Kematian', $fileName, 'public');
-                                // Simpan nama file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokKematian . '/Arsip Kematian';
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipKematian->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -630,6 +633,7 @@ class PermissionController extends Controller
                 break;
             case 'Akta Kelahiran':
                 $infoArsipKelahiran = InfoArsipKelahiran::where('ID_ARSIP', $ID_ARSIP)->first();
+                $tahunPembuatanDokKelahiran = $infoArsipKelahiran->TAHUN_PEMBUATAN_DOK_KELAHIRAN;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_KK',
@@ -658,7 +662,8 @@ class PermissionController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                $file->storeAs('Arsip Kelahiran', $fileName, 'public');
+                                $folderPath = $tahunPembuatanDokKelahiran . '/Arsip Kelahiran';
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 // Simpan nama file ke dalam database sesuai dengan field yang sesuai
                                 $infoArsipKelahiran->$field = $fileName;
                             } else {
@@ -681,6 +686,7 @@ class PermissionController extends Controller
                 break;
             case 'Akta Pengakuan Anak':
                 $infoArsipPengakuan = InfoArsipPengakuan::where('ID_ARSIP', $ID_ARSIP)->first();
+                $tahunPembuatanDokPengakuan = $infoArsipPengakuan->TAHUN_PEMBUATAN_DOK_PENGAKUAN;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_LAINNYA',
@@ -693,14 +699,12 @@ class PermissionController extends Controller
                         $allowedExtensions = ['pdf'];
                         $file = $request->file($field);
                         $extension = $file->getClientOriginalExtension();
-
-                        // Periksa apakah ekstensi file diizinkan
                         if (in_array($extension, $allowedExtensions)) {
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                $file->storeAs('Arsip Pengakuan', $fileName, 'public');
-                                // Simpan nama file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokPengakuan . '/Arsip Pengakuan';
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipPengakuan->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -722,6 +726,7 @@ class PermissionController extends Controller
                 break;
             case 'Akta Perkawinan':
                 $infoArsipPerkawinan = InfoArsipPerkawinan::where('ID_ARSIP', $ID_ARSIP)->first();
+                $tahunPembuatanDokPerkawinan = $infoArsipPerkawinan->TAHUN_PEMBUATAN_DOK_PERKAWINAN;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_F201',
@@ -748,8 +753,8 @@ class PermissionController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                $file->storeAs('Arsip Perkawinan', $fileName, 'public');
-                                // Simpan nama file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokPerkawinan . '/Arsip Perkawinan';
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipPerkawinan->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -771,6 +776,7 @@ class PermissionController extends Controller
                 break;
             case 'Kartu Keluarga':
                 $infoArsipKk = InfoArsipKk::where('ID_ARSIP', $ID_ARSIP)->first();
+                $tahunPembuatanDokKk = $infoArsipKk->TAHUN_PEMBUATAN_DOK_KK;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_F101',
@@ -799,9 +805,8 @@ class PermissionController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                // Simpan file dan dapatkan pathnya
-                                $file = $file->storeAs('Arsip Kk', $fileName, 'public');
-                                // Simpan path file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokKk . '/Arsip Kk';
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipKk ->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -823,6 +828,7 @@ class PermissionController extends Controller
                 break;
             case 'SKOT':
                 $infoArsipSkot = InfoArsipSkot::where('ID_ARSIP', $ID_ARSIP)->first();
+                $tahunPembuatanDokSkot = $infoArsipSkot->TAHUN_PEMBUATAN_DOK_SKOT;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_LAINNYA',
@@ -841,9 +847,8 @@ class PermissionController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                // Simpan file dan dapatkan pathnya
-                                $file = $file->storeAs('Arsip Skot', $fileName, 'public');
-                                // Simpan path file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokSkot . '/Arsip Skot';
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipSkot->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -865,6 +870,7 @@ class PermissionController extends Controller
                 break;
             case 'SKTT':
                 $infoArsipSktt = InfoArsipSktt::where('ID_ARSIP', $ID_ARSIP)->first();
+                $tahunPembuatanDokSktt = $infoArsipSktt->TAHUN_PEMBUATAN_DOK_SKTT;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_LAINNYA',
@@ -883,9 +889,8 @@ class PermissionController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                // Simpan file dan dapatkan pathnya
-                                $file = $file->storeAs('Arsip Sktt', $fileName, 'public');
-                                // Simpan path file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokSktt . '/Arsip Sktt';
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipSktt->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -907,6 +912,7 @@ class PermissionController extends Controller
                 break;
             case 'Kartu Tanda Penduduk':
                 $infoArsipKtp = InfoArsipKtp::where('ID_ARSIP', $ID_ARSIP)->first();
+                $tahunPembuatanDokKtp = $infoArsipKtp->TAHUN_PEMBUATAN_KTP;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_KK',
@@ -932,8 +938,8 @@ class PermissionController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                // Simpan file dan dapatkan pathnya
-                                $file = $file->storeAs('Arsip Ktp', $fileName, 'public');
+                                $folderPath = $tahunPembuatanDokKtp . '/Arsip Ktp';
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 // Simpan path file ke dalam database sesuai dengan field yang sesuai
                                 $infoArsipKtp->$field = $fileName;
                             } else {

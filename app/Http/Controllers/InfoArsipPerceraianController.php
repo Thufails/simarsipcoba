@@ -103,7 +103,7 @@ class InfoArsipPerceraianController extends Controller
         $infoArsipPerceraian->TANGGAL_DOK_PERKAWINAN = $request->input('TANGGAL_DOK_PERKAWINAN');
         $infoArsipPerceraian->TAHUN_PEMBUATAN_DOK_PERCERAIAN = $request->input('TAHUN_PEMBUATAN_DOK_PERCERAIAN');
 
-        $tahunPembuatanDokPerceraian = $request->TAHUN_PEMBUATAN_DOK_PERCERAIAN;
+        $tahunPembuatanDokPerceraian = $infoArsipPerceraian->TAHUN_PEMBUATAN_DOK_PERCERAIAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_F201',
@@ -255,7 +255,7 @@ class InfoArsipPerceraianController extends Controller
         $infoArsipPerceraian->NAMA_PRIA = $request->input('NAMA_PRIA');
         $infoArsipPerceraian->NAMA_WANITA = $request->input('NAMA_WANITA');
 
-        $tahunPembuatanDokPerceraian = $request->TAHUN_PEMBUATAN_DOK_PERCERAIAN;
+        $tahunPembuatanDokPerceraian = $infoArsipPerceraian->TAHUN_PEMBUATAN_DOK_PERCERAIAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_F201',

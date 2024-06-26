@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Arsip;
 use Firebase\JWT\JWT;
@@ -17,7 +18,7 @@ use App\Models\JenisDokumen;
 use Illuminate\Http\Request;
 use App\Models\InfoArsipSkot;
 use App\Models\InfoArsipSktt;
-use App\Models\infoArsipKematian;
+use App\Models\InfoArsipKematian;
 use App\Models\InfoArsipKelahiran;
 use App\Models\InfoArsipPengakuan;
 use App\Models\InfoArsipPengesahan;
@@ -349,6 +350,7 @@ class ManajemenController extends Controller
                 $infoArsipPengangkatan->NAMA_IBU = $request->input('NAMA_IBU');
                 $infoArsipPengangkatan->THN_PEMBUATAN_DOK_PENGANGKATAN = $request->input('THN_PEMBUATAN_DOK_PENGANGKATAN');
 
+                $tahunPembuatanDokPengangkatan = $infoArsipPengangkatan->THN_PEMBUATAN_DOK_PENGANGKATAN;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_LAINNYA',
@@ -367,8 +369,15 @@ class ManajemenController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                $file->storeAs('Arsip Pengangkatan', $fileName, 'public');
-                                // Simpan nama file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokPengangkatan . '/Arsip Kelahiran';
+                                $oldFileName = $infoArsipPengangkatan->$field;
+                                if ($oldFileName) {
+                                    $oldFilePath = $folderPath . '/' . $oldFileName;
+                                    if (Storage::disk('public')->exists($oldFilePath)) {
+                                        Storage::disk('public')->delete($oldFilePath);
+                                    }
+                                }
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipPengangkatan->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -537,7 +546,7 @@ class ManajemenController extends Controller
                     if (!$kelurahan) {
                         return response()->json(['error' => 'Kelurahan tidak ditemukan sesuai kecamatan yang dipilih'], 400);
                     }
-                    $infoArsipSuratPindah->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
+                    $tahunPembuatanDokSuratPindah= $infoArsipSuratPindah->THN_PEMBUATAN_DOK_SURAT_PINDAH;
                     $fileFields = [
                         'FILE_LAMA',
                         'FILE_SKP_WNI',
@@ -565,9 +574,15 @@ class ManajemenController extends Controller
                                 // Periksa ukuran file
                                 if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                     $fileName = $file->getClientOriginalName();
-                                    // Simpan file dan dapatkan pathnya
-                                    $file = $file->storeAs('Arsip Surat Pindah', $fileName, 'public');
-                                    // Simpan path file ke dalam database sesuai dengan field yang sesuai
+                                    $folderPath = $tahunPembuatanDokSuratPindah . '/Arsip Kelahiran';
+                                    $oldFileName = $infoArsipSuratPindah->$field;
+                                    if ($oldFileName) {
+                                        $oldFilePath = $folderPath . '/' . $oldFileName;
+                                        if (Storage::disk('public')->exists($oldFilePath)) {
+                                            Storage::disk('public')->delete($oldFilePath);
+                                        }
+                                    }
+                                    $file->storeAs($folderPath, $fileName, 'public');
                                     $infoArsipSuratPindah->$field = $fileName;
                                 } else {
                                     return response()->json([
@@ -699,6 +714,7 @@ class ManajemenController extends Controller
                     $infoArsipPerceraian->TANGGAL_DOK_PERKAWINAN = $request->input('TANGGAL_DOK_PERKAWINAN');
                     $infoArsipPerceraian->TAHUN_PEMBUATAN_DOK_PERCERAIAN = $request->input('TAHUN_PEMBUATAN_DOK_PERCERAIAN');
 
+                    $tahunPembuatanDokPerceraian = $infoArsipPerceraian->TAHUN_PEMBUATAN_DOK_PERCERAIAN;
                     $fileFields = [
                         'FILE_LAMA',
                         'FILE_F201',
@@ -709,6 +725,7 @@ class ManajemenController extends Controller
                         'FILE_SPTJM',
                         'FILE_LAINNYA',
                         'FILE_AKTA_PERCERAIAN',
+                        'FILE_AKTA_PERKAWINAN'
                     ];
 
                     // Loop melalui setiap field file untuk menyimpannya
@@ -723,8 +740,15 @@ class ManajemenController extends Controller
                                 // Periksa ukuran file
                                 if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                     $fileName = $file->getClientOriginalName();
-                                    $file->storeAs('Arsip Perceraian', $fileName, 'public');
-                                    // Simpan nama file ke dalam database sesuai dengan field yang sesuai
+                                    $folderPath = $tahunPembuatanDokPerceraian . '/Arsip Perceraian';
+                                    $oldFileName = $infoArsipPerceraian->$field;
+                                    if ($oldFileName) {
+                                        $oldFilePath = $folderPath . '/' . $oldFileName;
+                                        if (Storage::disk('public')->exists($oldFilePath)) {
+                                            Storage::disk('public')->delete($oldFilePath);
+                                        }
+                                    }
+                                    $file->storeAs($folderPath, $fileName, 'public');
                                     $infoArsipPerceraian->$field = $fileName;
                                 } else {
                                     return response()->json([
@@ -849,6 +873,7 @@ class ManajemenController extends Controller
                     $infoArsipPengesahan->NAMA_IBU = $request->input('NAMA_IBU');
                     $infoArsipPengesahan->TAHUN_PEMBUATAN_DOK_PENGESAHAN = $request->input('TAHUN_PEMBUATAN_DOK_PENGESAHAN');
 
+                    $tahunPembuatanDokPengesahan = $infoArsipPengesahan->TAHUTAHUN_PEMBUATAN_DOK_PENGESAHAN;
                     $fileFields = [
                         'FILE_LAMA',
                         'FILE_LAINNYA',
@@ -867,8 +892,15 @@ class ManajemenController extends Controller
                                 // Periksa ukuran file
                                 if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                     $fileName = $file->getClientOriginalName();
-                                    $file->storeAs('Arsip Pengesahan', $fileName, 'public');
-                                    // Simpan nama file ke dalam database sesuai dengan field yang sesuai
+                                    $folderPath = $tahunPembuatanDokPengesahan . '/Arsip Kelahiran';
+                                    $oldFileName = $infoArsipPengesahan->$field;
+                                    if ($oldFileName) {
+                                        $oldFilePath = $folderPath . '/' . $oldFileName;
+                                        if (Storage::disk('public')->exists($oldFilePath)) {
+                                            Storage::disk('public')->delete($oldFilePath);
+                                        }
+                                    }
+                                    $file->storeAs($folderPath, $fileName, 'public');
                                     $infoArsipPengesahan->$field = $fileName;
                                 } else {
                                     return response()->json([
@@ -1006,6 +1038,7 @@ class ManajemenController extends Controller
                 $infoArsipKematian->TANGGAL_LAPOR = $request->input('TANGGAL_LAPOR');
                 $infoArsipKematian->TAHUN_PEMBUATAN_DOK_KEMATIAN = $request->input('TAHUN_PEMBUATAN_DOK_KEMATIAN');
 
+                $tahunPembuatanDokKematian = $infoArsipKematian->TAHUN_PEMBUATAN_DOK_KELAHIRAN;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_F201',
@@ -1022,7 +1055,6 @@ class ManajemenController extends Controller
                     'FILE_AKTA_KEMATIAN',
                 ];
 
-                // Loop melalui setiap field file untuk menyimpannya
                 foreach ($fileFields as $field) {
                     if ($request->hasFile($field)) {
                         $allowedExtensions = ['pdf'];
@@ -1034,8 +1066,15 @@ class ManajemenController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                $file->storeAs('Arsip Kematian', $fileName, 'public');
-                                // Simpan nama file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokKematian . '/Arsip Kematian';
+                                $oldFileName = $infoArsipKematian->$field;
+                                if ($oldFileName) {
+                                    $oldFilePath = $folderPath . '/' . $oldFileName;
+                                    if (Storage::disk('public')->exists($oldFilePath)) {
+                                        Storage::disk('public')->delete($oldFilePath);
+                                    }
+                                }
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipKematian->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -1171,7 +1210,7 @@ class ManajemenController extends Controller
                 $infoArsipKelahiran->STATUS_KELAHIRAN = $request->input('STATUS_KELAHIRAN', $infoArsipKelahiran->STATUS_KELAHIRAN);
                 $infoArsipKelahiran->STATUS_PENDUDUK = $request->input('STATUS_PENDUDUK', $infoArsipKelahiran->STATUS_PENDUDUK);
 
-
+                $tahunPembuatanDokKelahiran = $infoArsipKelahiran->TAHUN_PEMBUATAN_DOK_KELAHIRAN;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_KK',
@@ -1199,8 +1238,16 @@ class ManajemenController extends Controller
                         if (in_array($extension, $allowedExtensions)) {
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
-                                $fileName =  $file->getClientOriginalName();
-                                $file->storeAs('Arsip Kelahiran', $fileName, 'public');
+                                $fileName = $file->getClientOriginalName();
+                                $folderPath = $tahunPembuatanDokKelahiran . '/Arsip Kelahiran';
+                                $oldFileName = $infoArsipKelahiran->$field;
+                                if ($oldFileName) {
+                                    $oldFilePath = $folderPath . '/' . $oldFileName;
+                                    if (Storage::disk('public')->exists($oldFilePath)) {
+                                        Storage::disk('public')->delete($oldFilePath);
+                                    }
+                                }
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 // Simpan nama file ke dalam database sesuai dengan field yang sesuai
                                 $infoArsipKelahiran->$field = $fileName;
                             } else {
@@ -1327,6 +1374,7 @@ class ManajemenController extends Controller
                 $infoArsipPengakuan->NAMA_IBU = $request->input('NAMA_IBU');
                 $infoArsipPengakuan->TAHUN_PEMBUATAN_DOK_PENGAKUAN = $request->input('TAHUN_PEMBUATAN_DOK_PENGAKUAN');
 
+                $tahunPembuatanDokPengakuan = $infoArsipPengakuan->TAHUN_PEMBUATAN_DOK_PENGAKUAN;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_LAINNYA',
@@ -1340,13 +1388,19 @@ class ManajemenController extends Controller
                         $file = $request->file($field);
                         $extension = $file->getClientOriginalExtension();
 
-                        // Periksa apakah ekstensi file diizinkan
                         if (in_array($extension, $allowedExtensions)) {
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                $file->storeAs('Arsip Pengakuan', $fileName, 'public');
-                                // Simpan nama file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokPengakuan . '/Arsip Pengakuan';
+                                $oldFileName = $infoArsipPengakuan->$field;
+                                if ($oldFileName) {
+                                    $oldFilePath = $folderPath . '/' . $oldFileName;
+                                    if (Storage::disk('public')->exists($oldFilePath)) {
+                                        Storage::disk('public')->delete($oldFilePath);
+                                    }
+                                }
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipPengakuan->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -1481,7 +1535,7 @@ class ManajemenController extends Controller
                 $infoArsipPerkawinan->IBU_WANITA = $request->input('IBU_WANITA');
                 $infoArsipPerkawinan->TAHUN_PEMBUATAN_DOK_PERKAWINAN = $request->input('TAHUN_PEMBUATAN_DOK_PERKAWINAN');
 
-                // Simpan file-file jika diberikan
+                $tahunPembuatanDokPerkawinan = $infoArsipPerkawinan->TAHUN_PEMBUATAN_DOK_PERKAWINAN;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_F201',
@@ -1508,8 +1562,15 @@ class ManajemenController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                $file->storeAs('Arsip Perkawinan', $fileName, 'public');
-                                // Simpan nama file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokPerkawinan . '/Arsip Perkawinan';
+                                $oldFileName = $infoArsipPerkawinan->$field;
+                                if ($oldFileName) {
+                                    $oldFilePath = $folderPath . '/' . $oldFileName;
+                                    if (Storage::disk('public')->exists($oldFilePath)) {
+                                        Storage::disk('public')->delete($oldFilePath);
+                                    }
+                                }
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipPerkawinan->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -1653,6 +1714,7 @@ class ManajemenController extends Controller
                     return response()->json(['error' => 'Kelurahan tidak ditemukan sesuai kecamatan yang dipilih'], 400);
                 }
                 $infoArsipKk ->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
+                $tahunPembuatanDokKk = $infoArsipKk->TAHUN_PEMBUATAN_DOK_KK;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_F101',
@@ -1681,9 +1743,15 @@ class ManajemenController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                // Simpan file dan dapatkan pathnya
-                                $file = $file->storeAs('Arsip Kk', $fileName, 'public');
-                                // Simpan path file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokKk . '/Arsip Kk';
+                                $oldFileName = $infoArsipKk->$field;
+                                if ($oldFileName) {
+                                    $oldFilePath = $folderPath . '/' . $oldFileName;
+                                    if (Storage::disk('public')->exists($oldFilePath)) {
+                                        Storage::disk('public')->delete($oldFilePath);
+                                    }
+                                }
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipKk ->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -1838,6 +1906,7 @@ class ManajemenController extends Controller
                     return response()->json(['error' => 'Kelurahan tidak ditemukan sesuai kecamatan yang dipilih'], 400);
                 }
                 $infoArsipSkot->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
+                $tahunPembuatanDokSkot = $infoArsipSkot->TAHUN_PEMBUATAN_DOK_SKOT;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_LAINNYA',
@@ -1856,9 +1925,15 @@ class ManajemenController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                // Simpan file dan dapatkan pathnya
-                                $file->storeAs('Arsip Skot', $fileName, 'public');
-                                // Simpan path file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokSkot . '/Arsip Skot';
+                                $oldFileName = $infoArsipSkot->$field;
+                                if ($oldFileName) {
+                                    $oldFilePath = $folderPath . '/' . $oldFileName;
+                                    if (Storage::disk('public')->exists($oldFilePath)) {
+                                        Storage::disk('public')->delete($oldFilePath);
+                                    }
+                                }
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipSkot->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -2010,6 +2085,7 @@ class ManajemenController extends Controller
                     return response()->json(['error' => 'Kelurahan tidak ditemukan sesuai kecamatan yang dipilih'], 400);
                 }
                 $infoArsipSktt->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
+                $tahunPembuatanDokSktt = $infoArsipSktt->TAHUN_PEMBUATAN_DOK_SKTT;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_LAINNYA',
@@ -2028,9 +2104,15 @@ class ManajemenController extends Controller
                             // Periksa ukuran file
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                // Simpan file dan dapatkan pathnya
-                                $file = $file->storeAs('Arsip Sktt', $fileName, 'public');
-                                // Simpan path file ke dalam database sesuai dengan field yang sesuai
+                                $folderPath = $tahunPembuatanDokSktt . '/Arsip Sktt';
+                                $oldFileName = $infoArsipSktt->$field;
+                                if ($oldFileName) {
+                                    $oldFilePath = $folderPath . '/' . $oldFileName;
+                                    if (Storage::disk('public')->exists($oldFilePath)) {
+                                        Storage::disk('public')->delete($oldFilePath);
+                                    }
+                                }
+                                $file->storeAs($folderPath, $fileName, 'public');
                                 $infoArsipSktt->$field = $fileName;
                             } else {
                                 return response()->json([
@@ -2189,7 +2271,7 @@ class ManajemenController extends Controller
                 }
                 $infoArsipKtp->ID_KELURAHAN = $kelurahan->ID_KELURAHAN;
 
-                // Handle file fields
+                $tahunPembuatanDokKtp = $infoArsipKtp->TAHUN_PEMBUATAN_KTP;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_KK',
@@ -2205,18 +2287,23 @@ class ManajemenController extends Controller
 
                 foreach ($fileFields as $field) {
                     if ($request->hasFile($field)) {
-                        $file = $request->file($field);
-                        $fileName = $file->getClientOriginalName();
-                        $fileExtension = $file->getClientOriginalExtension();
                         $allowedExtensions = ['pdf'];
+                        $file = $request->file($field);
+                        $extension = $file->getClientOriginalExtension();
 
-                        if (in_array($fileExtension, $allowedExtensions)) {
+                        if (in_array($extension, $allowedExtensions)) {
                             if ($file->getSize() <= 25000000) { // Ukuran maksimum 25 MB
                                 $fileName = $file->getClientOriginalName();
-                                // Simpan file dan dapatkan pathnya
-                                $file->storeAs('Arsip Ktp', $fileName, 'public');
-                                // Simpan path file ke dalam database sesuai dengan field yang sesuai
-                                $infoArsipKtp->$field = $fileName;
+                                $folderPath = $tahunPembuatanDokKtp . '/Arsip Ktp';
+                                $oldFileName = $infoArsipKtp->$field;
+                                if ($oldFileName) {
+                                    $oldFilePath = $folderPath . '/' . $oldFileName;
+                                    if (Storage::disk('public')->exists($oldFilePath)) {
+                                        Storage::disk('public')->delete($oldFilePath);
+                                    }
+                                }
+                                $file->storeAs($folderPath, $fileName, 'public');
+                                $infoArsipKtp ->$field = $fileName;
                             } else {
                                 return response()->json([
                                     'success' => false,

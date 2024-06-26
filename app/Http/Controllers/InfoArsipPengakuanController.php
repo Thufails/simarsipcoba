@@ -95,7 +95,7 @@ class InfoArsipPengakuanController extends Controller
         $infoArsipPengakuan->NAMA_IBU = $request->input('NAMA_IBU');
         $infoArsipPengakuan->TAHUN_PEMBUATAN_DOK_PENGAKUAN = $request->input('TAHUN_PEMBUATAN_DOK_PENGAKUAN');
 
-        $tahunPembuatanDokPengakuan = $request->TAHUN_PEMBUATAN_DOK_PENGAKUAN;
+        $tahunPembuatanDokPengakuan = $infoArsipPengakuan->TAHUN_PEMBUATAN_DOK_PENGAKUAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',
