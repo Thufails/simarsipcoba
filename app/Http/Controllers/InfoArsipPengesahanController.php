@@ -95,7 +95,7 @@ class InfoArsipPengesahanController extends Controller
         $infoArsipPengesahan->NAMA_IBU = $request->input('NAMA_IBU');
         $infoArsipPengesahan->TAHUN_PEMBUATAN_DOK_PENGESAHAN = $request->input('TAHUN_PEMBUATAN_DOK_PENGESAHAN');
 
-        $tahunPembuatanDokPengesahan = $infoArsipPengesahan->TAHUTAHUN_PEMBUATAN_DOK_PENGESAHAN;
+        $tahunPembuatanDokPengesahan = $infoArsipPengesahan->TAHUN_PEMBUATAN_DOK_PENGESAHAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',
@@ -230,7 +230,7 @@ class InfoArsipPengesahanController extends Controller
         $infoArsipPengesahan->NO_DOK_PENGESAHAN = $arsip->NO_DOK_PENGESAHAN;
         $infoArsipPengesahan->NAMA_ANAK = $request->input('NAMA_ANAK');
 
-        $tahunPembuatanDokPengesahan = $infoArsipPengesahan->TAHUTAHUN_PEMBUATAN_DOK_PENGESAHAN;
+        $tahunPembuatanDokPengesahan = $infoArsipPengesahan->TAHUN_PEMBUATAN_DOK_PENGESAHAN;
         $fileFields = [
             'FILE_LAMA',
             'FILE_LAINNYA',

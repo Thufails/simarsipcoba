@@ -583,7 +583,7 @@ class PermissionController extends Controller
                 break;
             case 'Akta Kematian':
                 $infoArsipKematian = infoArsipKematian::where('ID_ARSIP', $ID_ARSIP)->first();
-                $tahunPembuatanDokKematian = $infoArsipKematian->TAHUN_PEMBUATAN_DOK_KELAHIRAN;
+                $tahunPembuatanDokKematian = $infoArsipKematian->TAHUN_PEMBUATAN_DOK_KEMATIAN;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_F201',

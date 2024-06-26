@@ -601,7 +601,7 @@ class ManajemenController extends Controller
                         }
                     }
 
-                    
+
                     if (!$infoArsipSuratPindah->isDirty()) {
                         // Jika tidak ada perubahan, kembalikan respons tanpa melakukan penyimpanan ulang
                         return response()->json([
@@ -873,7 +873,7 @@ class ManajemenController extends Controller
                     $infoArsipPengesahan->NAMA_IBU = $request->input('NAMA_IBU');
                     $infoArsipPengesahan->TAHUN_PEMBUATAN_DOK_PENGESAHAN = $request->input('TAHUN_PEMBUATAN_DOK_PENGESAHAN');
 
-                    $tahunPembuatanDokPengesahan = $infoArsipPengesahan->TAHUTAHUN_PEMBUATAN_DOK_PENGESAHAN;
+                    $tahunPembuatanDokPengesahan = $infoArsipPengesahan->TAHUN_PEMBUATAN_DOK_PENGESAHAN;
                     $fileFields = [
                         'FILE_LAMA',
                         'FILE_LAINNYA',
@@ -1038,7 +1038,7 @@ class ManajemenController extends Controller
                 $infoArsipKematian->TANGGAL_LAPOR = $request->input('TANGGAL_LAPOR');
                 $infoArsipKematian->TAHUN_PEMBUATAN_DOK_KEMATIAN = $request->input('TAHUN_PEMBUATAN_DOK_KEMATIAN');
 
-                $tahunPembuatanDokKematian = $infoArsipKematian->TAHUN_PEMBUATAN_DOK_KELAHIRAN;
+                $tahunPembuatanDokKematian = $infoArsipKematian->TAHUN_PEMBUATAN_DOK_KEMATIAN;
                 $fileFields = [
                     'FILE_LAMA',
                     'FILE_F201',
