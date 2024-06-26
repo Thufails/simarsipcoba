@@ -23,6 +23,7 @@ use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class PermissionController extends Controller
@@ -992,18 +993,18 @@ class PermissionController extends Controller
 
         $validator = app('validator')->make($request->all(), [
             'ID_DOKUMEN' => 'nullable|integer',
-            'NO_DOK_PENGANGKATAN' => 'nullable|string',
-            'NO_DOK_SURAT_PINDAH' => 'nullable|string',
-            'NO_DOK_PERCERAIAN' => 'nullable|string',
-            'NO_DOK_PENGESAHAN' => 'nullable|string',
-            'NO_DOK_KEMATIAN' => 'nullable|string',
-            'NO_DOK_KELAHIRAN' => 'nullable|string',
-            'NO_DOK_PENGAKUAN' => 'nullable|string',
-            'NO_DOK_PERKAWINAN' => 'nullable|string',
-            'NO_DOK_KK' => 'nullable|string',
-            'NO_DOK_SKOT' => 'nullable|string',
+            'NO_DOK_PENGANGKATAN' => 'nullable|string|unique:info_arsip_pengangkatan',
+            'NO_DOK_SURAT_PINDAH' => 'nullable|string|unique:info_arsip_surat_pindah',
+            'NO_DOK_PERCERAIAN' => 'nullable|string|unique:info_arsip_perceraian',
+            'NO_DOK_PENGESAHAN' => 'nullable|string|unique:info_arsip_pengesahan',
+            'NO_DOK_KEMATIAN' => 'nullable|string|unique:info_arsip_kematian',
+            'NO_DOK_KELAHIRAN' => 'nullable|string|unique:info_arsip_kelahiran',
+            'NO_DOK_PENGAKUAN' => 'nullable|string|unique:info_arsip_pengakuan',
+            'NO_DOK_PERKAWINAN' => 'nullable|string|unique:info_arsip_perkawinan',
+            'NO_DOK_KK' => 'nullable|string|unique:info_arsip_kk',
+            'NO_DOK_SKOT' => 'nullable|string|unique:info_arsip_skot',
             'NO_DOK_SKTT' => 'nullable|string|unique:info_arsip_sktt',
-            'NO_DOK_KTP' => 'nullable|string',
+            'NO_DOK_KTP' => 'nullable|string|unique:info_arsip_ktp',
         ]);
 
         if ($validator->fails()) {
@@ -1028,158 +1029,242 @@ class PermissionController extends Controller
             case 'Akta Pengangkatan Anak':
                 $noDokumen = $request->input('NO_DOKUMEN');
                 $namaDokumen = $request->input('NAMA');
+                // Cek duplikasi NO_DOKUMEN di tabel info_arsip_pengangkatan
+                $existingDocument = InfoArsipPengangkatan::where('NO_DOK_PENGANGKATAN', $noDokumen)->first();
+                if ($existingDocument) {
+                    return response()->json([
+                        'error' => 'Nomor dokumen sudah terdaftar, silakan gunakan nomor dokumen yang berbeda.'
+                    ], 409); // Conflict HTTP status code
+                }
                 $arsip->NO_DOK_PENGANGKATAN = $noDokumen;
-                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
-                $arsip->save();
                 $infoArsipPengangkatan = new InfoArsipPengangkatan();
-                $idArsip = $arsip->ID_ARSIP;
-                $infoArsipPengangkatan->ID_ARSIP = $idArsip;
                 $infoArsipPengangkatan->NO_DOK_PENGANGKATAN = $arsip->NO_DOK_PENGANGKATAN;
                 $infoArsipPengangkatan->NAMA_ANAK = $namaDokumen;
-                $infoArsipPengangkatan->save();
+                DB::transaction(function () use ($arsip, $infoArsipPengangkatan) {
+                    $arsip->save();
+                    $infoArsipPengangkatan->ID_ARSIP = $arsip->ID_ARSIP;
+                    $infoArsipPengangkatan->save();
+                });
                 break;
             case 'Surat Pindah':
                 $noDokumen = $request->input('NO_DOKUMEN');
                 $namaDokumen = $request->input('NAMA');
+                // Cek duplikasi NO_DOKUMEN di tabel info_arsip_pengangkatan
+                $existingDocument = InfoArsipSuratPindah::where('NO_DOK_SURAT_PINDAH', $noDokumen)->first();
+                if ($existingDocument) {
+                    return response()->json([
+                        'error' => 'Nomor dokumen sudah terdaftar, silakan gunakan nomor dokumen yang berbeda.'
+                    ], 409); // Conflict HTTP status code
+                }
                 $arsip->NO_DOK_SURAT_PINDAH = $noDokumen;
-                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
-                $arsip->save();
                 $infoArsipSuratPindah = new InfoArsipSuratPindah();
-                $idArsip = $arsip->ID_ARSIP;
-                $infoArsipSuratPindah->ID_ARSIP = $idArsip;
                 $infoArsipSuratPindah->NO_DOK_SURAT_PINDAH = $arsip->NO_DOK_SURAT_PINDAH;
                 $infoArsipSuratPindah->NAMA_KEPALA = $namaDokumen;
-                $infoArsipSuratPindah->save();
+                DB::transaction(function () use ($arsip, $infoArsipSuratPindah) {
+                    $arsip->save();
+                    $infoArsipSuratPindah->ID_ARSIP = $arsip->ID_ARSIP;
+                    $infoArsipSuratPindah->save();
+                });
                 break;
             case 'Akta Perceraian':
                 $noDokumen = $request->input('NO_DOKUMEN');
                 $namaDokumen = $request->input('NAMA');
+                // Cek duplikasi NO_DOKUMEN di tabel info_arsip_pengangkatan
+                $existingDocument = InfoArsipPerceraian::where('NO_DOK_PERCERAIAN', $noDokumen)->first();
+                if ($existingDocument) {
+                    return response()->json([
+                        'error' => 'Nomor dokumen sudah terdaftar, silakan gunakan nomor dokumen yang berbeda.'
+                    ], 409); // Conflict HTTP status code
+                }
                 $arsip->NO_DOK_PERCERAIAN = $noDokumen;
-                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
-                $arsip->save();
                 $infoArsipPerceraian = new InfoArsipPerceraian();
-                $idArsip = $arsip->ID_ARSIP;
-                $infoArsipPerceraian->ID_ARSIP = $idArsip;
                 $infoArsipPerceraian->NO_DOK_PERCERAIAN = $arsip->NO_DOK_PERCERAIAN;
                 $infoArsipPerceraian->NAMA_PRIA = $namaDokumen;
-                $infoArsipPerceraian->save();
+                DB::transaction(function () use ($arsip, $infoArsipPerceraian) {
+                    $arsip->save();
+                    $infoArsipPerceraian->ID_ARSIP = $arsip->ID_ARSIP;
+                    $infoArsipPerceraian->save();
+                });
                 break;
             case 'Akta Pengesahan Anak':
                 $noDokumen = $request->input('NO_DOKUMEN');
                 $namaDokumen = $request->input('NAMA');
+                // Cek duplikasi NO_DOKUMEN di tabel info_arsip_pengangkatan
+                $existingDocument = InfoArsipPengesahan::where('NO_DOK_PENGESAHAN', $noDokumen)->first();
+                if ($existingDocument) {
+                    return response()->json([
+                        'error' => 'Nomor dokumen sudah terdaftar, silakan gunakan nomor dokumen yang berbeda.'
+                    ], 409); // Conflict HTTP status code
+                }
                 $arsip->NO_DOK_PENGESAHAN = $noDokumen;
-                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
-                $arsip->save();
                 $infoArsipPengesahan = new InfoArsipPengesahan();
-                $idArsip = $arsip->ID_ARSIP;
-                $infoArsipPengesahan->ID_ARSIP = $idArsip;
                 $infoArsipPengesahan->NO_DOK_PENGESAHAN = $arsip->NO_DOK_PENGESAHAN;
                 $infoArsipPengesahan->NAMA_ANAK = $namaDokumen;
-                $infoArsipPengesahan->save();
+                DB::transaction(function () use ($arsip, $infoArsipPengesahan) {
+                    $arsip->save();
+                    $infoArsipPengesahan->ID_ARSIP = $arsip->ID_ARSIP;
+                    $infoArsipPengesahan->save();
+                });
                 break;
             case 'Akta Kematian':
                 $noDokumen = $request->input('NO_DOKUMEN');
                 $namaDokumen = $request->input('NAMA');
+                // Cek duplikasi NO_DOKUMEN di tabel info_arsip_pengangkatan
+                $existingDocument = InfoArsipKematian::where('NO_DOK_KEMATIAN', $noDokumen)->first();
+                if ($existingDocument) {
+                    return response()->json([
+                        'error' => 'Nomor dokumen sudah terdaftar, silakan gunakan nomor dokumen yang berbeda.'
+                    ], 409); // Conflict HTTP status code
+                }
                 $arsip->NO_DOK_KEMATIAN = $noDokumen;
-                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
-                $arsip->save();
                 $infoArsipKematian = new InfoArsipKematian();
-                $idArsip = $arsip->ID_ARSIP;
-                $infoArsipKematian->ID_ARSIP = $idArsip;
                 $infoArsipKematian->NO_DOK_KEMATIAN = $arsip->NO_DOK_KEMATIAN;
                 $infoArsipKematian->NAMA = $namaDokumen;
-                $infoArsipKematian->save();
+                DB::transaction(function () use ($arsip, $infoArsipKematian) {
+                    $arsip->save();
+                    $infoArsipKematian->ID_ARSIP = $arsip->ID_ARSIP;
+                    $infoArsipKematian->save();
+                });
                 break;
             case 'Akta Kelahiran':
                 $noDokumen = $request->input('NO_DOKUMEN');
                 $namaDokumen = $request->input('NAMA');
+                // Cek duplikasi NO_DOKUMEN di tabel info_arsip_pengangkatan
+                $existingDocument = InfoArsipKelahiran::where('NO_DOK_KELAHIRAN', $noDokumen)->first();
+                if ($existingDocument) {
+                    return response()->json([
+                        'error' => 'Nomor dokumen sudah terdaftar, silakan gunakan nomor dokumen yang berbeda.'
+                    ], 409); // Conflict HTTP status code
+                }
                 $arsip->NO_DOK_KELAHIRAN = $noDokumen;
-                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
-                $arsip->save();
                 $infoArsipKelahiran = new InfoArsipKelahiran();
-                $idArsip = $arsip->ID_ARSIP;
-                $infoArsipKelahiran->ID_ARSIP = $idArsip;
                 $infoArsipKelahiran->NO_DOK_KELAHIRAN = $arsip->NO_DOK_KELAHIRAN;
                 $infoArsipKelahiran->NAMA = $namaDokumen;
-                $infoArsipKelahiran->save();
+                DB::transaction(function () use ($arsip, $infoArsipKelahiran) {
+                    $arsip->save();
+                    $infoArsipKelahiran->ID_ARSIP = $arsip->ID_ARSIP;
+                    $infoArsipKelahiran->save();
+                });
                 break;
             case 'Akta Pengakuan Anak':
                 $noDokumen = $request->input('NO_DOKUMEN');
                 $namaDokumen = $request->input('NAMA');
+                // Cek duplikasi NO_DOKUMEN di tabel info_arsip_pengangkatan
+                $existingDocument = InfoArsipPengakuan::where('NO_DOK_PENGAKUAN', $noDokumen)->first();
+                if ($existingDocument) {
+                    return response()->json([
+                        'error' => 'Nomor dokumen sudah terdaftar, silakan gunakan nomor dokumen yang berbeda.'
+                    ], 409); // Conflict HTTP status code
+                }
                 $arsip->NO_DOK_PENGAKUAN = $noDokumen;
-                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
-                $arsip->save();
                 $infoArsipPengakuan = new InfoArsipPengakuan();
-                $idArsip = $arsip->ID_ARSIP;
-                $infoArsipPengakuan->ID_ARSIP = $idArsip;
                 $infoArsipPengakuan->NO_DOK_PENGAKUAN = $arsip->NO_DOK_PENGAKUAN;
                 $infoArsipPengakuan->NAMA_ANAK = $namaDokumen;
-                $infoArsipPengakuan->save();
+                DB::transaction(function () use ($arsip, $infoArsipPengakuan) {
+                    $arsip->save();
+                    $infoArsipPengakuan->ID_ARSIP = $arsip->ID_ARSIP;
+                    $infoArsipPengakuan->save();
+                });
                 break;
             case 'Akta Perkawinan':
                 $noDokumen = $request->input('NO_DOKUMEN');
                 $namaDokumen = $request->input('NAMA');
+                // Cek duplikasi NO_DOKUMEN di tabel info_arsip_pengangkatan
+                $existingDocument = InfoArsipPerkawinan::where('NO_DOK_PERKAWINAN', $noDokumen)->first();
+                if ($existingDocument) {
+                    return response()->json([
+                        'error' => 'Nomor dokumen sudah terdaftar, silakan gunakan nomor dokumen yang berbeda.'
+                    ], 409); // Conflict HTTP status code
+                }
                 $arsip->NO_DOK_PERKAWINAN = $noDokumen;
-                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
-                $arsip->save();
                 $infoArsipPerkawinan = new InfoArsipPerkawinan();
-                $idArsip = $arsip->ID_ARSIP;
-                $infoArsipPerkawinan->ID_ARSIP = $idArsip;
                 $infoArsipPerkawinan->NO_DOK_PERKAWINAN = $arsip->NO_DOK_PERKAWINAN;
                 $infoArsipPerkawinan->NAMA_PRIA = $namaDokumen;
-                $infoArsipPerkawinan->save();
+                DB::transaction(function () use ($arsip, $infoArsipPerkawinan) {
+                    $arsip->save();
+                    $infoArsipPerkawinan->ID_ARSIP = $arsip->ID_ARSIP;
+                    $infoArsipPerkawinan->save();
+                });
                 break;
             case 'Kartu Keluarga':
                 $noDokumen = $request->input('NO_DOKUMEN');
                 $namaDokumen = $request->input('NAMA');
+                // Cek duplikasi NO_DOKUMEN di tabel info_arsip_pengangkatan
+                $existingDocument = InfoArsipKk::where('NO_DOK_KK', $noDokumen)->first();
+                if ($existingDocument) {
+                    return response()->json([
+                        'error' => 'Nomor dokumen sudah terdaftar, silakan gunakan nomor dokumen yang berbeda.'
+                    ], 409); // Conflict HTTP status code
+                }
                 $arsip->NO_DOK_KK = $noDokumen;
-                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
-                $arsip->save();
                 $infoArsipKk = new InfoArsipKk();
-                $idArsip = $arsip->ID_ARSIP;
-                $infoArsipKk->ID_ARSIP = $idArsip;
                 $infoArsipKk->NO_DOK_KK = $arsip->NO_DOK_KK;
                 $infoArsipKk->NAMA_KEPALA = $namaDokumen;
-                $infoArsipKk->save();
+                DB::transaction(function () use ($arsip, $infoArsipKk) {
+                    $arsip->save();
+                    $$infoArsipKk->ID_ARSIP = $arsip->ID_ARSIP;
+                    $$infoArsipKk->save();
+                });
                 break;
             case 'SKOT':
                 $noDokumen = $request->input('NO_DOKUMEN');
                 $namaDokumen = $request->input('NAMA');
+                // Cek duplikasi NO_DOKUMEN di tabel info_arsip_pengangkatan
+                $existingDocument = InfoArsipSkot::where('NO_DOK_SKOT', $noDokumen)->first();
+                if ($existingDocument) {
+                    return response()->json([
+                        'error' => 'Nomor dokumen sudah terdaftar, silakan gunakan nomor dokumen yang berbeda.'
+                    ], 409); // Conflict HTTP status code
+                }
                 $arsip->NO_DOK_SKOT = $noDokumen;
-                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
-                $arsip->save();
                 $infoArsipSkot = new InfoArsipSkot();
-                $idArsip = $arsip->ID_ARSIP;
-                $infoArsipSkot->ID_ARSIP = $idArsip;
                 $infoArsipSkot->NO_DOK_SKOT = $arsip->NO_DOK_SKOT;
                 $infoArsipSkot->NAMA = $namaDokumen;
-                $infoArsipSkot->save();
+                DB::transaction(function () use ($arsip, $infoArsipSkot) {
+                    $arsip->save();
+                    $$infoArsipSkot->ID_ARSIP = $arsip->ID_ARSIP;
+                    $$infoArsipSkot->save();
+                });
                 break;
             case 'SKTT':
                 $noDokumen = $request->input('NO_DOKUMEN');
                 $namaDokumen = $request->input('NAMA');
+                // Cek duplikasi NO_DOKUMEN di tabel info_arsip_pengangkatan
+                $existingDocument = InfoArsipSktt::where('NO_DOK_SKTT', $noDokumen)->first();
+                if ($existingDocument) {
+                    return response()->json([
+                        'error' => 'Nomor dokumen sudah terdaftar, silakan gunakan nomor dokumen yang berbeda.'
+                    ], 409); // Conflict HTTP status code
+                }
                 $arsip->NO_DOK_SKTT = $noDokumen;
-                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
-                $arsip->save();
                 $infoArsipSktt = new InfoArsipSktt();
-                $idArsip = $arsip->ID_ARSIP;
-                $infoArsipSktt->ID_ARSIP = $idArsip;
                 $infoArsipSktt->NO_DOK_SKTT = $arsip->NO_DOK_SKTT;
                 $infoArsipSktt->NAMA = $namaDokumen;
-                $infoArsipSktt->save();
+                DB::transaction(function () use ($arsip, $infoArsipSktt) {
+                    $arsip->save();
+                    $$infoArsipSktt->ID_ARSIP = $arsip->ID_ARSIP;
+                    $$infoArsipSktt->save();
+                });
                 break;
             case 'Kartu Tanda Penduduk':
                 $noDokumen = $request->input('NO_DOKUMEN');
                 $namaDokumen = $request->input('NAMA');
+                // Cek duplikasi NO_DOKUMEN di tabel info_arsip_pengangkatan
+                $existingDocument = InfoArsipKtp::where('NO_DOK_KTP', $noDokumen)->first();
+                if ($existingDocument) {
+                    return response()->json([
+                        'error' => 'Nomor dokumen sudah terdaftar, silakan gunakan nomor dokumen yang berbeda.'
+                    ], 409); // Conflict HTTP status code
+                }
                 $arsip->NO_DOK_KTP = $noDokumen;
-                // Simpan objek $arsip terlebih dahulu untuk mendapatkan ID arsip
-                $arsip->save();
                 $infoArsipKtp = new InfoArsipKtp();
-                $idArsip = $arsip->ID_ARSIP;
-                $infoArsipKtp->ID_ARSIP = $idArsip;
                 $infoArsipKtp->NO_DOK_KTP = $arsip->NO_DOK_KTP;
                 $infoArsipKtp->NAMA = $namaDokumen;
-                $infoArsipKtp->save();
+                DB::transaction(function () use ($arsip, $infoArsipKtp) {
+                    $arsip->save();
+                    $$infoArsipKtp->ID_ARSIP = $arsip->ID_ARSIP;
+                    $$infoArsipKtp->save();
+                });
                 break;
             default:
                 // Jika tidak ada kecocokan dengan NAMA_DOKUMEN yang diharapkan
@@ -1216,6 +1301,5 @@ class PermissionController extends Controller
             'message' => 'Permintaan ijin telah ditolak',
         ], 200);
     }
-
 }
 
